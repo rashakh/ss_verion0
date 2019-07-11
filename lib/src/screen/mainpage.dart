@@ -28,15 +28,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: _pages[_selectedPage],
-      floatingActionButton: new FancyFab()
-      //FloatingActionButton(
-        //child: new Icon(
-         // Icons.add,
-        //  size: 30.0,
-        //),
-        //onPressed: () {},
-      //)
-      ,
+      floatingActionButton: new FancyFab(),
       bottomNavigationBar: new BottomNavigationBar( 
         currentIndex: _selectedPage,
         onTap: (int index) {
@@ -61,7 +53,7 @@ class _MainPageState extends State<MainPage> {
               color: Colors.black,
             ),
             title: new Text(
-              'والجبات',
+              'الواجبات',
               style: new TextStyle(fontSize: 20.0, color: Colors.black87),
             ),
           ),
