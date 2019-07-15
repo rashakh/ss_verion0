@@ -13,7 +13,11 @@ import 'src/screen/meals.dart'; //import meals file
 import 'src/screen/physical_activity.dart'; //import physical_activity file
 import 'src/screen/instructions.dart'; //import instructions file
 import 'src/screen/medications.dart'; //import medications file
+import 'src/screen/glucose_measure.dart';
 import 'src/widgets/fancy_fab.dart';
+import 'src/widgets/maintheme.dart';
+
+
 
 final counter=0;
 
@@ -46,10 +50,11 @@ class SS extends StatelessWidget {
         '/instructions': (BuildContext context) => new Instructions(),
         '/medications': (BuildContext context) => new Medications(),
         '/FancyFab': (BuildContext context) => new FancyFab(),
+        '/GlucoseMeasure': (BuildContext context) => new GlucoseMeasure(),
       } ,
       theme: new ThemeData(primarySwatch: Colors.blue),
       
-      home: LoginPage()
+      home: GlucoseMeasure(),
       
     );
   }
