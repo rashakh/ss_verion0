@@ -53,8 +53,8 @@ class SS extends StatelessWidget {
         '/GlucoseMeasure': (BuildContext context) => new GlucoseMeasure(),
       } ,
       theme: new ThemeData(primarySwatch: Colors.blue),
-      
       home: GlucoseMeasure(),
+
       
     );
   }  

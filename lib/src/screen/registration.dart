@@ -108,7 +108,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          
+                          new TextForm(text: 'hello', errorText: 'wrong email',),
                           new Card(
                             elevation: 5.0,
                             //margin: new EdgeInsets.all(13.0),
