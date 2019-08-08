@@ -4,8 +4,6 @@
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:http/http.dart' as http;
 import '../widgets/aimagesize.dart'; //import animation widget
-import '../widgets/buttonwidget.dart'; //import button widget
-import '../widgets/textformwidget.dart';
 
 // StatefulWidget LoginPage class which has variable state
 class LoginPage extends StatefulWidget {
@@ -120,6 +118,7 @@ class _LoginPageState extends State<LoginPage> {
     return [
       new TextFormField(
         //controller: _user,
+        textDirection: TextDirection.rtl,
         decoration: InputDecoration(
           hintText: 'ادخل ايميلك',
           hintStyle: new TextStyle(fontSize: 20.0, color: Colors.black87),

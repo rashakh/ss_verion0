@@ -17,13 +17,7 @@ import 'src/screen/glucose_measure.dart';
 import 'src/widgets/fancy_fab.dart';
 import 'src/widgets/maintheme.dart';
 
-
-
-final counter=0;
-
 void main() => runApp(new SS()); // the App main function call SS class
-
-
 // the main class of the App
 class SS extends StatelessWidget {
   @override
@@ -53,7 +47,7 @@ class SS extends StatelessWidget {
         '/GlucoseMeasure': (BuildContext context) => new GlucoseMeasure(),
       } ,
       theme: new ThemeData(primarySwatch: Colors.blue),
-      home: GlucoseMeasure(),
+      home: LoginPage(),
 
       
     );

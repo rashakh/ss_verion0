@@ -1,11 +1,11 @@
 // Registration file which contains the Registration page, and its properties
 // this file allows user to register into the App, represented by 'r_1' Use-Case
 
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // flutter main package
+import 'package:flutter/material.dart'; // flutter main package
+import 'package:intl/intl.dart'as intl; // flutter main package
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'loginpage.dart';
-import '../widgets/textformwidget.dart';
+
 class Registration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class RegistrationForm extends StatefulWidget {
 
 class _RegistrationFormState extends State<RegistrationForm> {
   final _formKey = GlobalKey<FormState>();
-  final DateFormat format = new DateFormat('y-M-d');
+  final intl.DateFormat format = new intl.DateFormat('y-M-d');
   String _email, _password, _fName, _lName;
   int _gender;
   double _height, _weight;
@@ -107,9 +107,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     child: new SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          new TextForm(text: 'hello', errorText: 'wrong email',),
-                          new Card(
+                        children: <Widget>[                          new Card(
                             elevation: 5.0,
                             //margin: new EdgeInsets.all(13.0),
                             color: Colors.white,
@@ -125,6 +123,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                           right: 10.0,
                                         ),
                                         child: new TextFormField(
+                                          textDirection: TextDirection.rtl,
                                           decoration: InputDecoration(
                                             contentPadding:
                                                 EdgeInsets.symmetric(
@@ -150,6 +149,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                           left: 7.0,
                                         ),
                                         child: new TextFormField(
+                                          textDirection: TextDirection.rtl,
                                           decoration: InputDecoration(
                                             contentPadding:
                                                 EdgeInsets.symmetric(
@@ -192,6 +192,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                           left: 10.0,
                                         ),
                                         child: new TextFormField(
+                                          textDirection: TextDirection.rtl,
                                           decoration: InputDecoration(
                                             contentPadding:
                                                 EdgeInsets.symmetric(
@@ -223,6 +224,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                           left: 10.0,
                                         ),
                                         child: new TextFormField(
+                                          textDirection: TextDirection.rtl,
                                           decoration: InputDecoration(
                                             contentPadding:
                                                 EdgeInsets.symmetric(
