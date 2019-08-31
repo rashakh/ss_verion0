@@ -15,11 +15,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  
   int _selectedPage = 0;
   final List<Widget> _pages = [
     new HomePage(),
     new Meals(),
-    new PhysicalActivity(),
+    //new PhysicalActivity(),
     new Instructions(),
     new Medications(),
   ];
@@ -57,16 +58,16 @@ class _MainPageState extends State<MainPage> {
               style: new TextStyle(fontSize: 20.0, color: Colors.black87),
             ),
           ),
-          BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.directions_run,
-              color: Colors.black,
-            ),
-            title: new Text(
-              'النشاط البدني',
-              style: new TextStyle(fontSize: 20.0, color: Colors.black87),
-            ),
-          ),
+          // BottomNavigationBarItem(
+          //   icon: new Icon(
+          //     Icons.directions_run,
+          //     color: Colors.black,
+          //   ),
+          //   title: new Text(
+          //     'النشاط البدني',
+          //     style: new TextStyle(fontSize: 20.0, color: Colors.black87),
+          //   ),
+          // ),
           BottomNavigationBarItem(
             icon: new Icon(
               Icons.library_books,

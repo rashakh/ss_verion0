@@ -70,31 +70,40 @@ class _FancyFabState extends State<FancyFab>
     isOpened = !isOpened;
   }
 
-  Widget add() {
+  Widget _addGlucose() {
     return Container(
       child: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Add',
+        heroTag: "btn1",
+        onPressed: () {
+                    Navigator.of(context).pushNamed('/GlucoseMeasure');
+                  },
+        tooltip: 'اضافة نسبة الجولوكوز',
         child: Icon(Icons.add),
       ),
     );
   }
 
-  Widget image() {
+  Widget _addWeight() {
     return Container(
       child: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Image',
+        heroTag: "btn2",
+        onPressed: () {
+                    Navigator.of(context).pushNamed('/Weightinput');
+                  },
+        tooltip: 'اضافة وزن',
         child: Icon(Icons.add),
       ),
     );
   }
 
-  Widget inbox() {
+  Widget _addPressure() {
     return Container(
       child: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Inbox',
+        heroTag: "btn3",
+        onPressed: () {
+                    Navigator.of(context).pushNamed('/Pressureinput');
+                  },
+        tooltip: 'اضافة ضغط الدم',
         child: Icon(Icons.add),
       ),
     );
@@ -103,6 +112,7 @@ class _FancyFabState extends State<FancyFab>
   Widget toggle() {
     return Container(
       child: FloatingActionButton(
+        heroTag: "btn4",
         backgroundColor: _buttonColor.value,
         onPressed: animate,
         tooltip: 'Toggle',
@@ -125,7 +135,7 @@ class _FancyFabState extends State<FancyFab>
             _translateButton.value * 3.0,
             0.0,
           ),
-          child: add(),
+          child: _addGlucose(),
         ),
         Transform(
           transform: Matrix4.translationValues(
@@ -133,7 +143,7 @@ class _FancyFabState extends State<FancyFab>
             _translateButton.value * 2.0,
             0.0,
           ),
-          child: image(),
+          child: _addWeight(),
         ),
         Transform(
           transform: Matrix4.translationValues(
@@ -141,7 +151,7 @@ class _FancyFabState extends State<FancyFab>
             _translateButton.value,
             0.0,
           ),
-          child: inbox(),
+          child: _addPressure(),
         ),
         toggle(),
       ],

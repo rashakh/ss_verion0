@@ -6,21 +6,34 @@ class HomePage extends StatelessWidget {
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF2A79D2), //Color(0xFF7EAFE5),
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         brightness: Brightness.light,
         title: new Text(
           'الرئيسية',
-          style: new TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 25.0),
+          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            new UserAccountsDrawerHeader(
+              accountName: Text('Rasha'),
+              accountEmail: Text('r@gmail.com'),
+            ),
+            new ListTile(
+              title: Text('الاعدادات'),
+              onTap: (){},
+            )
+          ],
         ),
       ),
       body: Center(
         child: new Text("هذا التطبيق قيد الانشاء",
-                style: new TextStyle(
-                  fontSize: 30.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                )),
+            style: new TextStyle(
+              fontSize: 30.0,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            )),
       ),
     );
   }

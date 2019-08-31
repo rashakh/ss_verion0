@@ -13,7 +13,6 @@ class SizeAnimationState extends State<SizeAnimation>
   Animation<double> _sizeAnimation;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller = new AnimationController(
         duration: new Duration(milliseconds: 700), vsync: this);

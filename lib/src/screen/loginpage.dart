@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
   // print('form invalid, Email: $_email,  Passwoer: $_password');
   // }
 
-  bool validateAndSave() {
+  bool _validateAndSave() {
     final form = _formKey.currentState;
     form.save();
     if (form.validate() &&
@@ -49,8 +49,8 @@ class _LoginPageState extends State<LoginPage> {
       return false;
   }
 
-  void validateAndSubmit() {
-    if (validateAndSave()) {
+  void _validateAndSubmit() {
+    if (_validateAndSave()) {
       Navigator.of(context).pushNamed('/MainPage');
       _formKey.currentState.reset();
     } else
@@ -59,56 +59,60 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      // Stack widget helps overlap objects
-      body: new Stack(
-        fit: StackFit.expand, // make Stack itself fit screen
-        children: <Widget>[
-          new Image(
-            image: new AssetImage('assets/img.jpg'),
-            fit: BoxFit.cover, // make image fit screen
-            //color: Colors.black87,
-            //colorBlendMode: BlendMode.darken, // show opacity
-          ), // first widget (object or child) in the Stack
-          new SingleChildScrollView(
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                new Padding(
-                  padding: const EdgeInsets.only(top: 70),
-                ),
-                new SizeAnimation(
-                  new Image(
-                    image: new AssetImage('assets/icon12.png'),
+    return new Directionality(
+      textDirection: TextDirection.rtl,
+      child: new Scaffold(
+        // Stack widget helps overlap objects
+        body: new Stack(
+          fit: StackFit.expand, // make Stack itself fit screen
+          children: <Widget>[
+            new Image(
+              image: new AssetImage('assets/img.jpg'),
+              fit: BoxFit.none, // make image fit screen
+              //color: Colors.black87,
+              //colorBlendMode: BlendMode.darken, // show opacity
+            ), // first widget (object or child) in the Stack
+            new SingleChildScrollView(
+              child: new Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  new Padding(
+                    padding: const EdgeInsets.only(top: 70),
                   ),
-                ),
-                new Padding(
-                    padding: const EdgeInsets.only(top: 20.0)), // logo & form
-                new Form(
-                  key: _formKey,
-                  child: new Theme(
-                    data: new ThemeData(
-                        brightness: Brightness.light,
-                        primaryColor: Color(0xFFBDD22A),
-                        inputDecorationTheme: new InputDecorationTheme(
-                            labelStyle: new TextStyle(
-                                color: Colors.black,
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold))),
-                    child: Container(
-                      padding: const EdgeInsets.all(40.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children:
-                            buildInput() + buildSubmit() + buildRegistration(),
-                      ),
+                  new SizeAnimation(
+                    new Image(
+                      image: new AssetImage('assets/icon12.png'),
                     ),
                   ),
-                )
-              ],
-            ),
-          ), // secondr widget (object or child) in the Stack which is Column contine other widgets vertically
-        ],
+                  new Padding(
+                      padding: const EdgeInsets.only(top: 20.0)), // logo & form
+                  new Form(
+                    key: _formKey,
+                    child: new Theme(
+                      data: new ThemeData(
+                          brightness: Brightness.light,
+                          primaryColor: Color(0xFFBDD22A),
+                          inputDecorationTheme: new InputDecorationTheme(
+                              labelStyle: new TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold))),
+                      child: Container(
+                        padding: const EdgeInsets.all(40.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: buildInput() +
+                              buildSubmit() +
+                              buildRegistration(),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ), // secondr widget (object or child) in the Stack which is Column contine other widgets vertically
+          ],
+        ),
       ),
     );
   } // build widget
@@ -118,7 +122,6 @@ class _LoginPageState extends State<LoginPage> {
     return [
       new TextFormField(
         //controller: _user,
-        textDirection: TextDirection.rtl,
         decoration: InputDecoration(
           hintText: 'ادخل ايميلك',
           hintStyle: new TextStyle(fontSize: 20.0, color: Colors.black87),
@@ -174,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: new Text("هل نسيت كلمة السر؟",
                       style: new TextStyle(
                           fontSize: 16.0,
-                          color: Color(0xFFBDD22A),
+                          color: Colors.grey[600],
                           fontWeight: FontWeight.bold)),
                 )),
           ),
@@ -182,18 +185,18 @@ class _LoginPageState extends State<LoginPage> {
         new Expanded(
           child: Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 3.0, top: 10.0),
-            child: GestureDetector(
-              onTap: validateAndSubmit,
+            child: new GestureDetector(
+              onTap: _validateAndSubmit,
               child: new Container(
                   alignment: Alignment.center,
                   height: 45.0,
                   decoration: new BoxDecoration(
-                      color: Color(0xFFBDD22A),
+                      color: Color(0xFF2A79D2),
                       borderRadius: new BorderRadius.circular(7.0)),
                   child: new Text("سجل الدخول",
                       style: new TextStyle(
                           fontSize: 20.0,
-                          color: Colors.black,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold))),
             ),
           ),
@@ -207,17 +210,22 @@ class _LoginPageState extends State<LoginPage> {
     return [
       new Padding(
         padding: const EdgeInsets.only(top: 70.0),
-        child: new FlatButton(
-          child: new Text("ليس لديك حساب؟انشئ حساب جديد",
-              style: new TextStyle(
-                fontSize: 20.0,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              )),
-          onPressed: () {
+        child: new GestureDetector(
+        onTap: () {
             Navigator.pushNamed(context, '/Registration');
           },
-        ),
+        child: new Container(
+            alignment: Alignment.center,
+            height: 45.0,
+            decoration: new BoxDecoration(
+                color: Color(0xFFBDD22A),
+                borderRadius: new BorderRadius.circular(7.0)),
+            child: new Text("انشئ حساب جديد",
+                style: new TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold))),
+      ),
       )
     ];
   }
