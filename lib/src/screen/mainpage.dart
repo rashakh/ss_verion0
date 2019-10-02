@@ -10,12 +10,13 @@ import 'medications.dart'; //import medications file
 import '../widgets/fancy_fab.dart';
 
 class MainPage extends StatefulWidget {
+  final String _email;
+  MainPage(@required this._email);
   @override
   State createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  
   int _selectedPage = 0;
   final List<Widget> _pages = [
     new HomePage(),
@@ -24,13 +25,12 @@ class _MainPageState extends State<MainPage> {
     new Instructions(),
     new Medications(),
   ];
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: _pages[_selectedPage],
-      floatingActionButton: new FancyFab(),
-      bottomNavigationBar: new BottomNavigationBar( 
+      floatingActionButton: new FancyFab(widget._email),
+      bottomNavigationBar: new BottomNavigationBar(
         currentIndex: _selectedPage,
         onTap: (int index) {
           setState(() {
@@ -54,7 +54,7 @@ class _MainPageState extends State<MainPage> {
               color: Colors.black,
             ),
             title: new Text(
-              'الواجبات',
+              'الوجبات',
               style: new TextStyle(fontSize: 20.0, color: Colors.black87),
             ),
           ),

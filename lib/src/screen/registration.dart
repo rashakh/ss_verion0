@@ -1,9 +1,14 @@
 // Registration file which contains the Registration page, and its properties
 // this file allows user to register into the App, represented by 'r_1' Use-Case
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:intl/intl.dart' as intl; // flutter main package
 import 'package:flutter/cupertino.dart';
+import 'dart:async';
+import 'package:http/http.dart'
+    as http; // perform http request on API to get the into
 import 'loginpage.dart';
 
 class Registration extends StatelessWidget {
@@ -31,12 +36,17 @@ class RegistrationForm extends StatefulWidget {
 
 class _RegistrationFormState extends State<RegistrationForm> {
   final _formKey = GlobalKey<FormState>();
+  final String url =
+      'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   final intl.DateFormat format = new intl.DateFormat('y-M-d');
   String _email, _password, _fName, _lName;
   int _gender;
+  int _type;
   double _height, _weight;
   DateTime _birthday = new DateTime.now();
-  int _value = -1;
+  DateTime _dd = new DateTime.now();
+  // int _value = -1;
+  bool _result;
   @override
   void initState() {
     super.initState();
@@ -46,17 +56,44 @@ class _RegistrationFormState extends State<RegistrationForm> {
   void _onChange(int value) {
     setState(() {
       _gender = value;
-      print(_gender);
-      print(_birthday);
-      print(DateTime.now());
-      print(format.format(new DateTime.now()));
     });
+  }
+
+  void _onChanget(int value) {
+    setState(() {
+      _type = value;
+    });
+  }
+
+  Future<bool> _postData() async {
+    // map data to converted to json data
+    final Map<String, dynamic> userData = {
+      '_id': _email,
+      'password': _password,
+      'fName': _fName,
+      'lName': _lName,
+      'weight': _weight,
+      'height': _height,
+      'gender': _gender,
+      'type': _type,
+      'bd': _birthday.toIso8601String(),
+      'dd': _dd.toIso8601String(),
+    };
+    var jsonData = JsonCodec().encode(userData); // encode data to json
+    var httpclient = new http.Client();
+    var response = await httpclient.post(url,
+        body: jsonData, headers: {'Content-type': 'application/json'});
+    print('the body of the response = \n${response.body}\n.');
+    _result =
+        response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
   }
 
   bool validateAndSave() {
     final form = _formKey.currentState;
     form.save();
+    _postData();
     if (form.validate() &&
+        _result == true &&
         _gender != -1 &&
         format.format(_birthday) != format.format(DateTime.now())) {
       return true;
@@ -92,6 +129,23 @@ class _RegistrationFormState extends State<RegistrationForm> {
             e = DateTime.now();
           }
           _birthday = e;
+        });
+      },
+    );
+  }
+
+  Widget _ddate() {
+    return CupertinoDatePicker(
+      initialDateTime: _dd,
+      minimumDate: DateTime(2018),
+      maximumDate: DateTime.now(),
+      mode: CupertinoDatePickerMode.date,
+      onDateTimeChanged: (e) {
+        setState(() {
+          if (e.isAfter(DateTime.now())) {
+            e = DateTime.now();
+          }
+          _dd = e;
         });
       },
     );
@@ -152,8 +206,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                                             vertical: 3.0),
                                                     hintText: 'الاسم الاول',
                                                     hintStyle: new TextStyle(
-                                                        fontSize: 20.0,
-                                                        color: Colors.black87),
+                                                        fontSize: 17.0,
+                                                        color: Colors.grey),
                                                     fillColor: Colors.white54
                                                         .withOpacity(0.5),
                                                   ),
@@ -180,8 +234,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                                             vertical: 3.0),
                                                     hintText: 'الاسم الاخير',
                                                     hintStyle: new TextStyle(
-                                                        fontSize: 20.0,
-                                                        color: Colors.black87),
+                                                        fontSize: 17.0,
+                                                        color: Colors.grey),
                                                     fillColor: Colors.white54
                                                         .withOpacity(0.5),
                                                   ),
@@ -217,8 +271,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                                             vertical: 3.0),
                                                     hintText: 'وزنك',
                                                     hintStyle: new TextStyle(
-                                                        fontSize: 20.0,
-                                                        color: Colors.black87),
+                                                        fontSize: 17.0,
+                                                        color: Colors.grey),
                                                     fillColor: Colors.white54
                                                         .withOpacity(0.5),
                                                   ),
@@ -251,8 +305,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                                             vertical: 3.0),
                                                     hintText: 'طولك',
                                                     hintStyle: new TextStyle(
-                                                        fontSize: 20.0,
-                                                        color: Colors.black87),
+                                                        fontSize: 17.0,
+                                                        color: Colors.grey),
                                                     fillColor: Colors.white54
                                                         .withOpacity(0.5),
                                                   ),
@@ -274,69 +328,117 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                             ),
                                           ]),
                                     ),
-                                    new Column(
+                                    new Row(
                                       children: <Widget>[
-                                        new Row(
-                                          children: <Widget>[
-                                            new Radio(
-                                              activeColor: Colors.lightBlue,
-                                              value: 0,
-                                              groupValue: _gender,
-                                              onChanged: (value) {
-                                                _onChange(value);
-                                              },
-                                            ),
-                                            new Text(
-                                              'انثى',
-                                              style: new TextStyle(
-                                                  fontSize: 20.0,
-                                                  color: Colors.black87),
-                                            ),
-                                            new Radio(
-                                              activeColor: Colors.lightBlue,
-                                              value: 1,
-                                              groupValue: _gender,
-                                              onChanged: (value) {
-                                                _onChange(value);
-                                              },
-                                            ),
-                                            new Text(
-                                              'ذكر',
-                                              style: new TextStyle(
-                                                  fontSize: 20.0,
-                                                  color: Colors.black87),
-                                            ),
-                                          ],
+                                        new Radio(
+                                          activeColor: Colors.lightBlue,
+                                          value: 0,
+                                          groupValue: _gender,
+                                          onChanged: (value) {
+                                            _onChange(value);
+                                          },
+                                        ),
+                                        new Text(
+                                          'انثى',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                        ),
+                                        new Radio(
+                                          activeColor: Colors.lightBlue,
+                                          value: 1,
+                                          groupValue: _gender,
+                                          onChanged: (value) {
+                                            _onChange(value);
+                                          },
+                                        ),
+                                        new Text(
+                                          'ذكر',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
                                         ),
                                       ],
                                     ),
-                                    new Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 175.0,
-                                      ),
-                                      child: Row(
-                                        children: <Widget>[
-                                          new Text(
-                                            '    تاريخ الميلاد : ',
-                                            style: new TextStyle(
-                                                fontSize: 20.0,
-                                                color: Colors.black87),
+                                    new Row(
+                                      children: <Widget>[
+                                        new Radio(
+                                          activeColor: Colors.lightBlue,
+                                          value: 0,
+                                          groupValue: _type,
+                                          onChanged: (value) {
+                                            _onChanget(value);
+                                          },
+                                        ),
+                                        new Text(
+                                          'سكري النوع الاول',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                        ),
+                                        new Radio(
+                                          activeColor: Colors.lightBlue,
+                                          value: 1,
+                                          groupValue: _type,
+                                          onChanged: (value) {
+                                            _onChanget(value);
+                                          },
+                                        ),
+                                        new Text(
+                                          'سكري النوع الثاني',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        new Text(
+                                          '    تاريخ الميلاد : ',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                        ),
+                                        new IconButton(
+                                          color: Colors.blue,
+                                          icon: new Icon(
+                                            Icons.calendar_today,
                                           ),
-                                          new IconButton(
-                                            color: Colors.blue,
-                                            icon: new Icon(Icons.date_range),
-                                            onPressed: () async {
-                                              await showModalBottomSheet(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return _cupdate();
-                                                },
-                                              );
-                                            },
+                                          onPressed: () async {
+                                            await showModalBottomSheet(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return _cupdate();
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        new Text(
+                                          '    تاريخ التشخيص بالسكري : ',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                        ),
+                                        new IconButton(
+                                          color: Colors.blue,
+                                          icon: new Icon(
+                                            Icons.calendar_today,
                                           ),
-                                        ],
-                                      ),
+                                          onPressed: () async {
+                                            await showModalBottomSheet(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return _ddate();
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 )),
@@ -360,8 +462,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                               vertical: 5.0),
                                           hintText: 'دخل ايميلك',
                                           hintStyle: new TextStyle(
-                                              fontSize: 20.0,
-                                              color: Colors.black87),
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
                                           fillColor:
                                               Colors.white54.withOpacity(0.5),
                                         ),
@@ -387,8 +489,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                               vertical: 5.0),
                                           hintText: 'ادخل كلمة المرور',
                                           hintStyle: new TextStyle(
-                                              fontSize: 20.0,
-                                              color: Colors.black87),
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
                                           fillColor:
                                               Colors.white54.withOpacity(0.5),
                                         ),
@@ -411,8 +513,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                               vertical: 5.0),
                                           hintText: 'اكد كلمة المرور',
                                           hintStyle: new TextStyle(
-                                              fontSize: 20.0,
-                                              color: Colors.black87),
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
                                           fillColor:
                                               Colors.white54.withOpacity(0.5),
                                         ),
@@ -427,7 +529,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                   ],
                                 )),
                             new Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20.0,vertical: 35.0),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 35.0),
                               child: new GestureDetector(
                                 onTap: validateAndSubmit,
                                 child: new Container(

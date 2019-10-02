@@ -12,9 +12,9 @@ import 'src/screen/meals.dart'; //import meals file
 import 'src/screen/physical_activity.dart'; //import physical_activity file
 import 'src/screen/instructions.dart'; //import instructions file
 import 'src/screen/medications.dart'; //import medications file
+import 'src/widgets/maintheme.dart';
 import 'src/screen/glucose_measure.dart';
 import 'src/widgets/fancy_fab.dart';
-import 'src/widgets/maintheme.dart';
 import 'src/screen/weight_input.dart';
 import 'src/screen/pressure_input.dart';
 
@@ -36,23 +36,23 @@ class SS extends StatelessWidget {
       // ],
       // routes files by name
       routes: <String, WidgetBuilder>{
-        '/MainPage': (BuildContext context) => new MainPage(),
-        '/HomePage': (BuildContext context) => new HomePage(),
         '/LoginPage': (BuildContext context) => new LoginPage(),
+        '/MainPage': (BuildContext context) => new MainPage('r@gmail.com'),
+        '/HomePage': (BuildContext context) => new HomePage(),
         '/Registration': (BuildContext context) => new Registration(),
         '/LostPassword': (BuildContext context) => new LostPassword(),
-        '/meals': (BuildContext context) => new Meals(),
-        '/physical_activity': (BuildContext context) => new PhysicalActivity(),
-        '/instructions': (BuildContext context) => new Instructions(),
-        '/medications': (BuildContext context) => new Medications(),
-        '/FancyFab': (BuildContext context) => new FancyFab(),
-        '/GlucoseMeasure': (BuildContext context) => new GlucoseMeasure(),
-        '/MainTheme' : (BuildContext context) => new MainTheme(),
-       '/Weightinput': (BuildContext context) => new Weightinput(),
-       '/Pressureinput': (BuildContext context) => new Pressureinput(),
+        // '/meals': (BuildContext context) => new Meals(),
+        // '/physical_activity': (BuildContext context) => new PhysicalActivity(),
+        // '/instructions': (BuildContext context) => new Instructions(),
+        // '/medications': (BuildContext context) => new Medications(),
+        //'/FancyFab': (BuildContext context) => new FancyFab(),
+        //'/GlucoseMeasure': (BuildContext context) => new GlucoseMeasure(),
+        '/MainTheme': (BuildContext context) => new MainTheme(),
+        //'/Weightinput': (BuildContext context) => new Weightinput(),
+        //'/Pressureinput': (BuildContext context) => new Pressureinput(),
       },
       theme: new ThemeData(primarySwatch: Colors.blue),
-      home: LoginPage(),
+      home: MainPage('r@gmail.com'),
     );
   }
 }

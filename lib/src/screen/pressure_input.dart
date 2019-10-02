@@ -4,8 +4,14 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import '../widgets/styles.dart';
 import 'package:intl/intl.dart' as intl;
+import 'dart:async';
+import 'dart:convert'; // convert json into data
+import 'package:http/http.dart'
+    as http; // perform http request on API to get the into
 
 class Pressureinput extends StatelessWidget {
+  String _email;
+  Pressureinput(this._email);
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -20,17 +26,22 @@ class Pressureinput extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body()),
+          body: new SingleChildScrollView(child: new Body(_email)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
+  String _email;
+  Body(this._email);
   @override
-  State createState() => new Bodystate();
+  State createState() => new _Bodystate();
 }
 
-class Bodystate extends State<Body> {
+class _Bodystate extends State<Body> {
+  final String url =
+      'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+  bool _result;
   int pressureSys = 120;
   int pressureDia = 85;
   String evaluation = '';
@@ -38,8 +49,27 @@ class Bodystate extends State<Body> {
   DateTime dateTime = DateTime.now();
   String note = '';
 
+  Future<bool> _postData() async {
+    // map data to converted to json data
+    final Map<String, dynamic> userData = {
+      'email': widget._email,
+      'PressureSys': pressureSys,
+      'pressureDia': pressureDia,
+      'DateTime': dateTime.toIso8601String(),
+      'Note': note,
+    };
+    var jsonData = JsonCodec().encode(userData); // encode data to json
+    var httpclient = new http.Client();
+    var response = await httpclient.post(url,
+        body: jsonData, headers: {'Content-type': 'application/json'});
+    print('the body of the response = \n${response.body}\n.');
+    _result =
+        response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
+  }
+
   void _onChangedSys(e) {
     setState(() {
+      print('this is pressure ${widget._email}');
       if (e > 140 || e < 120) {
         slider = Colors.redAccent[400];
         evaluation = 'هذا ليس جيد';
@@ -94,12 +124,12 @@ class Bodystate extends State<Body> {
           SizedBox(height: 20.0),
           Row(
             children: <Widget>[
-              _pressureBackground(_onChangedDia,pressureDia,110),
+              _pressureBackground(_onChangedDia, pressureDia, 110),
               Text(
                 '\t/\t',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
               ),
-              _pressureBackground(_onChangedSys,pressureSys,180),
+              _pressureBackground(_onChangedSys, pressureSys, 180),
             ],
           ),
           SizedBox(height: 20.0),
@@ -116,7 +146,7 @@ class Bodystate extends State<Body> {
     ));
   }
 
-  Widget _pressureBackground(Function fun, pressure ,max) {
+  Widget _pressureBackground(Function fun, pressure, max) {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: <Widget>[
@@ -153,51 +183,47 @@ class Bodystate extends State<Body> {
   }
 
   Widget _buildDateAndTimePicker(BuildContext context) {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
+        SizedBox(width: 8.0),
+        new Text(
+          'وقت القياس :',
+          style: Styles.productRowItemName,
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SizedBox(width: 8.0),
             new Text(
-              'وقت القياس :',
+              '(',
               style: Styles.productRowItemName,
             ),
-            Row(
-              children: <Widget>[
-                new Text(
-                  '(',
-                  style: Styles.productRowItemName,
-                ),
-                new IconButton(
-                  icon: Icon(
-                    CupertinoIcons.clock,
-                    color: CupertinoColors.activeBlue,
-                    size: 28,
-                  ),
-                  onPressed: () async {
-                    await showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return _cupDate();
-                      },
-                    );
+            new IconButton(
+              icon: Icon(
+                Icons.access_time,
+                color: CupertinoColors.activeBlue,
+                size: 28,
+              ),
+              onPressed: () async {
+                await showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return _cupDate();
                   },
-                ),
-                new Text(
-                  ')',
-                  style: Styles.productRowItemName,
-                ),
-                SizedBox(width: 10.0),
-              ],
+                );
+              },
             ),
             new Text(
-              intl.DateFormat.yMMMd().add_jm().format(dateTime),
+              ')',
               style: Styles.productRowItemName,
             ),
-            SizedBox(width: 5.0)
+            SizedBox(width: 10.0),
           ],
         ),
+        new Text(
+          intl.DateFormat.yMMMd().add_jm().format(dateTime),
+          style: Styles.productRowItemName,
+        ),
+        SizedBox(width: 5.0)
       ],
     );
   }
@@ -253,7 +279,7 @@ class Bodystate extends State<Body> {
           _buildDateAndTimePicker(context),
           Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 70.0, horizontal: 10.0),
+                const EdgeInsets.symmetric(vertical: 68.0, horizontal: 10.0),
             child: _buildNoteField(),
           ),
           SizedBox(height: 20.0),

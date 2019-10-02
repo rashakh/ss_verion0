@@ -4,8 +4,14 @@ import '../widgets/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:intl/intl.dart' as intl; // flutter main package
+import 'dart:async';
+import 'dart:convert'; // convert json into data
+import 'package:http/http.dart'
+    as http; // perform http request on API to get the into
 
 class GlucoseMeasure extends StatelessWidget {
+  String _email;
+  GlucoseMeasure(this._email);
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -20,24 +26,34 @@ class GlucoseMeasure extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body()),
+          body: new SingleChildScrollView(child: new Body(_email)),
           // Padding(padding: const EdgeInsets.only(top: 100), child: Body()),
         ));
   }
 }
 
 class Body extends StatefulWidget {
+  String _email;
+  Body(this._email);
   @override
-  State createState() => new Bodystate();
+  State createState() => new _Bodystate();
 }
 
-class Bodystate extends State<Body> {
-  int gm = 180;
+class _Bodystate extends State<Body> {
+  final String url =
+      'mongodb+srv://ghida:ghida@cluster0-xskul.mongodb.net/test?retryWrites=true&w=majority'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+  bool _result;
+  int gm = 110;
   DateTime dateTime = DateTime.now();
   String evaluation = '';
   Color slider = Colors.greenAccent[400];
   String note = '';
-int slot = _slot();
+  int slot = _slot();
+  Duration dur = new Duration(
+    hours: 0,
+    minutes: 30,
+  );
+  double n = 44.0;
   List<String> slots = const <String>[
     'قبل النوم',
     'بعد الاستيقاظ',
@@ -69,16 +85,34 @@ int slot = _slot();
     } else if (DateTime.now().hour >= 23 || DateTime.now().hour < 00) {
       slot = 7;
     }
-    print(slot);
     return slot;
+  }
+
+  Future<bool> _postData() async {
+    // map data to converted to json data
+    final Map<String, dynamic> userData = {
+      'email': widget._email,
+      'Glucose Measure': gm,
+      'DateTime': dateTime.toIso8601String(),
+      'Slot': slot,
+      'Note': note,
+    };
+    var jsonData = JsonCodec().encode(userData); // encode data to json
+    var httpclient = new http.Client();
+    var response = await httpclient.post(url,
+        body: jsonData, headers: {'Content-type': 'application/json'});
+    print('the body of the response = \n${response.body}\n.');
+    _result =
+        response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
   }
 
   String message = 'ادخل نسبة الجولوكوز في الدم';
 
   void _changed(e) {
     setState(() {
+      print('this is glucose ${widget._email}');
       gm = e;
-      if (gm < 90 || gm > 200) {
+      if (gm < 80 || gm > 180) {
         slider = Colors.redAccent[400];
         evaluation = 'هذا ليس جيد، يجب عليك الانتباه';
       } else {
@@ -87,6 +121,7 @@ int slot = _slot();
       }
     });
   }
+
   Widget _glucose() {
     return Card(
         child: Padding(
@@ -154,9 +189,7 @@ int slot = _slot();
                   minValue: 17,
                   maxValue: 400,
                   itemExtent: 60,
-                  onChanged: (e) => _changed(e)
-                      )
-                      ,
+                  onChanged: (e) => _changed(e)),
             ),
           ),
         ),
@@ -168,7 +201,7 @@ int slot = _slot();
       ],
     );
   }
-  
+
   Widget _mySlider() {
     return Column(
       children: <Widget>[
@@ -191,51 +224,47 @@ int slot = _slot();
   }
 
   Widget _buildDateAndTimePicker(BuildContext context) {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
+        SizedBox(width: 8.0),
+        new Text(
+          'وقت القياس :',
+          style: Styles.productRowItemName,
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SizedBox(width: 8.0),
             new Text(
-              'وقت القياس :',
+              '(',
               style: Styles.productRowItemName,
             ),
-            Row(
-              children: <Widget>[
-                new Text(
-                  '(',
-                  style: Styles.productRowItemName,
-                ),
-                new IconButton(
-                  icon: Icon(
-                    CupertinoIcons.clock,
-                    color: CupertinoColors.activeBlue,
-                    size: 28,
-                  ),
-                  onPressed: () async {
-                    await showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return _cupDate();
-                      },
-                    );
+            new IconButton(
+              icon: Icon(
+                Icons.access_time,
+                color: CupertinoColors.activeBlue,
+                size: 28,
+              ),
+              onPressed: () async {
+                await showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return _cupDate();
                   },
-                ),
-                new Text(
-                  ')',
-                  style: Styles.productRowItemName,
-                ),
-                SizedBox(width: 10.0),
-              ],
+                );
+              },
             ),
             new Text(
-              intl.DateFormat.yMMMd().add_jm().format(dateTime),
+              ')',
               style: Styles.productRowItemName,
             ),
-            SizedBox(width: 5.0)
+            SizedBox(width: 10.0),
           ],
         ),
+        new Text(
+          intl.DateFormat.yMMMd().add_jm().format(dateTime),
+          style: Styles.productRowItemName,
+        ),
+        SizedBox(width: 5.0)
       ],
     );
   }
@@ -247,59 +276,57 @@ int slot = _slot();
       maximumDate: DateTime.now(),
       mode: CupertinoDatePickerMode.dateAndTime,
       onDateTimeChanged: (e) => setState(() {
-        if(e.isAfter(DateTime.now())){ e = DateTime.now();}
+        if (e.isAfter(DateTime.now())) {
+          e = DateTime.now();
+        }
         dateTime = e;
       }),
     );
   }
 
   Widget _buildSlotPicker(BuildContext context) {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
+        SizedBox(width: 8.0),
+        new Text(
+          'فترة القياس :',
+          style: Styles.productRowItemName,
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SizedBox(width: 8.0),
             new Text(
-              'فترة القياس :',
+              '(',
               style: Styles.productRowItemName,
             ),
-            Row(
-              children: <Widget>[
-                new Text(
-                  '(',
-                  style: Styles.productRowItemName,
-                ),
-                new IconButton(
-                  icon: Icon(
-                    CupertinoIcons.info,
-                    color: CupertinoColors.activeBlue,
-                    size: 28,
-                  ),
-                  onPressed: () async {
-                    await showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return _cupPicker();
-                      },
-                    );
+            new IconButton(
+              icon: Icon(
+                Icons.outlined_flag,
+                color: CupertinoColors.activeBlue,
+                size: 28,
+              ),
+              onPressed: () async {
+                await showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return _cupPicker();
                   },
-                ),
-                new Text(
-                  ')',
-                  style: Styles.productRowItemName,
-                ),
-                SizedBox(width: 10.0),
-              ],
+                );
+              },
             ),
-            SizedBox(width: 90.0),
             new Text(
-              slots[slot],
+              ')',
               style: Styles.productRowItemName,
             ),
-            SizedBox(width: 20.0),
+            SizedBox(width: 10.0),
           ],
         ),
+        SizedBox(width: 90.0),
+        new Text(
+          slots[slot] + '\t',
+          style: Styles.productRowItemName,
+        ),
+        SizedBox(width: 20.0),
       ],
     );
   }
@@ -318,8 +345,68 @@ int slot = _slot();
       }),
       onSelectedItemChanged: (e) => setState(() {
         slot = e;
+        if (slot == 8)
+          n = 20.0;
+        else
+          n = 44.0;
       }),
     );
+  }
+
+  Widget _buildActivityPicker(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        SizedBox(width: 8.0),
+        new Text(
+          'مدة الرياضة :',
+          style: Styles.productRowItemName,
+        ),
+        Row(
+          children: <Widget>[
+            new Text(
+              '(',
+              style: Styles.productRowItemName,
+            ),
+            new IconButton(
+              icon: Icon(
+                Icons.timer,
+                color: CupertinoColors.activeBlue,
+                size: 28,
+              ),
+              onPressed: () async {
+                await showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return _activityPicker();
+                  },
+                );
+              },
+            ),
+            new Text(
+              ')',
+              style: Styles.productRowItemName,
+            ),
+            SizedBox(width: 10.0),
+          ],
+        ),
+        SizedBox(width: 90.0),
+        new Text(
+          '${dur.inHours.remainder(60)}:${dur.inMinutes.remainder(60)}:${dur.inSeconds.remainder(60)}\t\t\t\t\t',
+          style: Styles.productRowItemName,
+        ),
+        SizedBox(width: 20.0),
+      ],
+    );
+  }
+
+  Widget _activityPicker() {
+    return CupertinoTimerPicker(
+        mode: CupertinoTimerPickerMode.hms,
+        initialTimerDuration: dur,
+        onTimerDurationChanged: (e) => setState(() {
+              dur = e;
+            }));
   }
 
   Widget _buildNoteField() {
@@ -357,9 +444,9 @@ int slot = _slot();
           SizedBox(height: 40.0),
           _buildDateAndTimePicker(context),
           _buildSlotPicker(context),
+          if (slot == 8) _buildActivityPicker(context),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 45.0, horizontal: 10.0),
+            padding: EdgeInsets.symmetric(vertical: n, horizontal: 10.0),
             child: _buildNoteField(),
           ),
           SizedBox(height: 20.0),

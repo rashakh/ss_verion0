@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import '../screen/glucose_measure.dart';
+import '../screen/weight_input.dart';
+import '../screen/pressure_input.dart';
 
 class FancyFab extends StatefulWidget {
   final Function() onPressed;
   final String tooltip;
-  final IconData icon;
+  IconData icon;
+  String _email;
 
-  FancyFab({this.onPressed, this.tooltip, this.icon});
+  FancyFab(
+    this._email, {
+    this.onPressed,
+    this.tooltip,
+    this.icon,
+  });
 
   @override
   _FancyFabState createState() => _FancyFabState();
@@ -20,7 +29,7 @@ class _FancyFabState extends State<FancyFab>
   Animation<double> _translateButton;
   Curve _curve = Curves.easeOut;
   double _fabHeight = 56.0;
-
+  IconData icon = Icons.add;
   @override
   initState() {
     _animationController =
@@ -63,8 +72,10 @@ class _FancyFabState extends State<FancyFab>
 
   animate() {
     if (!isOpened) {
+      icon = Icons.clear;
       _animationController.forward();
     } else {
+      icon = Icons.add;
       _animationController.reverse();
     }
     isOpened = !isOpened;
@@ -73,10 +84,16 @@ class _FancyFabState extends State<FancyFab>
   Widget _addGlucose() {
     return Container(
       child: FloatingActionButton(
+        mini:true,
         heroTag: "btn1",
         onPressed: () {
-                    Navigator.of(context).pushNamed('/GlucoseMeasure');
-                  },
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => GlucoseMeasure(widget._email)),
+          );
+          //Navigator.of(context).pushNamed('/GlucoseMeasure');
+        },
         tooltip: 'اضافة نسبة الجولوكوز',
         child: Icon(Icons.add),
       ),
@@ -86,10 +103,15 @@ class _FancyFabState extends State<FancyFab>
   Widget _addWeight() {
     return Container(
       child: FloatingActionButton(
+        mini:true,
         heroTag: "btn2",
         onPressed: () {
-                    Navigator.of(context).pushNamed('/Weightinput');
-                  },
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Weightinput(widget._email)),
+          );
+          //Navigator.of(context).pushNamed('/Weightinput');
+        },
         tooltip: 'اضافة وزن',
         child: Icon(Icons.add),
       ),
@@ -99,10 +121,16 @@ class _FancyFabState extends State<FancyFab>
   Widget _addPressure() {
     return Container(
       child: FloatingActionButton(
+        mini:true,
         heroTag: "btn3",
         onPressed: () {
-                    Navigator.of(context).pushNamed('/Pressureinput');
-                  },
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Pressureinput(widget._email)),
+          );
+          //Navigator.of(context).pushNamed('/Pressureinput');
+        },
         tooltip: 'اضافة ضغط الدم',
         child: Icon(Icons.add),
       ),
@@ -112,13 +140,13 @@ class _FancyFabState extends State<FancyFab>
   Widget toggle() {
     return Container(
       child: FloatingActionButton(
+        mini:true,
         heroTag: "btn4",
         backgroundColor: _buttonColor.value,
         onPressed: animate,
         tooltip: 'Toggle',
-        child: AnimatedIcon(
-          icon: AnimatedIcons.menu_close,
-          progress: _animateIcon,
+        child: Icon(
+          icon,
         ),
       ),
     );
@@ -132,7 +160,7 @@ class _FancyFabState extends State<FancyFab>
         Transform(
           transform: Matrix4.translationValues(
             0.0,
-            _translateButton.value * 3.0,
+            _translateButton.value * 2.59,
             0.0,
           ),
           child: _addGlucose(),
@@ -140,7 +168,7 @@ class _FancyFabState extends State<FancyFab>
         Transform(
           transform: Matrix4.translationValues(
             0.0,
-            _translateButton.value * 2.0,
+            _translateButton.value * 1.70,
             0.0,
           ),
           child: _addWeight(),
@@ -148,7 +176,7 @@ class _FancyFabState extends State<FancyFab>
         Transform(
           transform: Matrix4.translationValues(
             0.0,
-            _translateButton.value,
+            _translateButton.value * 0.87,
             0.0,
           ),
           child: _addPressure(),

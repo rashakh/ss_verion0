@@ -25,8 +25,8 @@ class SizeAnimationState extends State<SizeAnimation>
   @override
   Widget build(BuildContext context) {
     return new Container(
-      width: 170.0 * _sizeAnimation.value,
-      height: 170.0 * _sizeAnimation.value,
+      width: 140.0 * _sizeAnimation.value,
+      height: 140.0 * _sizeAnimation.value,
       child: widget.child,
     );
   }

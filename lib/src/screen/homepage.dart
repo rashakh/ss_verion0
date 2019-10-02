@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart'; // flutter main package
+import 'package:percent_indicator/percent_indicator.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -17,23 +18,185 @@ class HomePage extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: Text('Rasha'),
+              accountName: Text('رشا'),
               accountEmail: Text('r@gmail.com'),
             ),
             new ListTile(
               title: Text('الاعدادات'),
-              onTap: (){},
+              onTap: () {},
+            ),
+            new ListTile(
+              title: Text('تسجيل الخروج'),
+              onTap: () {
+                Navigator.of(context).pushReplacementNamed('/LoginPage');
+              },
             )
           ],
         ),
       ),
-      body: Center(
-        child: new Text("هذا التطبيق قيد الانشاء",
-            style: new TextStyle(
-              fontSize: 30.0,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            )),
+      body: new SingleChildScrollView(child: new Body()),
+    );
+  }
+}
+
+class Body extends StatefulWidget {
+  String _email;
+  //Body(this._email);
+  @override
+  State createState() => new _Bodystate();
+}
+
+class _Bodystate extends State<Body> {
+  var dd = 45*0.55;
+  var bgratio;
+  Widget icon = Icon(Icons.mood, color: Colors.greenAccent);
+  Color color = Colors.greenAccent;
+  double a1c = 4.0;
+
+  double _a1c() {
+    var n = a1c / 14;
+    print(n);
+    _bgratio();
+    return n;
+  }
+
+  void _bgratio() {
+    if (a1c <= 6.0) {
+      icon = Icon(Icons.mood, color: Colors.greenAccent);
+      color = Colors.greenAccent;
+    } else if (a1c > 6.0 && a1c <= 8.0) {
+      icon = Icon(Icons.mood, color: Colors.orangeAccent);
+      color = Colors.orangeAccent;
+    } else {
+      icon = Icon(Icons.mood_bad, color: Colors.redAccent);
+      color = Colors.redAccent;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: new Column(
+        children: <Widget>[
+          new Container(
+              width: 380.0,
+              height: 114.0,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(begin: Alignment.bottomLeft, colors: [
+                  Colors.white70.withOpacity(0.3),
+                  Colors.white10.withOpacity(0.3)
+                ]),
+                shape: BoxShape.rectangle,
+                borderRadius: new BorderRadius.circular(8.0),
+                boxShadow: <BoxShadow>[
+                  new BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 50.0,
+                    offset: new Offset(0.0, 5.0),
+                  ),
+                ],
+              ),
+              child: new Column(
+                children: <Widget>[
+                  new Row(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(
+                            top: 15.0, bottom: 15.0, right: 20.0),
+                        child: Text(
+                          'مجموع جرعات الانسولين اليومي: ',
+                          style: TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      new Container(
+                        padding: EdgeInsets.only(
+                          bottom: 15.0,
+                          top: 15.0,
+                        ),
+                        child: Text(
+                          dd.toInt().toString() + ' وحدة',
+                          style: TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  new Row(
+                    children: <Widget>[
+                      new Container(
+                        padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
+                        child: Text(
+                          'مجموع جرعات الصافي: ',
+                          style: TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      new Container(
+                        padding: EdgeInsets.only(
+                          bottom: 15.0,
+                        ),
+                        child: Text(
+                          (dd / 2).toInt().toString() + ' وحدة',
+                          style: TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  new Row(
+                    children: <Widget>[
+                      new Container(
+                        padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
+                        child: Text(
+                          'مجموع جرعات العكر: ',
+                          style: TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      new Container(
+                        padding: EdgeInsets.only(
+                          bottom: 15.0,
+                        ),
+                        child: Text(
+                          (dd / 2).toInt().toString() + ' وحدة',
+                          style: TextStyle(
+                            fontSize: 13.0,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
+          new Padding(
+            padding: EdgeInsets.only(top: 15.0, bottom: 15.0, right: 25.0),
+            child: new LinearPercentIndicator(
+              width: MediaQuery.of(context).size.width - 70,
+              animation: true,
+              lineHeight: 20.0,
+              animationDuration: 2000,
+              percent: _a1c(),
+              center: Text('HbA1c: ' + (_a1c() * 14).toString(),
+                  style: new TextStyle(fontWeight: FontWeight.bold)),
+              linearStrokeCap: LinearStrokeCap.roundAll,
+              progressColor: color,
+              leading: icon,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -2,8 +2,12 @@
 // this file allows user to log in into the App, represented by 'l_1' Use-Case
 
 import 'package:flutter/material.dart'; // flutter main package
-import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert'; // convert json into data
+import 'package:http/http.dart'
+    as http; // perform http request on API to get the into
 import '../widgets/aimagesize.dart'; //import animation widget
+import 'mainpage.dart';
 
 // StatefulWidget LoginPage class which has variable state
 class LoginPage extends StatefulWidget {
@@ -16,31 +20,37 @@ class LoginPage extends StatefulWidget {
 // variable states of LoginPage class will occur in LoginPageState class
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final String url =
+      'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+
+  // list item to get from http request:
   String _email;
   String _password;
+  bool _result;
   String re = 'r@gmail.com';
   String rpass = '123';
 
-  //extEditingController _user = new TextEditingController();
-  //TextEditingController _pass = new TextEditingController();
-
-  //Future<List> _login() async{
-  //final response = await http.post('http://51.36.79.20/mysql/data/ssdb/login.php',body:  {
-  //'username': _user.text,
-  //'password': _pass.text,
-  // });
-  //print(response.body);
-  //if (validateAndSave()) {
-  // Navigator.of(context).pushNamed('/MainPage');
-  // _formKey.currentState.reset();
-  // } else
-  // print('form invalid, Email: $_email,  Passwoer: $_password');
-  // }
+  Future<bool> _postData() async {
+    // map data to converted to json data
+    final Map<String, dynamic> authData = {
+      'email': _email,
+      'password': _password
+    };
+    var jsonData = JsonCodec().encode(authData); // encode data to json
+    var httpclient = new http.Client();
+    var response = await httpclient.post(url,
+        body: jsonData, headers: {'Content-type': 'application/json'});
+    _result =
+        response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
+  }
 
   bool _validateAndSave() {
     final form = _formKey.currentState;
     form.save();
+    _postData();
+    print('this is the result ${_result}');
     if (form.validate() &&
+            _result &&
             _email == widget.email &&
             _password == widget.password ||
         _email == re && _password == rpass) {
@@ -51,7 +61,11 @@ class _LoginPageState extends State<LoginPage> {
 
   void _validateAndSubmit() {
     if (_validateAndSave()) {
-      Navigator.of(context).pushNamed('/MainPage');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainPage(_email)),
+      );
+      //Navigator.of(context).pushNamed('/MainPage',arguments: _email);
       _formKey.currentState.reset();
     } else
       print('form invalid, Email: $_email,  Passwoer: $_password');
@@ -68,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             new Image(
               image: new AssetImage('assets/img.jpg'),
-              fit: BoxFit.none, // make image fit screen
+              fit: BoxFit.fill, // make image fit screen
               //color: Colors.black87,
               //colorBlendMode: BlendMode.darken, // show opacity
             ), // first widget (object or child) in the Stack
@@ -211,21 +225,21 @@ class _LoginPageState extends State<LoginPage> {
       new Padding(
         padding: const EdgeInsets.only(top: 70.0),
         child: new GestureDetector(
-        onTap: () {
+          onTap: () {
             Navigator.pushNamed(context, '/Registration');
           },
-        child: new Container(
-            alignment: Alignment.center,
-            height: 45.0,
-            decoration: new BoxDecoration(
-                color: Color(0xFFBDD22A),
-                borderRadius: new BorderRadius.circular(7.0)),
-            child: new Text("انشئ حساب جديد",
-                style: new TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold))),
-      ),
+          child: new Container(
+              alignment: Alignment.center,
+              height: 45.0,
+              decoration: new BoxDecoration(
+                  color: Color(0xFFBDD22A),
+                  borderRadius: new BorderRadius.circular(7.0)),
+              child: new Text("انشئ حساب جديد",
+                  style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold))),
+        ),
       )
     ];
   }
