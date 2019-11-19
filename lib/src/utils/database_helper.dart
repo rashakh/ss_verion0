@@ -59,7 +59,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user.db';
+    String path = directory.path + 'user2.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
@@ -80,7 +80,7 @@ class DatabaseHelper {
     await db.execute('CREATE TABLE $varietyTable ('
         '$colid INT,$colId INT,$coleat TEXT,'
         'colEmail TEXT, $colvarcarb REAL,'
-        '$colamount REAL,PRIMARY KEY (varId,mealId)');
+        '$colamount REAL,PRIMARY KEY ($colid,$colId))');
   }
 
 //----------------------------------User Table------------------------------------------
@@ -107,6 +107,7 @@ class DatabaseHelper {
   Future<int> insertMeal(Meal meal) async {
     Database db = await this.database;
     var result = await db.insert(mealTable, meal.toMap());
+  //  print(result);
     return result;
   }
 

@@ -1,3 +1,5 @@
+import 'package:dtfbl/src/models/meal.dart';
+import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:dtfbl/src/widgets/styles.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -15,6 +17,8 @@ List<Map<String, double>> _carbs = [
 ];
 double _sum = 0.0;
 int _inter = 0;
+double dbcarb;
+String dbemail, dbslot, dbnote, dbdm;
 
 class Meals extends StatelessWidget {
   Meals(this.id);
@@ -22,6 +26,7 @@ class Meals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    dbemail = id[0]['email'].toString();
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF2A79D2), //Color(0xFF7EAFE5),
@@ -68,17 +73,22 @@ class Meals extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body()),
+      body: new SingleChildScrollView(child: new Body(id)),
     );
   }
 }
 
 class Body extends StatefulWidget {
+  Body(this.id);
+  var id;
+
   @override
   State createState() => new _Bodystate();
 }
 
 class _Bodystate extends State<Body> {
+  DatabaseHelper helper = DatabaseHelper();
+
   final String url =
       'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   // Db db = new Db("mongodb://localhost:27017/mongo_dart-blog");
@@ -86,8 +96,10 @@ class _Bodystate extends State<Body> {
   var meals;
   bool _visible = true;
   DateTime dateTime = DateTime.now();
-  String note = '';
+
+  String note;
   int slot = _slot();
+
   List<String> slots = const <String>[
     'الفطور',
     'الغداء',
@@ -108,6 +120,7 @@ class _Bodystate extends State<Body> {
       slot = 0;
     return slot;
   }
+  //dbslot= slots[slot];
 
   Widget _buildSlotPicker(BuildContext context) {
     return Row(
@@ -131,11 +144,12 @@ class _Bodystate extends State<Body> {
                 size: 28,
               ),
               onPressed: () async {
-                print("clik 1");
+                //print("clik 1");
                 await showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
-                    print("1:");print(_cupPicker);
+                    //print("1:");
+                    //print(_cupPicker);
                     return _cupPicker();
                   },
                 );
@@ -160,44 +174,46 @@ class _Bodystate extends State<Body> {
 
   Widget _cupPicker() {
     return CupertinoPicker(
-      itemExtent: 40.0,
-      backgroundColor: Colors.white,
-      children: new List<Widget>.generate(slots.length, (slot) {
-        return new Center(
-          child: new Text(
-            slots[slot],
-            style: Styles.productRowItemName,
-          ),
-        );
-      }),
-      onSelectedItemChanged: (e) => {print("clik 2"), setState(() {
-        slot = e;
-        print("2:slot= $slot, and e= $e");
-      }),}
-    );
+        itemExtent: 40.0,
+        backgroundColor: Colors.white,
+        children: new List<Widget>.generate(slots.length, (slot) {
+          return new Center(
+            child: new Text(
+              slots[slot],
+              style: Styles.productRowItemName,
+            ),
+          );
+        }),
+        onSelectedItemChanged: (e) => {
+              //print("clik 2"),
+              setState(() {
+                slot = e;
+                dbslot = slots[slot];
+              }),
+            });
   }
 
   // function make the http request
   Future<String> getData() async {
     _sum = 0.0;
     _inter = 0;
-     
-    print("click 3: sum= $_sum and inter= $_inter");
+
+    //print("click 3: sum= $_sum and inter= $_inter");
     var response = await http // .get(url)
         .get(Uri.encodeFull(url), headers: {
       'Accept': 'application/json' // 'key': 'ur key'
-      }
-         //    print("sum= $_sum and inter= $_inter");
-); // .get(encode the response data as json) with headers which tell the code should be json
+    }
+            //    print("sum= $_sum and inter= $_inter");
+            ); // .get(encode the response data as json) with headers which tell the code should be json
 
     // after response back, setup the state for the application
     setState(() {
-    print("click 4: sum= $_sum and inter= $_inter and meals= $meals");
+      //print("click 4: sum= $_sum and inter= $_inter and meals= $meals");
       var responseBoddy = json.decode(response.body);
       meals = responseBoddy;
       print(responseBoddy);
       _visible = !_visible;
-    print("click 5: sum= $_sum and inter= $_inter and meals= $meals");
+      //print("click 5: sum= $_sum and inter= $_inter and meals= $meals");
 
       //['name of area in the database or in the json data']; // user for example
     });
@@ -264,14 +280,14 @@ class _Bodystate extends State<Body> {
                 size: 28,
               ),
               onPressed: () async {
-              print("click 6: sum= $_sum and inter= $_inter and meals= $meals  and $_cupDate");
+                //print(
+                   // "click 6: sum= $_sum and inter= $_inter and meals= $meals  and $_cupDate");
 
                 await showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
-              print("click 7: $_cupDate");
+                  //  print("click 7: $_cupDate");
                     return _cupDate();
-
                   },
                 );
               },
@@ -303,8 +319,8 @@ class _Bodystate extends State<Body> {
           e = DateTime.now();
         }
         dateTime = e;
-        print("click 8: e is $e");
-
+        dbdm = e.toIso8601String();
+        //print("click 8: e is $e.toIso8601String()");
       }),
     );
   }
@@ -330,9 +346,9 @@ class _Bodystate extends State<Body> {
       ),
       placeholder: 'ملاحظات',
       onChanged: (e) => setState(() {
-      print("click 9: not is $note and e = $e");
-
+        print("click 9: not is $note and e = $e");
         note = e;
+        dbnote = note;
       }),
     );
   }
@@ -394,10 +410,10 @@ class _Bodystate extends State<Body> {
                       color: Color(0xFF2A79D2),
                       onPressed: () {
                         setState(() {
-                        print("click 10: _inter = $_inter");
-  
+                          //print("click 10: _inter = $_inter");
+
                           _inter = 0;
-                        print("click 11: _inter = $_inter");
+                          //print("click 11: _inter = $_inter");
                         });
                       }),
                 )
@@ -442,6 +458,7 @@ class _Bodystate extends State<Body> {
     ]);
   }
 
+// الفئات:
   Widget _grouping() {
     return Column(
       children: <Widget>[
@@ -460,7 +477,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
+                            print("click 12: _inter = $_inter");
                             _inter = 1;
+                            //print("click 13: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -495,7 +514,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
+                            //print("click 14: _inter = $_inter");
                             _inter = 1;
+                            //print("click 15: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -535,7 +556,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
+                            //print("click 16: _inter = $_inter");
                             _inter = 1;
+                            //print("click 17: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -570,7 +593,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
+                            //print("click 18: _inter = $_inter");
                             _inter = 1;
+                            //print("click 19: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -611,6 +636,7 @@ class _Bodystate extends State<Body> {
   }
 
   List<Widget> _wid() {
+    //print("click 20: grouping:$_grouping()  , insider: $_insider()");
     return [_grouping(), _insider()];
   }
 
@@ -623,6 +649,8 @@ class _Bodystate extends State<Body> {
         children: <Widget>[
           new SizedBox(
             height: 282,
+            //print("click 21: inter:$_inter");
+            //print("click 21: inter:$_wid()[_inter]");
             child: _wid()[_inter],
           ),
           new Card(
@@ -636,20 +664,28 @@ class _Bodystate extends State<Body> {
                   padding: const EdgeInsets.only(
                       left: 5.0, right: 180.0, top: 5.0, bottom: 5.0),
                   child: new GestureDetector(
-                    onTap: () {
+                    onTap: () async {                      
+                      dbcarb = _sum;
+                      dbslot = slots[slot];
+                      dbdm=dateTime.toIso8601String();
+                      //print( "click 27: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");                      
+                      Meal meal = Meal(dbemail, dbslot, dbcarb, dbnote, dbdm);
+                      var mealw = await helper.insertMeal(meal);
+
+                      print('this result id : ${mealw}');
+                      print( "click 28: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
 
                       setState(() {
                         _sum = 0.0;
                         _inter = 0;
-                       // save,
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MainPage("")),
+                              builder: (context) => MainPage(widget.id)),
                         );
                       });
+                    
                     },
-
                     child: new Container(
                         alignment: Alignment.center,
                         height: 40.0,
@@ -680,6 +716,7 @@ class _Bodystate extends State<Body> {
 
   @override
   void initState() {
+
     super.initState();
     this.getData();
   }
@@ -688,6 +725,7 @@ class _Bodystate extends State<Body> {
 class MealCard extends StatefulWidget {
   String name;
   double carbs;
+
   int caloris;
   _Bodystate parent;
   MealCard(this.name, this.carbs, this.caloris, this.parent);
@@ -700,6 +738,7 @@ class MealCardState extends State<MealCard> {
 
   @override
   Widget build(BuildContext context) {
+
     return new Stack(
       alignment: AlignmentDirectional.center,
       children: <Widget>[
@@ -787,17 +826,17 @@ class MealCardState extends State<MealCard> {
               setState(() {
                 check = e;
                 if (check == true) {
-                  print(widget.name);
                   _carbs.add({widget.name: widget.carbs});
                   _sum += widget.carbs;
                 }
                 if (check == false) {
-                  print(widget.name);
+                  //print(widget.name);
                   _carbs.remove({widget.name: widget.carbs});
                   _sum -= widget.carbs;
                 }
               });
-              widget.parent.setState(() {});
+              widget.parent.setState(() {
+              });
             },
           ),
         ),

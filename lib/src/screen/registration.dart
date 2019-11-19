@@ -6,12 +6,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:intl/intl.dart' as intl; // flutter main package
 import 'package:flutter/cupertino.dart';
-import 'dart:async';
-import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+// import 'dart:async';
+// import 'package:http/http.dart'
+//     as http; // perform http request on API to get the into
 import 'loginpage.dart';
 
-import 'package:sqflite/sqflite.dart';
+// import 'package:sqflite/sqflite.dart';
 import '../models/user.dart';
 import '../utils/database_helper.dart';
 

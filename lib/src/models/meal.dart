@@ -32,7 +32,7 @@ class Meal {
     }
     map['email']=_email;
     map['slot'] = _slot;
-    map['carb'] = _carb;
+    map['totalCarb'] = _carb;
     map['note'] = _note;
     map['dm'] = _dm;
     return map;
@@ -42,7 +42,7 @@ class Meal {
     this._email = map['email'];
     this._id = map['id'];   
     this._slot = map['slot'];
-    this._carb = map['carb'];
+    this._carb = map['totalCarb'];
     this._note = map['note'];
     this._dm = map['dm'];
 
