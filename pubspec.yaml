@@ -30,7 +30,8 @@ dependencies:
   numberpicker: ^1.1.0
   flutter_spinkit: "^4.0.0"
   percent_indicator: "^2.1.1"
-  mongo_dart: ^0.2.5
+  sqflite: any
+  path_provider: any
   
 
   # The following adds the Cupertino Icons font to your application.
@@ -61,6 +62,9 @@ flutter:
     - assets/img.jpg
     - assets/icon12.png
     - assets/acarbose.png
+    - assets/novonorm.jpg
+    - assets/insulin1.jpg
+    - assets/insulin2.jpg
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

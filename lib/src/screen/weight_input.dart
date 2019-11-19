@@ -8,10 +8,10 @@ import 'dart:async';
 import 'dart:convert'; // convert json into data
 import 'package:http/http.dart'
     as http; // perform http request on API to get the into
-
+import 'mainpage.dart';
 class Weightinput extends StatelessWidget {
-  String _email;
-  Weightinput(this._email);
+  Weightinput(this.id);
+  var id;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -26,14 +26,14 @@ class Weightinput extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(_email)),
+          body: new SingleChildScrollView(child: new Body(id)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  String _email;
-  Body(this._email);
+  Body(this.id);
+  var id;
   @override
   State createState() => new _Bodystate();
 }
@@ -51,7 +51,7 @@ class _Bodystate extends State<Body> {
   Future<bool> _postData() async {
     // map data to converted to json data
     final Map<String, dynamic> userData = {
-      'email': widget._email,
+      'email': widget.id[0]['email'],
       'Weight': weight,
       'DateTime': dateTime.toIso8601String(),
       'Note': note,
@@ -133,7 +133,7 @@ class _Bodystate extends State<Body> {
                   maxValue: 400,
                   itemExtent: 60,
                   onChanged: (e) => setState(() {
-                        print('this is weight ${widget._email}');
+                        print('this is weight ${widget.id}');
                         if (e > 130 || e < 30) {
                           slider = Colors.redAccent[400];
                           evaluation = 'هذا ليس جيد';
@@ -260,16 +260,23 @@ class _Bodystate extends State<Body> {
             child: new ButtonBar(
               children: <Widget>[
                 new FlatButton(
-                  child: Text('تمام',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                      )),
-                  onPressed: () => setState(() {}),
+                  child: Icon(Icons.check,size: 30.0,),
+                  // Text('تمام',
+                  //     style: TextStyle(
+                  //       fontSize: 20.0,
+                  //     )),
+                  onPressed: () => setState(() {
+                    Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainPage(widget.id)),
+                        );
+                  }),
                 ),
                 SizedBox(width: 160.0),
                 new FlatButton(
-                  child: Text('الغاء',
-                      style: TextStyle(fontSize: 20.0, color: Colors.red)),
+                  child: Icon(Icons.close,size: 30.0,color: Colors.red),
+                  // Text('الغاء',
+                  //     style: TextStyle(fontSize: 20.0, color: Colors.red)),
                   onPressed: () => Navigator.pop(context),
                 ),
                 SizedBox(width: 10.0),

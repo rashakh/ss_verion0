@@ -8,6 +8,8 @@ import 'package:http/http.dart'
     as http; // perform http request on API to get the into
 
 class Medications extends StatelessWidget {
+  Medications(this.id);
+  var id;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -24,8 +26,24 @@ class Medications extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: Text('رشا'),
-              accountEmail: Text('r@gmail.com'),
+              accountName: Text(id[0]['fname'].toString()),
+              accountEmail: Text(id[0]['email'].toString()),
+            ),
+            new ListTile(
+              title: Text('الادوية'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/MedAlert');
+              },
+            ),
+            new ListTile(
+              title: Text('الفحوصات الدورية'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/PeriodicTest');
+              },
+            ),
+            new ListTile(
+              title: Text('التقارير'),
+              onTap: () {},
             ),
             new ListTile(
               title: Text('الاعدادات'),
@@ -64,10 +82,10 @@ class _Bodystate extends State<Body> {
         .get(Uri.encodeFull(url), headers: {
       'Accept': 'application/json' // 'key': 'ur key'
     }); // .get(encode the response data as json) with headers which tell the code should be json
-
     // after response back, setup the state for the application
     setState(() {
       var responseBoddy = json.decode(response.body);
+      print(responseBoddy);
       meds = responseBoddy;
       _visible = !_visible;
       //['name of area in the database or in the json data']; // user for example
@@ -75,14 +93,14 @@ class _Bodystate extends State<Body> {
     return 'Success!'; // tell whether|not get the json
   }
 
-  Widget _medicTxt(String title, String info) {
+  Widget _medicTxt(String title, String info, AssetImage image) {
     return Column(
       children: <Widget>[
         new Stack(
           alignment: AlignmentDirectional.topCenter,
           children: <Widget>[
             Container(
-              margin: new EdgeInsets.only(top: 40.0),
+              margin: new EdgeInsets.only(top: 7.0),
               width: 360.0,
               height: 470.0,
               decoration: BoxDecoration(
@@ -121,7 +139,7 @@ class _Bodystate extends State<Body> {
               ),
               child: Center(
                 child: new Image(
-                  image: new AssetImage('assets/acarbose.png'),
+                  image: image,
                 ),
                 //     Text(
                 //   'Medicine Pic',
@@ -131,7 +149,7 @@ class _Bodystate extends State<Body> {
             ),
             Container(
               margin:
-                  new EdgeInsets.symmetric(vertical: 180.0, horizontal: 40.0),
+                  new EdgeInsets.only(left: 40.0, right: 40.0, top: 180.0, bottom: 70.0),
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Column(
@@ -160,7 +178,6 @@ class _Bodystate extends State<Body> {
             ),
           ],
         ),
-        SizedBox(height: 30.0),
       ],
     );
   }
@@ -174,11 +191,27 @@ class _Bodystate extends State<Body> {
             new ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: meds == null ? 0 : meds.length,
+                itemCount: meds == null ? 0 : 1,
+                // itemCount: meds == null ? 0 : meds.length,
                 itemBuilder: (BuildContext context, int index) {
                   return new Container(
-                    child: _medicTxt('اكاربوز (جلوكوباي)',
-                        'يستخدم للنوع الثاني من مرض السكري.\nيقلل من متسوى السكر في الدم.\n\nاذا شعرت بهذه الاعراض اخبر الطبيب:\n-ارتفاع في درجه الحرارة.\n-غثيان ومغص وفقدان شهية.\n-اصفرار الجلد.'),
+                    child: Column(
+                      children: <Widget>[
+_medicTxt('اكاربوز (جلوكوباي)',
+                        'يستخدم للنوع الثاني من مرض السكري.\nيقلل من متسوى السكر في الدم.\n\nاذا شعرت بهذه الاعراض اخبر الطبيب:\n-ارتفاع في درجه الحرارة.\n-غثيان ومغص وفقدان شهية.\n-اصفرار الجلد.',new AssetImage('assets/acarbose.png')),
+                   
+                   _medicTxt('ريباجلينايد (نوفونورم)',
+                        'يستخدم للنوع الثاني من مرض السكري، ولا يستخدم للنوع الاول.\nيحفز البنكرياس لإفراز هرمون الانسولين.\n\nاذا شعرت بهذه الاعراض اخبر الطبيب:\n- تشنجات.\n-اصفرار الجلد او العين.\n-صداع الم في الظهر او المفاصل.',new AssetImage('assets/novonorm.jpg')),
+                   
+                   _medicTxt('انسولين قصير التأثير (الصافي)',
+                        'هو الانسولين المنتظم و يعد اكثر انواع الانسولين استقرارا .\n\nيؤخذ قبل الوجبة بـ ٣٠ دقيقة.\n\nاذا كان السائل معكرا فيجب التخلص من الزجاجة.',new AssetImage('assets/insulin1.jpg')),
+                   
+                   _medicTxt('انسولين متوسط التأثير (العكر)',
+                        'هذا النوع من الانسولين يجب تحريكه داخل الزجاجه قبل الاستخدام.\n\nيؤخذ قبل الافطار، ،قبل النوم .\n\nيجب ان تتبع تعليمات طبيبك عند استخدام هذا الانسولين.',new AssetImage('assets/insulin2.jpg')),
+                   
+                      ],
+                    )
+                    
                     //_medicTxt(meds[index]["Medicine"], meds[index]["info"]),
                   );
                 }),

@@ -8,10 +8,10 @@ import 'dart:async';
 import 'dart:convert'; // convert json into data
 import 'package:http/http.dart'
     as http; // perform http request on API to get the into
-
+import 'mainpage.dart';
 class GlucoseMeasure extends StatelessWidget {
-  String _email;
-  GlucoseMeasure(this._email);
+  GlucoseMeasure(this.id);
+  var id;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -26,15 +26,15 @@ class GlucoseMeasure extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(_email)),
+          body: new SingleChildScrollView(child: new Body(id)),
           // Padding(padding: const EdgeInsets.only(top: 100), child: Body()),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  String _email;
-  Body(this._email);
+  Body(this.id);
+  var id;
   @override
   State createState() => new _Bodystate();
 }
@@ -49,11 +49,17 @@ class _Bodystate extends State<Body> {
   Color slider = Colors.greenAccent[400];
   String note = '';
   int slot = _slot();
+    int pa = 0;
   Duration dur = new Duration(
     hours: 0,
     minutes: 30,
   );
-  double n = 44.0;
+   List<String> pas = const <String>[
+     'المشي',
+    'تمارين هوائية',
+    'ركوب الدراجة',
+    'السباحة',
+  ];
   List<String> slots = const <String>[
     'قبل النوم',
     'بعد الاستيقاظ',
@@ -63,6 +69,7 @@ class _Bodystate extends State<Body> {
     'بعد الغداء',
     'قبل العشاء',
     'بعد العشاء',
+    'قبل الرياضة',
     'بعد الرياضة',
   ];
 
@@ -88,29 +95,29 @@ class _Bodystate extends State<Body> {
     return slot;
   }
 
-  Future<bool> _postData() async {
-    // map data to converted to json data
-    final Map<String, dynamic> userData = {
-      'email': widget._email,
-      'Glucose Measure': gm,
-      'DateTime': dateTime.toIso8601String(),
-      'Slot': slot,
-      'Note': note,
-    };
-    var jsonData = JsonCodec().encode(userData); // encode data to json
-    var httpclient = new http.Client();
-    var response = await httpclient.post(url,
-        body: jsonData, headers: {'Content-type': 'application/json'});
-    print('the body of the response = \n${response.body}\n.');
-    _result =
-        response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
-  }
+  // Future<bool> _postData() async {
+  //   // map data to converted to json data
+  //   final Map<String, dynamic> userData = {
+  //     'email': widget.id[0]['email'],
+  //     'Glucose Measure': gm,
+  //     'DateTime': dateTime.toIso8601String(),
+  //     'Slot': slot,
+  //     'Note': note,
+  //   };
+  //   var jsonData = JsonCodec().encode(userData); // encode data to json
+  //   var httpclient = new http.Client();
+  //   var response = await httpclient.post(url,
+  //       body: jsonData, headers: {'Content-type': 'application/json'});
+  //   print('the body of the response = \n${response.body}\n.');
+  //   _result =
+  //       response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
+  // }
 
   String message = 'ادخل نسبة الجولوكوز في الدم';
 
   void _changed(e) {
     setState(() {
-      print('this is glucose ${widget._email}');
+      print('this is glucose ${widget.id[0]['email']}');
       gm = e;
       if (gm < 80 || gm > 180) {
         slider = Colors.redAccent[400];
@@ -125,7 +132,7 @@ class _Bodystate extends State<Body> {
   Widget _glucose() {
     return Card(
         child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 90.0, vertical: 5.0),
+      padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 5.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -139,7 +146,7 @@ class _Bodystate extends State<Body> {
               ),
               children: <TextSpan>[
                 TextSpan(
-                  text: '(الوحدة)',
+                  text: '(mg/dL)',
                   style: TextStyle(
                     fontSize: 15.0,
                     fontWeight: FontWeight.w500,
@@ -345,10 +352,6 @@ class _Bodystate extends State<Body> {
       }),
       onSelectedItemChanged: (e) => setState(() {
         slot = e;
-        if (slot == 8)
-          n = 20.0;
-        else
-          n = 44.0;
       }),
     );
   }
@@ -409,6 +412,70 @@ class _Bodystate extends State<Body> {
             }));
   }
 
+  Widget _buildActivityType(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        SizedBox(width: 8.0),
+        new Text(
+          'نوع الرياضة :',
+          style: Styles.productRowItemName,
+        ),
+        Row(
+          children: <Widget>[
+            new Text(
+              '(',
+              style: Styles.productRowItemName,
+            ),
+            new IconButton(
+              icon: Icon(
+                Icons.directions_run,
+                color: CupertinoColors.activeBlue,
+                size: 28,
+              ),
+              onPressed: () async {
+                await showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return _cupType();
+                  },
+                );
+              },
+            ),
+            new Text(
+              ')',
+              style: Styles.productRowItemName,
+            ),
+            SizedBox(width: 10.0),
+          ],
+        ),
+        SizedBox(width: 80.0),
+        new Text(
+          pas[pa] + '\t',
+          style: Styles.productRowItemName,
+        ),
+        SizedBox(width: 20.0),
+      ],
+    );
+  }
+    Widget _cupType() {
+    return CupertinoPicker(
+      itemExtent: 40.0,
+      backgroundColor: Colors.white,
+      children: new List<Widget>.generate(pas.length,(pa) {
+        return new Center(
+          child: new Text(
+            pas[pa],
+            style: Styles.productRowItemName,
+          ),
+        );
+      }),
+      onSelectedItemChanged: (e) => setState(() {
+        pa = e;
+      }),
+    );
+  }
+
   Widget _buildNoteField() {
     return CupertinoTextField(
       prefix: const Icon(
@@ -444,26 +511,35 @@ class _Bodystate extends State<Body> {
           SizedBox(height: 40.0),
           _buildDateAndTimePicker(context),
           _buildSlotPicker(context),
-          if (slot == 8) _buildActivityPicker(context),
+          if (slot == 8) _buildActivityType(context),
+          if (slot == 9) _buildActivityPicker(context),
+          SizedBox(height: 20.0),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: n, horizontal: 10.0),
+            padding: EdgeInsets.symmetric(vertical: 0 , horizontal: 10.0),
             child: _buildNoteField(),
           ),
-          SizedBox(height: 20.0),
+          SizedBox(height: 30.0),
           new ButtonTheme.bar(
             child: new ButtonBar(
               children: <Widget>[
                 new FlatButton(
-                  child: Text('تمام',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                      )),
-                  onPressed: () => setState(() {}),
+                  child: Icon(Icons.check,size: 30.0,),
+                  // Text('تمام',
+                  //     style: TextStyle(
+                  //       fontSize: 20.0,
+                  //     )),
+                  onPressed: () => setState(() {
+                    Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainPage(widget.id)),
+                        );
+                  }),
                 ),
                 SizedBox(width: 160.0),
                 new FlatButton(
-                  child: Text('الغاء',
-                      style: TextStyle(fontSize: 20.0, color: Colors.red)),
+                  child: Icon(Icons.close,size: 30.0,color: Colors.red),
+                  // Text('الغاء',
+                  //     style: TextStyle(fontSize: 20.0, color: Colors.red)),
                   onPressed: () => Navigator.pop(context),
                 ),
                 SizedBox(width: 10.0),

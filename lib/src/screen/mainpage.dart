@@ -10,26 +10,37 @@ import 'medications.dart'; //import medications file
 import '../widgets/fancy_fab.dart';
 
 class MainPage extends StatefulWidget {
-  final String _email;
-  MainPage(@required this._email);
+  MainPage(@required this.id);
+  var id;
   @override
   State createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
   int _selectedPage = 0;
-  final List<Widget> _pages = [
-    new HomePage(),
-    new Meals(),
-    //new PhysicalActivity(),
-    new Instructions(),
-    new Medications(),
-  ];
+   Widget pages(_selectedPage) {
+      print('here is id in main ${widget.id}');
+    final List<Widget> _pages = [
+      new HomePage(widget.id),
+      new Meals(widget.id),
+      //new PhysicalActivity(),
+      new Instructions(widget.id),
+      new Medications(widget.id),
+    ];
+    return _pages[_selectedPage];
+  }
+  // final List<Widget> _pages = [
+  //   new HomePage(widget.id),
+  //   new Meals(),
+  //   //new PhysicalActivity(),
+  //   new Instructions(),
+  //   new Medications(),
+  // ];
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: _pages[_selectedPage],
-      floatingActionButton: new FancyFab(widget._email),
+      body: pages(_selectedPage),
+      floatingActionButton: new FancyFab(widget.id),
       bottomNavigationBar: new BottomNavigationBar(
         currentIndex: _selectedPage,
         onTap: (int index) {

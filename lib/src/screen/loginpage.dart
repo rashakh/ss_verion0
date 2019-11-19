@@ -8,67 +8,70 @@ import 'package:http/http.dart'
     as http; // perform http request on API to get the into
 import '../widgets/aimagesize.dart'; //import animation widget
 import 'mainpage.dart';
+import 'package:sqflite/sqflite.dart';
+import '../models/user.dart';
+import '../utils/database_helper.dart';
 
 // StatefulWidget LoginPage class which has variable state
 class LoginPage extends StatefulWidget {
-  final String email, password;
-  const LoginPage({Key key, this.email, this.password}) : super(key: key);
   @override
   State createState() => new _LoginPageState();
 }
 
 // variable states of LoginPage class will occur in LoginPageState class
 class _LoginPageState extends State<LoginPage> {
+  DatabaseHelper helper = DatabaseHelper();
   final _formKey = GlobalKey<FormState>();
   final String url =
       'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
 
   // list item to get from http request:
-  String _email;
-  String _password;
-  bool _result;
-  String re = 'r@gmail.com';
-  String rpass = '123';
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  String _email, _password;
 
-  Future<bool> _postData() async {
-    // map data to converted to json data
-    final Map<String, dynamic> authData = {
-      'email': _email,
-      'password': _password
-    };
-    var jsonData = JsonCodec().encode(authData); // encode data to json
-    var httpclient = new http.Client();
-    var response = await httpclient.post(url,
-        body: jsonData, headers: {'Content-type': 'application/json'});
-    _result =
-        response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
-  }
+  // Future<bool> _postData() async {
+  //   // map data to converted to json data
+  //   final Map<String, dynamic> authData = {
+  //     'email': _email,
+  //     'password': _password
+  //   };
+  //   var jsonData = JsonCodec().encode(authData); // encode data to json
+  //   var httpclient = new http.Client();
+  //   var response = await httpclient.post(url,
+  //       body: jsonData, headers: {'Content-type': 'application/json'});
+  //   _result =
+  //       response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
+  // }
 
-  bool _validateAndSave() {
+  bool _validateAndSave(var id) {
     final form = _formKey.currentState;
     form.save();
-    _postData();
-    print('this is the result ${_result}');
     if (form.validate() &&
-            _result &&
-            _email == widget.email &&
-            _password == widget.password ||
-        _email == re && _password == rpass) {
+        id[0]['email'] == emailController.text &&
+        id[0]['Pass'] == passwordController.text) {
       return true;
     } else
       return false;
   }
 
-  void _validateAndSubmit() {
-    if (_validateAndSave()) {
+  void _validateAndSubmit() async {
+    var id =
+        await helper.getUser(emailController.text, passwordController.text);
+    if (id == null) {
+      print(
+          'form invalid, Email: ${emailController.text}, Passwoer: ${passwordController.text}');
+    } else if (_validateAndSave(id)) {
+      print('here is login id : ${id}');
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainPage(_email)),
+        MaterialPageRoute(builder: (context) => new MainPage(id)),
       );
       //Navigator.of(context).pushNamed('/MainPage',arguments: _email);
       _formKey.currentState.reset();
     } else
-      print('form invalid, Email: $_email,  Passwoer: $_password');
+      print(
+          'form invalid, Email: ${emailController.text},  Passwoer: ${passwordController.text}');
   }
 
   @override
@@ -135,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
   List<Widget> buildInput() {
     return [
       new TextFormField(
-        //controller: _user,
+        controller: emailController,
         decoration: InputDecoration(
           hintText: 'ادخل ايميلك',
           hintStyle: new TextStyle(fontSize: 20.0, color: Colors.black87),
@@ -155,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       new Padding(padding: const EdgeInsets.only(top: 20.0)),
       new TextFormField(
-        //controller: _pass,
+        controller: passwordController,
         decoration: InputDecoration(
           hintText: 'ادخل كلمة المرور',
           hintStyle: new TextStyle(fontSize: 20.0, color: Colors.black87),

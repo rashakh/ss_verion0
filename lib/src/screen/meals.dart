@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:convert'; // convert json into data
 import 'package:http/http.dart'
     as http; // perform http request on API to get the into
+import 'mainpage.dart';
 
 List<Map<String, double>> _carbs = [
   {'meal': 0.0}
@@ -16,6 +17,9 @@ double _sum = 0.0;
 int _inter = 0;
 
 class Meals extends StatelessWidget {
+  Meals(this.id);
+  var id;
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -32,8 +36,24 @@ class Meals extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: Text('رشا'),
-              accountEmail: Text('r@gmail.com'),
+              accountName: Text(id[0]['fname'].toString()),
+              accountEmail: Text(id[0]['email'].toString()),
+            ),
+            new ListTile(
+              title: Text('الادوية'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/MedAlert');
+              },
+            ),
+            new ListTile(
+              title: Text('الفحوصات الدورية'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/PeriodicTest');
+              },
+            ),
+            new ListTile(
+              title: Text('التقارير'),
+              onTap: () {},
             ),
             new ListTile(
               title: Text('الاعدادات'),
@@ -59,7 +79,8 @@ class Body extends StatefulWidget {
 }
 
 class _Bodystate extends State<Body> {
-  final String url = 'http://127.0.0.1:8000/varity/carb'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+  final String url =
+      'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   // Db db = new Db("mongodb://localhost:27017/mongo_dart-blog");
   // await db.open();
   var meals;
@@ -308,45 +329,44 @@ class _Bodystate extends State<Body> {
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                new Container(
-                  alignment: Alignment.centerRight,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: new BorderRadius.circular(80.0),
-                    boxShadow: <BoxShadow>[
-                      new BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 50.0,
-                        offset: new Offset(0.0, 5.0),
-                      ),
-                    ],
-                  ),
-                  height: 40.0,
-                  width: 290.0,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 12.0, left: 12.0),
-                    child: new CupertinoTextField(
-                      prefix: Icon(
-                        Icons.search,
-                        color: CupertinoColors.activeBlue,
-                      ),
-                      placeholder: 'بـحـث',
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 5.0),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            width: 0,
-                            color: CupertinoColors.activeBlue,
-                          ),
-                        ),
-                      ),
-                      onChanged: (e) {
-                        
-                      },
-                    ),
-                  ),
-                ),
+                // new Container(
+                //   alignment: Alignment.centerRight,
+                //   decoration: BoxDecoration(
+                //     color: Colors.white,
+                //     borderRadius: new BorderRadius.circular(80.0),
+                //     boxShadow: <BoxShadow>[
+                //       new BoxShadow(
+                //         color: Colors.black12,
+                //         blurRadius: 50.0,
+                //         offset: new Offset(0.0, 5.0),
+                //       ),
+                //     ],
+                //   ),
+                //   height: 40.0,
+                //   width: 290.0,
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(right: 12.0, left: 12.0),
+                //     child: new CupertinoTextField(
+                //       prefix: Icon(
+                //         Icons.search,
+                //         color: CupertinoColors.activeBlue,
+                //       ),
+                //       placeholder: 'بـحـث',
+                //       padding: const EdgeInsets.symmetric(
+                //           horizontal: 10.0, vertical: 5.0),
+                //       decoration: BoxDecoration(
+                //         border: Border(
+                //           bottom: BorderSide(
+                //             width: 0,
+                //             color: CupertinoColors.activeBlue,
+                //           ),
+                //         ),
+                //       ),
+                //       onChanged: (e) {
+                //       },
+                //     ),
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.only(
                     right: 15.0,
@@ -369,8 +389,19 @@ class _Bodystate extends State<Body> {
                 //physics: NeverScrollableScrollPhysics(),
                 itemCount: meals == null ? 0 : meals.length,
                 itemBuilder: (BuildContext context, int index) {
-                  // var meal = MealCard('تفاح', 30, 50, this);
-                   return  MealCard('تفاح', 30, 50, this);
+                  var meal = MealCard('تفاح', 30, 50, this);
+                  return Column(
+                    children: <Widget>[
+                      MealCard('تفاح', 25.1, 95, this),
+                      MealCard('القهوة', 0, 2, this),
+                      MealCard('الموز', 34.3, 134, this),
+                      MealCard('البيض', 0.7, 134, this),
+                      MealCard('حليب', 10.9, 149, this),
+                      MealCard('رز ابيض', 44.5, 205, this),
+                      MealCard('الدجاج', 0, 114, this),
+                      MealCard('تفاح', 30, 50, this)
+                    ],
+                  );
                 }),
           ),
         ],
@@ -588,6 +619,11 @@ class _Bodystate extends State<Body> {
                       setState(() {
                         _sum = 0.0;
                         _inter = 0;
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MainPage('r@gmail.com')),
+                        );
                       });
                     },
                     child: new Container(

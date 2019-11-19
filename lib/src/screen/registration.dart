@@ -11,6 +11,10 @@ import 'package:http/http.dart'
     as http; // perform http request on API to get the into
 import 'loginpage.dart';
 
+import 'package:sqflite/sqflite.dart';
+import '../models/user.dart';
+import '../utils/database_helper.dart';
+
 class Registration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -35,13 +39,13 @@ class RegistrationForm extends StatefulWidget {
 }
 
 class _RegistrationFormState extends State<RegistrationForm> {
+  DatabaseHelper helper = DatabaseHelper();
   final _formKey = GlobalKey<FormState>();
   final String url =
       'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   final intl.DateFormat format = new intl.DateFormat('y-M-d');
   String _email, _password, _fName, _lName;
-  int _gender;
-  int _type;
+  int _gender, _type;
   double _height, _weight;
   DateTime _birthday = new DateTime.now();
   DateTime _dd = new DateTime.now();
@@ -65,35 +69,35 @@ class _RegistrationFormState extends State<RegistrationForm> {
     });
   }
 
-  Future<bool> _postData() async {
-    // map data to converted to json data
-    final Map<String, dynamic> userData = {
-      '_id': _email,
-      'password': _password,
-      'fName': _fName,
-      'lName': _lName,
-      'weight': _weight,
-      'height': _height,
-      'gender': _gender,
-      'type': _type,
-      'bd': _birthday.toIso8601String(),
-      'dd': _dd.toIso8601String(),
-    };
-    var jsonData = JsonCodec().encode(userData); // encode data to json
-    var httpclient = new http.Client();
-    var response = await httpclient.post(url,
-        body: jsonData, headers: {'Content-type': 'application/json'});
-    print('the body of the response = \n${response.body}\n.');
-    _result =
-        response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
-  }
+  // Future<bool> _postData() async {
+  //   // map data to converted to json data
+  //   final Map<String, dynamic> userData = {
+  //     '_id': _email,
+  //     'password': _password,
+  //     'fName': _fName,
+  //     'lName': _lName,
+  //     'weight': _weight,
+  //     'height': _height,
+  //     'gender': _gender,
+  //     'type': _type,
+  //     'bd': _birthday.toIso8601String(),
+  //     'dd': _dd.toIso8601String(),
+  //   };
+  //   var jsonData = JsonCodec().encode(userData); // encode data to json
+  //   var httpclient = new http.Client();
+  //   var response = await httpclient.post(url,
+  //       body: jsonData, headers: {'Content-type': 'application/json'});
+  //   print('the body of the response = \n${response.body}\n.');
+  //   _result =
+  //       response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
+  // }
 
   bool validateAndSave() {
     final form = _formKey.currentState;
     form.save();
-    _postData();
+    //_postData();
     if (form.validate() &&
-        _result == true &&
+        //_result == true &&
         _gender != -1 &&
         format.format(_birthday) != format.format(DateTime.now())) {
       return true;
@@ -101,20 +105,30 @@ class _RegistrationFormState extends State<RegistrationForm> {
       return false;
   }
 
-  void validateAndSubmit() {
+  void validateAndSubmit() async {
     if (validateAndSave()) {
-      print(
-          'form valid, Email: ${_email},  Passwoer: ${_password}, ${_fName}, ${_lName}, ${_gender}, ${_height}, ${_birthday}');
+      User user = User(
+          _email,
+          _password,
+          _fName,
+          _lName,
+          _dd.toIso8601String(),
+          _birthday.toIso8601String(),
+          _gender,
+          _type,
+          _height,
+          _weight,
+          (((_weight / _height) / _height) * 10000));
+      var id = await helper.insertUser(user);
+      print('this result id : ${id}');
       var route = new MaterialPageRoute(
-          builder: (context) => new LoginPage(
-                email: _email,
-                password: _password,
-              ));
+          builder: (context) => new LoginPage());
       Navigator.of(context).push(route);
       _formKey.currentState.reset();
-    } else
+    } else {
       print(
           'form invalid, Email: ${_email},  Passwoer: ${_password}, ${_fName}, ${_lName}, ${_gender}, ${_height}, ${_weight}, ${_birthday}');
+    }
   }
 
   Widget _cupdate() {
@@ -218,7 +232,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                                           ? 'هذا الحقل مطلوب'
                                                           : null,
                                                   onSaved: (value) =>
-                                                      _lName = value,
+                                                      _fName = value,
                                                 ),
                                               ),
                                             ),
@@ -246,7 +260,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                                           ? 'هذا الحقل مطلوب'
                                                           : null,
                                                   onSaved: (value) =>
-                                                      _fName = value,
+                                                      _lName = value,
                                                 ),
                                               ),
                                             ),

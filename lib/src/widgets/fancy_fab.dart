@@ -7,10 +7,10 @@ class FancyFab extends StatefulWidget {
   final Function() onPressed;
   final String tooltip;
   IconData icon;
-  String _email;
+  List<Map<String, dynamic>> id;
 
   FancyFab(
-    this._email, {
+    this.id, {
     this.onPressed,
     this.tooltip,
     this.icon,
@@ -90,11 +90,11 @@ class _FancyFabState extends State<FancyFab>
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => GlucoseMeasure(widget._email)),
+                builder: (context) => GlucoseMeasure(widget.id)),
           );
           //Navigator.of(context).pushNamed('/GlucoseMeasure');
         },
-        tooltip: 'اضافة نسبة الجولوكوز',
+        tooltip: 'اضافة قراءة السكر في الدم',
         child: Icon(Icons.add),
       ),
     );
@@ -108,11 +108,11 @@ class _FancyFabState extends State<FancyFab>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Weightinput(widget._email)),
+            MaterialPageRoute(builder: (context) => Weightinput(widget.id)),
           );
           //Navigator.of(context).pushNamed('/Weightinput');
         },
-        tooltip: 'اضافة وزن',
+        tooltip: 'اضافة الوزن',
         child: Icon(Icons.add),
       ),
     );
@@ -127,7 +127,7 @@ class _FancyFabState extends State<FancyFab>
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Pressureinput(widget._email)),
+                builder: (context) => Pressureinput(widget.id)),
           );
           //Navigator.of(context).pushNamed('/Pressureinput');
         },
@@ -144,7 +144,7 @@ class _FancyFabState extends State<FancyFab>
         heroTag: "btn4",
         backgroundColor: _buttonColor.value,
         onPressed: animate,
-        tooltip: 'Toggle',
+        tooltip: 'اضافة',
         child: Icon(
           icon,
         ),

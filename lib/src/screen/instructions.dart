@@ -8,6 +8,8 @@ import 'package:http/http.dart'
     as http; // perform http request on API to get the into
 
 class Instructions extends StatelessWidget {
+  Instructions(this.id);
+  var id;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -24,8 +26,24 @@ class Instructions extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              accountName: Text('رشا'),
-              accountEmail: Text('r@gmail.com'),
+              accountName: Text(id[0]['fname'].toString()),
+              accountEmail: Text(id[0]['email'].toString()),
+            ),
+            new ListTile(
+              title: Text('الادوية'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/MedAlert');
+              },
+            ),
+            new ListTile(
+              title: Text('الفحوصات الدورية'),
+              onTap: () {
+                Navigator.of(context).pushNamed('/PeriodicTest');
+              },
+            ),
+            new ListTile(
+              title: Text('التقارير'),
+              onTap: () {},
             ),
             new ListTile(
               title: Text('الاعدادات'),
@@ -164,13 +182,27 @@ class _Bodystate extends State<Body> {
             new ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: insts == null ? 0 : insts.length,
+                itemCount: insts == null ? 0 : 1,
+                //itemCount: insts == null ? 0 : insts.length,
                 itemBuilder: (BuildContext context, int index) {
                   return new Container(
-                    child: _instrTxt('Issue','information about the issue'),
-                    // _instrTxt('الكربوهيدرات',
-                    //     'الكربوهيدرات البسيطة تتحلل بسرعة الى جلوكوز لترفع مستوى السكر في الدم.\n\nمثال: الاطعمة المصنعة و المكررة، الارز الابيض\n\n\nالكربوهيدرات المعقدة تتحل بشكل ابطئ مما يساعد على الشعور بالشبع ويبطئ ارتفاع مستوى السكر في الدم.\n\nمثال: الارز الاسمر، الدقيق الاسمر، الشوفان'),
+                    child: Column(
+                      children: <Widget>[
+_instrTxt('الكربوهيدرات',
+                        'الكربوهيدرات البسيطة تتحلل بسرعة الى جلوكوز لترفع مستوى السكر في الدم.\n\nمثال: الاطعمة المصنعة و المكررة، الارز الابيض\n\n\nالكربوهيدرات المعقدة تتحل بشكل ابطئ مما يساعد على الشعور بالشبع ويبطئ ارتفاع مستوى السكر في الدم.\n\nمثال: الارز الاسمر، الدقيق الاسمر، الشوفان'),
+                  _instrTxt('تحليل السكر التراكمي A1C',
+                        'هو تحليل يظهر مدى تحكم الفرد بمستوى السكر في الدم على مدار ثلاث اشهر.\n\nتتراوح قيمته بين ٤ و ١٤\n\nمن الجيد ان تكون قيمته بين ٥ و ٧، وكلما زاد عن ذلك كل ما كان الشخص معرض للمخاطر.\n\nاذا كان تحليل السكر التراكمي مرتفع عن ٨، يكون الشخص عرضه لامراض خطيرة مثل امراض الكلى و العين'),
                   
+                  _instrTxt('مواضع حقن الأنسولين',
+                        'افضل المواضع لحقن الأنسولين: الذراعين، البطن،الفخذين، الردفين.\n\nيحقن الأنسولين في النسيج تحت الجلد\n\nيجب مراعاة تغيير مواضع الحقن من فترة الى اخري، لان الحقن المستمر في نفس الموضع يسبب تليف الموضع، بالتالي لا يمر الأنسلين خلال الانسجة.\n\nقبل الحقن يجب ان تتأكد من تعقيم الموضع، وخلوه من اي اورام، وان شعرت بذلك لا تحقن في نفس الموضع حتى تزول الاورام'),
+                  
+                  _instrTxt('كن على اهبة الاستعداد',
+                        'من المهم ان تستعد و تعد احتياطاتك في جميع الظروف و الاسباب.\n\nدائما ارتدي سوارا وبطاقة تبين انك مصاب  سكري\n\n احمل دائما معك قطعه حلوى في حال شعرت باعراض انخفاض السكر.\n\nفي حاله السفر لا تنسى ان تستخدم حقيبة اليد لحمل الانسولين و الابر، و جهاز قياس السكر، وايضا خذ معك كمية اكبر من الانسولين'),
+                  
+                      ],
+                    ),
+                    //_instrTxt('Issue','information about the issue'),
+                    
                   );
                 }),
             AnimatedOpacity(
