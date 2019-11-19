@@ -33,7 +33,7 @@
     map['mealId'] = _mealId;
     map['email']=_email;
     map['eat'] = _eat;
-    map['carb'] = _carb;
+    map['varcarb'] = _carb;
     map['amount'] = _amount;
     return map;
   }
@@ -44,7 +44,7 @@
     this._email = map['email'];
    // this._id = map['id'];   
     this._eat = map['eat'];
-    this._carb = map['carb'];
+    this._carb = map['varcarb'];
     this._amount = map['amount'];
 
   }

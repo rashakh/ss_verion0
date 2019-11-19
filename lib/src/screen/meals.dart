@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:dtfbl/src/models/meal.dart';
+import 'package:dtfbl/src/models/variety.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:dtfbl/src/widgets/styles.dart';
@@ -17,9 +20,12 @@ List<Map<String, double>> _carbs = [
 ];
 double _sum = 0.0;
 int _inter = 0;
-double dbcarb;
-String dbemail, dbslot, dbnote, dbdm;
-
+double dbcarb,dbvarycarb;
+String dbemail, dbslot, dbnote, dbdm,dbeat;
+int dbvarId;
+int dbamount=1;
+int coun=0;
+var varty = new List(); 
 class Meals extends StatelessWidget {
   Meals(this.id);
   var id;
@@ -280,13 +286,13 @@ class _Bodystate extends State<Body> {
                 size: 28,
               ),
               onPressed: () async {
-                //print(
-                   // "click 6: sum= $_sum and inter= $_inter and meals= $meals  and $_cupDate");
+                print(
+                   "click 6: sum= $_sum and inter= $_inter and meals= $meals  and $_cupDate");
 
                 await showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
-                  //  print("click 7: $_cupDate");
+                   print("click 7: $_cupDate");
                     return _cupDate();
                   },
                 );
@@ -320,7 +326,6 @@ class _Bodystate extends State<Body> {
         }
         dateTime = e;
         dbdm = e.toIso8601String();
-        //print("click 8: e is $e.toIso8601String()");
       }),
     );
   }
@@ -346,7 +351,6 @@ class _Bodystate extends State<Body> {
       ),
       placeholder: 'ملاحظات',
       onChanged: (e) => setState(() {
-        print("click 9: not is $note and e = $e");
         note = e;
         dbnote = note;
       }),
@@ -410,10 +414,10 @@ class _Bodystate extends State<Body> {
                       color: Color(0xFF2A79D2),
                       onPressed: () {
                         setState(() {
-                          //print("click 10: _inter = $_inter");
+                          print("click 10: _inter = $_inter");
 
                           _inter = 0;
-                          //print("click 11: _inter = $_inter");
+                          print("click 11: _inter = $_inter");
                         });
                       }),
                 )
@@ -426,17 +430,17 @@ class _Bodystate extends State<Body> {
                 //physics: NeverScrollableScrollPhysics(),
                 itemCount: meals == null ? 0 : meals.length,
                 itemBuilder: (BuildContext context, int index) {
-                  var meal = MealCard('تفاح', 30, 50, this);
+                  var meal = MealCard(9,'تفاح', 30, 50, this);
                   return Column(
                     children: <Widget>[
-                      MealCard('تفاح', 25.1, 95, this),
-                      MealCard('القهوة', 0, 2, this),
-                      MealCard('الموز', 34.3, 134, this),
-                      MealCard('البيض', 0.7, 134, this),
-                      MealCard('حليب', 10.9, 149, this),
-                      MealCard('رز ابيض', 44.5, 205, this),
-                      MealCard('الدجاج', 0, 114, this),
-                      MealCard('تفاح', 30, 50, this)
+                      MealCard(1,'تفاح', 25.1, 95, this),
+                      MealCard(2,'القهوة', 0, 2, this),
+                      MealCard(3,'الموز', 34.3, 134, this),
+                      MealCard(4,'البيض', 0.7, 134, this),
+                      MealCard(5,'حليب', 10.9, 149, this),
+                      MealCard(6,'رز ابيض', 44.5, 205, this),
+                      MealCard(7,'الدجاج', 0, 114, this),
+                      MealCard(8,'تفاح', 30, 50, this)
                     ],
                   );
                 }),
@@ -479,7 +483,7 @@ class _Bodystate extends State<Body> {
                           setState(() {
                             print("click 12: _inter = $_inter");
                             _inter = 1;
-                            //print("click 13: _inter = $_inter");
+                            print("click 13: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -514,9 +518,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
-                            //print("click 14: _inter = $_inter");
+                            print("click 14: _inter = $_inter");
                             _inter = 1;
-                            //print("click 15: _inter = $_inter");
+                            print("click 15: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -556,9 +560,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
-                            //print("click 16: _inter = $_inter");
+                            print("click 16: _inter = $_inter, ");
                             _inter = 1;
-                            //print("click 17: _inter = $_inter");
+                            print("click 17: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -593,9 +597,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
-                            //print("click 18: _inter = $_inter");
+                            print("click 18: _inter = $_inter");
                             _inter = 1;
-                            //print("click 19: _inter = $_inter");
+                            print("click 19: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -636,7 +640,7 @@ class _Bodystate extends State<Body> {
   }
 
   List<Widget> _wid() {
-    //print("click 20: grouping:$_grouping()  , insider: $_insider()");
+    print("click 20: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard(name, carbs, caloris, parent)");
     return [_grouping(), _insider()];
   }
 
@@ -668,11 +672,14 @@ class _Bodystate extends State<Body> {
                       dbcarb = _sum;
                       dbslot = slots[slot];
                       dbdm=dateTime.toIso8601String();
-                      //print( "click 27: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");                      
+                      print( "click 27: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");                      
                       Meal meal = Meal(dbemail, dbslot, dbcarb, dbnote, dbdm);
                       var mealw = await helper.insertMeal(meal);
-
                       print('this result id : ${mealw}');
+                      
+                      // Variety variety= Variety(dbvarId,mealw,dbemail,dbeat,dbvarycarb,dbamount);
+                      // var varyw = await helper.insertVariety(variety);
+                      // print('this result id : ${varyw}');
                       print( "click 28: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
 
                       setState(() {
@@ -716,6 +723,7 @@ class _Bodystate extends State<Body> {
 
   @override
   void initState() {
+    print("click 23: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard($this.name, $this.carbs, $this.caloris, $this.parent)");
 
     super.initState();
     this.getData();
@@ -725,10 +733,11 @@ class _Bodystate extends State<Body> {
 class MealCard extends StatefulWidget {
   String name;
   double carbs;
-
+int id;
   int caloris;
   _Bodystate parent;
-  MealCard(this.name, this.carbs, this.caloris, this.parent);
+
+  MealCard(this.id,this.name, this.carbs, this.caloris, this.parent);
   @override
   MealCardState createState() => MealCardState();
 }
@@ -738,6 +747,8 @@ class MealCardState extends State<MealCard> {
 
   @override
   Widget build(BuildContext context) {
+  //  print("click 21: check: $check, meal:$MealCard(name, carbs, caloris, parent)");
+   // print("click 22: chech: $check, meal: $MealCard(this.name, this.carbs, this.caloris, this.parent)");
 
     return new Stack(
       alignment: AlignmentDirectional.center,
@@ -805,6 +816,7 @@ class MealCardState extends State<MealCard> {
                     ),
                   ),
                   new Text(
+            
                     widget.caloris.toString(),
                     style: TextStyle(
                       fontSize: 17.0,
@@ -824,14 +836,22 @@ class MealCardState extends State<MealCard> {
             value: check,
             onChanged: (bool e) {
               setState(() {
+                  print("click 28: chech: $check , widget: ${widget.name}, ${widget.carbs},");
                 check = e;
                 if (check == true) {
+                  print("click 24: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
                   _carbs.add({widget.name: widget.carbs});
+                  print("click 25: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+
+                //varty.add(widget.id,widget.name, widget.carbs,dbamount);
                   _sum += widget.carbs;
                 }
                 if (check == false) {
                   //print(widget.name);
+                  print("click 26: chech: $check , carb list: ${_carbs.length}, widget: $widget.name, $widget.carbs,");
                   _carbs.remove({widget.name: widget.carbs});
+                //varty.remove;
+                  print("click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
                   _sum -= widget.carbs;
                 }
               });

@@ -59,7 +59,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user2.db';
+    String path = directory.path + 'user.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
@@ -111,6 +111,13 @@ class DatabaseHelper {
     return result;
   }
 
+ //delete
+  Future<int> deleteUser(int id) async {
+  	var db = await this.database;
+  	int result = await db.rawDelete('DELETE FROM $mealTable WHERE $colId = $id');
+  	return result;
+  }
+
 //updaite  //not complite
   Future<int> updateMeal(Meal meal) async {
     var db = await this.database;
@@ -129,12 +136,8 @@ class DatabaseHelper {
     }
     return null;
   }
-  //delete
-  // Future<int> deleteUser(int id) async {
-  // 	var db = await this.database;
-  // 	int result = await db.rawDelete('DELETE FROM $UserTable WHERE $colId = $id');
-  // 	return result;
-  // }
+  
+ 
 
 //-------------------------------Variety Table--------------------------------------------
 //add
