@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart'; // flutter main package
 import 'homepage.dart'; //import homepage file
 import 'meals.dart'; //import meals file
-import 'physical_activity.dart'; //import physical_activity file
+//import 'physical_activity.dart'; //import physical_activity file
 import 'instructions.dart'; //import instructions file
 import 'medications.dart'; //import medications file
 import '../widgets/fancy_fab.dart';

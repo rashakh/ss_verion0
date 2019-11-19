@@ -131,9 +131,11 @@ class _Bodystate extends State<Body> {
                 size: 28,
               ),
               onPressed: () async {
+                print("clik 1");
                 await showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
+                    print("1:");print(_cupPicker);
                     return _cupPicker();
                   },
                 );
@@ -168,9 +170,10 @@ class _Bodystate extends State<Body> {
           ),
         );
       }),
-      onSelectedItemChanged: (e) => setState(() {
+      onSelectedItemChanged: (e) => {print("clik 2"), setState(() {
         slot = e;
-      }),
+        print("2:slot= $slot, and e= $e");
+      }),}
     );
   }
 
@@ -178,17 +181,24 @@ class _Bodystate extends State<Body> {
   Future<String> getData() async {
     _sum = 0.0;
     _inter = 0;
+     
+    print("click 3: sum= $_sum and inter= $_inter");
     var response = await http // .get(url)
         .get(Uri.encodeFull(url), headers: {
       'Accept': 'application/json' // 'key': 'ur key'
-    }); // .get(encode the response data as json) with headers which tell the code should be json
+      }
+         //    print("sum= $_sum and inter= $_inter");
+); // .get(encode the response data as json) with headers which tell the code should be json
 
     // after response back, setup the state for the application
     setState(() {
+    print("click 4: sum= $_sum and inter= $_inter and meals= $meals");
       var responseBoddy = json.decode(response.body);
       meals = responseBoddy;
       print(responseBoddy);
       _visible = !_visible;
+    print("click 5: sum= $_sum and inter= $_inter and meals= $meals");
+
       //['name of area in the database or in the json data']; // user for example
     });
 
@@ -254,10 +264,14 @@ class _Bodystate extends State<Body> {
                 size: 28,
               ),
               onPressed: () async {
+              print("click 6: sum= $_sum and inter= $_inter and meals= $meals  and $_cupDate");
+
                 await showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
+              print("click 7: $_cupDate");
                     return _cupDate();
+
                   },
                 );
               },
@@ -289,6 +303,8 @@ class _Bodystate extends State<Body> {
           e = DateTime.now();
         }
         dateTime = e;
+        print("click 8: e is $e");
+
       }),
     );
   }
@@ -314,6 +330,8 @@ class _Bodystate extends State<Body> {
       ),
       placeholder: 'ملاحظات',
       onChanged: (e) => setState(() {
+      print("click 9: not is $note and e = $e");
+
         note = e;
       }),
     );
@@ -376,7 +394,10 @@ class _Bodystate extends State<Body> {
                       color: Color(0xFF2A79D2),
                       onPressed: () {
                         setState(() {
+                        print("click 10: _inter = $_inter");
+  
                           _inter = 0;
+                        print("click 11: _inter = $_inter");
                         });
                       }),
                 )
@@ -616,16 +637,19 @@ class _Bodystate extends State<Body> {
                       left: 5.0, right: 180.0, top: 5.0, bottom: 5.0),
                   child: new GestureDetector(
                     onTap: () {
+
                       setState(() {
                         _sum = 0.0;
                         _inter = 0;
+                       // save,
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MainPage('r@gmail.com')),
+                              builder: (context) => MainPage("")),
                         );
                       });
                     },
+
                     child: new Container(
                         alignment: Alignment.center,
                         height: 40.0,

@@ -4,10 +4,10 @@ import '../widgets/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:intl/intl.dart' as intl; // flutter main package
-import 'dart:async';
-import 'dart:convert'; // convert json into data
-import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+// import 'dart:async';
+// import 'dart:convert'; // convert json into data
+// import 'package:http/http.dart'
+//     as http; // perform http request on API to get the into
 import 'mainpage.dart';
 class GlucoseMeasure extends StatelessWidget {
   GlucoseMeasure(this.id);

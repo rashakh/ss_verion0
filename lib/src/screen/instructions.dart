@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart'; // flutter main package
-import 'package:dtfbl/src/widgets/styles.dart';
+//import 'package:dtfbl/src/widgets/styles.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:math';
 import 'dart:async';
