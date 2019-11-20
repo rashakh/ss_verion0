@@ -2,7 +2,7 @@ class BG {
  // int _id; //auto
   String _email;
   String _slot;
-  double _BG;
+  int _BG;
   String _note;
   String _dg;
 
@@ -11,14 +11,14 @@ class BG {
 
   String get email => _email;
   String get slot => _slot;
-  double get bG => _BG;
+  int get bG => _BG;
   String get note => _note;
   String get dg => _dg;
 
 
   set email(String newemail) => _email = newemail;
   set slot(String newslot) => _slot = newslot;
-  set bG(double newBG) => _BG = newBG;
+  set bG(int newBG) => _BG = newBG;
   set note(String newnote) => _note = newnote;
   set dg(String newdg) => _dg = newdg;
 

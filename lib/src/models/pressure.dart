@@ -1,23 +1,23 @@
 class BP {
  // int _id; //auto
   String _email;
-  double _Systolic;
-  double _Diastolic;
+  int _Systolic;
+  int _Diastolic;
   String _note;
   String _dp;
 
   BP(this._email, this._Systolic,this._Diastolic, this._note, this._dp);
 
   String get email => _email;
-  double get Systolic => _Systolic;
-  double get Diastolic => _Diastolic;
+  int get Systolic => _Systolic;
+  int get Diastolic => _Diastolic;
   String get note => _note;
   String get dp => _dp;
 
 
   set email(String newemail) => _email = newemail;
-  set Systolic(double newslot) => _Systolic = newslot;
-  set Diastolic(double newBG) => _Diastolic = newBG;
+  set Systolic(int newslot) => _Systolic = newslot;
+  set Diastolic(int newBG) => _Diastolic = newBG;
   set note(String newnote) => _note = newnote;
   set dp(String newdp) => _dp = newdp;
 

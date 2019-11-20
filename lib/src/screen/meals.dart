@@ -20,12 +20,13 @@ List<Map<String, double>> _carbs = [
 ];
 double _sum = 0.0;
 int _inter = 0;
-double dbcarb,dbvarycarb;
-String dbemail, dbslot, dbnote, dbdm,dbeat;
+double dbcarb, dbvarycarb;
+String dbemail, dbslot, dbnote, dbdm, dbeat;
 int dbvarId;
-int dbamount=1;
-int coun=0;
-var varty = new List(); 
+int dbamount = 1;+
+int coun = 0;
+var varty = new List();
+
 class Meals extends StatelessWidget {
   Meals(this.id);
   var id;
@@ -64,7 +65,9 @@ class Meals extends StatelessWidget {
             ),
             new ListTile(
               title: Text('التقارير'),
-              onTap: () { Navigator.of(context).pushNamed('/ExportPDF');},
+              onTap: () {
+                Navigator.of(context).pushNamed('/ExportPDF');
+              },
             ),
             new ListTile(
               title: Text('الاعدادات'),
@@ -287,12 +290,12 @@ class _Bodystate extends State<Body> {
               ),
               onPressed: () async {
                 print(
-                   "click 6: sum= $_sum and inter= $_inter and meals= $meals  and $_cupDate");
+                    "click 6: sum= $_sum and inter= $_inter and meals= $meals  and $_cupDate");
 
                 await showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
-                   print("click 7: $_cupDate");
+                    print("click 7: $_cupDate");
                     return _cupDate();
                   },
                 );
@@ -430,17 +433,17 @@ class _Bodystate extends State<Body> {
                 //physics: NeverScrollableScrollPhysics(),
                 itemCount: meals == null ? 0 : meals.length,
                 itemBuilder: (BuildContext context, int index) {
-                  var meal = MealCard(9,'تفاح', 30, 50, this);
+                  var meal = MealCard(9, 'تفاح', 30, 50, this);
                   return Column(
                     children: <Widget>[
-                      MealCard(1,'تفاح', 25.1, 95, this),
-                      MealCard(2,'القهوة', 0, 2, this),
-                      MealCard(3,'الموز', 34.3, 134, this),
-                      MealCard(4,'البيض', 0.7, 134, this),
-                      MealCard(5,'حليب', 10.9, 149, this),
-                      MealCard(6,'رز ابيض', 44.5, 205, this),
-                      MealCard(7,'الدجاج', 0, 114, this),
-                      MealCard(8,'تفاح', 30, 50, this)
+                      MealCard(1, 'تفاح', 25.1, 95, this),
+                      MealCard(2, 'القهوة', 0, 2, this),
+                      MealCard(3, 'الموز', 34.3, 134, this),
+                      MealCard(4, 'البيض', 0.7, 134, this),
+                      MealCard(5, 'حليب', 10.9, 149, this),
+                      MealCard(6, 'رز ابيض', 44.5, 205, this),
+                      MealCard(7, 'الدجاج', 0, 114, this),
+                      MealCard(8, 'تفاح', 30, 50, this)
                     ],
                   );
                 }),
@@ -640,7 +643,8 @@ class _Bodystate extends State<Body> {
   }
 
   List<Widget> _wid() {
-    print("click 20: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard(name, carbs, caloris, parent)");
+    print(
+        "click 20: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard(name, carbs, caloris, parent)");
     return [_grouping(), _insider()];
   }
 
@@ -668,21 +672,26 @@ class _Bodystate extends State<Body> {
                   padding: const EdgeInsets.only(
                       left: 5.0, right: 180.0, top: 5.0, bottom: 5.0),
                   child: new GestureDetector(
-                    onTap: () async {                      
+                    onTap: () async {
                       dbcarb = _sum;
                       dbslot = slots[slot];
-                      dbdm=dateTime.toIso8601String();
-                      print( "click 27: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");                      
+                      dbdm = dateTime.toIso8601String();
+                      print(
+                          "click 27: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
                       Meal meal = Meal(dbemail, dbslot, dbcarb, dbnote, dbdm);
                       var mealw = await helper.insertMeal(meal);
                       print('this result id : ${mealw}');
-                      
+
                       // Variety variety= Variety(dbvarId,mealw,dbemail,dbeat,dbvarycarb,dbamount);
                       // var varyw = await helper.insertVariety(variety);
                       // print('this result id : ${varyw}');
-                      print( "click 28: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
+                      print(
+                          "click 28: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
 
                       setState(() {
+                        _carbs = [
+                          {'meal': 0.0}
+                        ];
                         _sum = 0.0;
                         _inter = 0;
                         Navigator.pushReplacement(
@@ -691,7 +700,6 @@ class _Bodystate extends State<Body> {
                               builder: (context) => MainPage(widget.id)),
                         );
                       });
-                    
                     },
                     child: new Container(
                         alignment: Alignment.center,
@@ -723,7 +731,8 @@ class _Bodystate extends State<Body> {
 
   @override
   void initState() {
-    print("click 23: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard($this.name, $this.carbs, $this.caloris, $this.parent)");
+    print(
+        "click 23: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard($this.name, $this.carbs, $this.caloris, $this.parent)");
 
     super.initState();
     this.getData();
@@ -733,11 +742,11 @@ class _Bodystate extends State<Body> {
 class MealCard extends StatefulWidget {
   String name;
   double carbs;
-int id;
+  int id;
   int caloris;
   _Bodystate parent;
 
-  MealCard(this.id,this.name, this.carbs, this.caloris, this.parent);
+  MealCard(this.id, this.name, this.carbs, this.caloris, this.parent);
   @override
   MealCardState createState() => MealCardState();
 }
@@ -747,8 +756,8 @@ class MealCardState extends State<MealCard> {
 
   @override
   Widget build(BuildContext context) {
-  //  print("click 21: check: $check, meal:$MealCard(name, carbs, caloris, parent)");
-   // print("click 22: chech: $check, meal: $MealCard(this.name, this.carbs, this.caloris, this.parent)");
+    //  print("click 21: check: $check, meal:$MealCard(name, carbs, caloris, parent)");
+    // print("click 22: chech: $check, meal: $MealCard(this.name, this.carbs, this.caloris, this.parent)");
 
     return new Stack(
       alignment: AlignmentDirectional.center,
@@ -816,7 +825,6 @@ class MealCardState extends State<MealCard> {
                     ),
                   ),
                   new Text(
-            
                     widget.caloris.toString(),
                     style: TextStyle(
                       fontSize: 17.0,
@@ -836,27 +844,32 @@ class MealCardState extends State<MealCard> {
             value: check,
             onChanged: (bool e) {
               setState(() {
-                  print("click 28: chech: $check , widget: ${widget.name}, ${widget.carbs},");
+                print(
+                    "click 28: chech: $check , widget: ${widget.name}, ${widget.carbs},");
                 check = e;
                 if (check == true) {
-                  print("click 24: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+                  print(
+                      "click 24: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
                   _carbs.add({widget.name: widget.carbs});
-                  print("click 25: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+                  print(
+                      "click 25: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
 
-                //varty.add(widget.id,widget.name, widget.carbs,dbamount);
+                  //varty.add(widget.id,widget.name, widget.carbs,dbamount);
                   _sum += widget.carbs;
                 }
                 if (check == false) {
                   //print(widget.name);
-                  print("click 26: chech: $check , carb list: ${_carbs.length}, widget: $widget.name, $widget.carbs,");
+                  print(
+                      "click 26: chech: $check , carb list: $_carbs, widget: $widget.name, $widget.carbs,");
                   _carbs.remove({widget.name: widget.carbs});
-                //varty.remove;
-                  print("click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+                  //varty.remove;
+                  
+                  print(
+                      "click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
                   _sum -= widget.carbs;
                 }
               });
-              widget.parent.setState(() {
-              });
+              widget.parent.setState(() {});
             },
           ),
         ),

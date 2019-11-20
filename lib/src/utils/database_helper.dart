@@ -102,11 +102,11 @@ class DatabaseHelper {
 
     await db.execute('CREATE TABLE $BGTable ('
         '$colEmail TEXT,$colDg TEXT,$colBGSlot TEXT,'
-        ' $colBg REAL,$colnote TEXT,PRIMARY KEY ($colEmail,$colDg))');
+        ' $colBg INT,$colnote TEXT,PRIMARY KEY ($colEmail,$colDg))');
     
     await db.execute('CREATE TABLE $BPTable ('
-        '$colEmail TEXT,$colDp TEXT,$colSystolic REAL,'
-        ' $colSystolic REAL,$colnote TEXT,PRIMARY KEY ($colEmail,$colDp))');
+        '$colEmail TEXT,$colDp TEXT,$colSystolic INT,'
+        ' $colSystolic INT,$colnote TEXT,PRIMARY KEY ($colEmail,$colDp))');
 
   }
 
