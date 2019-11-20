@@ -300,8 +300,8 @@ class _Bodystate extends State<Body> {
 
                     print("click 1 BG bg=BG(${widget.id[0]['email'].toString()}, $pressureSys, $pressureDia, $note,${dateTime.toIso8601String()}");
                     BP bp=BP(widget.id[0]['email'].toString(), pressureSys, pressureDia, note,dateTime.toIso8601String());
-                   //   var mealw = await helper.insertBP(bp);
-                  //  print("click 2: $mealw");
+                      var mealw = await helper.insertBP(bp);
+                    print("click 2: $mealw");
                     Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => MainPage(widget.id)),
