@@ -64,7 +64,7 @@ class Meals extends StatelessWidget {
             ),
             new ListTile(
               title: Text('التقارير'),
-              onTap: () {},
+              onTap: () { Navigator.of(context).pushNamed('/ExportPDF');},
             ),
             new ListTile(
               title: Text('الاعدادات'),

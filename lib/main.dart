@@ -19,7 +19,8 @@ import 'src/screen/medalert.dart';
 // import 'src/widgets/fancy_fab.dart';
 // import 'src/screen/weight_input.dart';
 // import 'src/screen/pressure_input.dart';
-
+import 'src/screen/exportPDF.dart';
+import 'src/screen/path_provider.dart';
 void main() => runApp(new SS()); // the App main function call SS class
 
 // the main class of the App
@@ -54,6 +55,9 @@ class SS extends StatelessWidget {
         '/MainTheme': (BuildContext context) => new MainTheme(),
         //'/Weightinput': (BuildContext context) => new Weightinput(),
         //'/Pressureinput': (BuildContext context) => new Pressureinput(),
+        '/ExportPDF': (BuildContext context) => new ExportPDF(),
+
+
       },
       theme: new ThemeData(primarySwatch: Colors.blue),
       home: LoginPage(),

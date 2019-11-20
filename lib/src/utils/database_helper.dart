@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:dtfbl/src/models/BG.dart';
 import 'package:dtfbl/src/models/meal.dart';
+import 'package:dtfbl/src/models/pressure.dart';
 import 'package:dtfbl/src/models/variety.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -43,6 +45,22 @@ class DatabaseHelper {
   String coleat = 'eat';
   String colvarcarb = 'varcarb';
   String colamount = 'amount';
+  
+  // BG table:
+  String BGTable= 'BG_table';
+  //colEmail
+  String colBGSlot = 'slot';
+  String colBg='BG';
+ // colnote
+ String colDg='dg';
+
+   // BP table:
+  String BPTable= 'BP_table';
+  //colEmail
+  String colDiastolic = 'Diastolic';
+  String colSystolic='Systolic';
+ // colnote
+ String colDp='dp';
 
   factory DatabaseHelper() {
     if (_databaseHelper == null) {
@@ -59,7 +77,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user.db';
+    String path = directory.path + 'user2.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
@@ -81,6 +99,15 @@ class DatabaseHelper {
         '$colid INT,$colId INT,$coleat TEXT,'
         'colEmail TEXT, $colvarcarb REAL,'
         '$colamount REAL,PRIMARY KEY ($colid,$colId))');
+
+    await db.execute('CREATE TABLE $BGTable ('
+        '$colEmail TEXT,$colDg TEXT,$colBGSlot TEXT,'
+        ' $colBg REAL,$colnote TEXT,PRIMARY KEY ($colEmail,$colDg))');
+    
+    await db.execute('CREATE TABLE $BPTable ('
+        '$colEmail TEXT,$colDp TEXT,$colSystolic REAL,'
+        ' $colSystolic REAL,$colnote TEXT,PRIMARY KEY ($colEmail,$colDp))');
+
   }
 
 //----------------------------------User Table------------------------------------------
@@ -151,6 +178,35 @@ class DatabaseHelper {
     var db = await this.database;
     var result = await db.update(mealTable, variety.toMap(),
         where: '$colId = ?', whereArgs: [variety.id]);
+    return result;
+  }
+
+ //delete one variety
+  Future<int> deleteVariety(int id, int mealid) async {
+  	var db = await this.database;
+  	int result = await db.rawDelete('DELETE FROM $varietyTable WHERE $colid = $id AND $colId=$mealid');
+  	return result;
+  }
+
+ //delete All varietise meal
+  Future<int> deleteAllVarieteis(int id, int mealid) async {
+  	var db = await this.database;
+  	int result = await db.rawDelete('DELETE FROM $varietyTable WHERE $colId = $id');
+  	return result;
+  }
+//----------------------------------BG Table--------------------------------------------------- 
+//add
+  Future<int> insertBG(BG bg) async {
+    Database db = await this.database;
+    var result = await db.insert(BGTable, bg.toMap());
+    return result;
+  }
+
+//----------------------------------Prusser Table--------------------------------------------------- 
+//add
+  Future<int> insertBP(BP bp) async {
+    Database db = await this.database;
+    var result = await db.insert(BPTable, bp.toMap());
     return result;
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:percent_indicator/percent_indicator.dart';
 
+import 'exportPDF.dart';
+
 class HomePage extends StatelessWidget {
   HomePage(this.id);
   var id;
@@ -37,7 +39,10 @@ class HomePage extends StatelessWidget {
             ),
             new ListTile(
               title: Text('التقارير'),
-              onTap: () {},
+              onTap: () { Navigator.of(context).pushNamed('/ExportPDF');},
+
+
+
             ),
             new ListTile(
               title: Text('الاعدادات'),
