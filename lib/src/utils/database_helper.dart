@@ -4,6 +4,7 @@ import 'package:dtfbl/src/models/BG.dart';
 import 'package:dtfbl/src/models/meal.dart';
 import 'package:dtfbl/src/models/pressure.dart';
 import 'package:dtfbl/src/models/variety.dart';
+import 'package:dtfbl/src/models/wieght.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class DatabaseHelper {
   String colMealSlot = 'slot';
   String colCarb = 'totalCarb';
   String colnote = 'note';
-  String coldm = 'dm';
+  String coldate = 'date';
 
 // variety table:
   String varietyTable = 'variety_table';
@@ -52,7 +53,7 @@ class DatabaseHelper {
   String colBGSlot = 'slot';
   String colBg='BG';
  // colnote
- String colDg='dg';
+// String colDg='dg';
 
    // BP table:
   String BPTable= 'BP_table';
@@ -60,7 +61,23 @@ class DatabaseHelper {
   String colDiastolic = 'Diastolic';
   String colSystolic='Systolic';
  // colnote
- String colDp='dp';
+// String colDp='dp';
+
+
+//BW table:
+  String BWTable= 'BW_table';
+ // String _email;
+  String colwieght='wieght';
+ // double _bmi;
+ // String _note;
+ // String _dw;
+
+//Instruction table:
+  String instrTable= 'Instr_table';
+  String colinstId = 'id'; //auto
+  String coltitel='titel';
+  String coldes='des';
+
 
   factory DatabaseHelper() {
     if (_databaseHelper == null) {
@@ -77,7 +94,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user2.db';
+    String path = directory.path + 'user3.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
@@ -88,12 +105,12 @@ class DatabaseHelper {
         'CREATE TABLE $userTable($colEmail TEXT PRIMARY KEY, $colPass TEXT,'
         '$colFname TEXT, $colLname TEXT, $colDd TEXT, $colBd TEXT,'
         '$colGender INTEGER, $colType INTEGER,'
-        '$colHight REAL, $colWeight REAL, $colBmi REAL)');
+        '$colHight REAL)');
 
     await db.execute(
         'CREATE TABLE $mealTable($colId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT , $colMealSlot TEXT,'
-        '$colCarb REAL, $colnote TEXT, $coldm TEXT)');
+        '$colCarb REAL, $colnote TEXT, $coldate TEXT)');
 
     await db.execute('CREATE TABLE $varietyTable ('
         '$colid INT,$colId INT,$coleat TEXT,'
@@ -101,12 +118,21 @@ class DatabaseHelper {
         '$colamount REAL,PRIMARY KEY ($colid,$colId))');
 
     await db.execute('CREATE TABLE $BGTable ('
-        '$colEmail TEXT,$colDg TEXT,$colBGSlot TEXT,'
-        ' $colBg INT,$colnote TEXT,PRIMARY KEY ($colEmail,$colDg))');
+        '$colEmail TEXT,$coldate TEXT,$colBGSlot TEXT,'
+        ' $colBg INT,$colnote TEXT,PRIMARY KEY ($colEmail,$coldate))');
     
     await db.execute('CREATE TABLE $BPTable ('
-        '$colEmail TEXT,$colDp TEXT,$colSystolic INT,'
-        ' $colSystolic INT,$colnote TEXT,PRIMARY KEY ($colEmail,$colDp))');
+        '$colEmail TEXT,$coldate TEXT,$colSystolic INT,'
+        ' $colDiastolic INT,$colnote TEXT,PRIMARY KEY ($colEmail,$coldate))');
+
+     await db.execute('CREATE TABLE $BWTable ('
+        '$colEmail TEXT,$coldate TEXT,$colwieght INT,'
+        ' $colBmi REAL,$colnote TEXT,PRIMARY KEY ($colEmail,$coldate))');
+
+    await db.execute(
+        'CREATE TABLE $instrTable($colinstId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$coltitel TEXT , $coldes TEXT)');
+
 
   }
 
@@ -209,6 +235,33 @@ class DatabaseHelper {
     var result = await db.insert(BPTable, bp.toMap());
     return result;
   }
+  
+//----------------------------------Wieght Table--------------------------------------------------- 
+//add
+  Future<int> insertBW(BW bw) async {
+    Database db = await this.database;
+    var result = await db.insert(BWTable, bw.toMap());
+    return result;
+  }
+
+//----------------------------------Instruction Table--------------------------------------------------- 
+
+//get one Instruction
+  Future<List<Map<String, dynamic>>> getInstruction(int id) async {
+    Database db = await this.database;
+    var result =
+        await db.query(instrTable, where: '$colinstId = ?', whereArgs: [id]);
+    if (result.length > 0) {
+      return result;
+    }
+    return null;
+  }
+//get All Instruction
+Future<List<Map<String, dynamic>>> getInstructionMapList() async {
+		Database db = await this.database;
+		var result = await db.query(instrTable, orderBy: '$colinstId ASC');
+		return result;
+	}
 }
 
 

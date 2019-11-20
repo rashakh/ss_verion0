@@ -1,3 +1,5 @@
+import 'package:dtfbl/src/models/wieght.dart';
+import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -39,6 +41,7 @@ class Body extends StatefulWidget {
 }
 
 class _Bodystate extends State<Body> {
+    DatabaseHelper helper = DatabaseHelper();
   final String url =
       'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   bool _result;
@@ -265,7 +268,11 @@ class _Bodystate extends State<Body> {
                   //     style: TextStyle(
                   //       fontSize: 20.0,
                   //     )),
-                  onPressed: () => setState(() {
+                  onPressed: () => setState(() async {
+                          print("click 1 BG bg=BG(${widget.id[0]['email'].toString()}, $weight, ${(((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000)}, $note,${dateTime.toIso8601String()}");
+                    BW bw=BW(widget.id[0]['email'].toString(), weight, (((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000), note,dateTime.toIso8601String());
+                      var mealw = await helper.insertBW(bw);
+                    print("click 2: $mealw");
                     Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => MainPage(widget.id)),

@@ -28,7 +28,7 @@ class BP {
     map['Systolic'] = _Systolic;
     map['Diastolic'] = _Diastolic;
     map['note'] = _note;
-    map['dp'] = _dp;
+    map['date'] = _dp;
     return map;
   }
 
@@ -37,7 +37,7 @@ class BP {
     this._Systolic = map['Systolic'];
     this._Diastolic = map['Diastolic'];
     this._note = map['note'];
-    this._dp = map['dg'];
+    this._dp = map['date'];
 
   }
 }

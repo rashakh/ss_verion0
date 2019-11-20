@@ -23,7 +23,7 @@ int _inter = 0;
 double dbcarb, dbvarycarb;
 String dbemail, dbslot, dbnote, dbdm, dbeat;
 int dbvarId;
-int dbamount = 1;+
+int dbamount = 1;
 int coun = 0;
 var varty = new List();
 

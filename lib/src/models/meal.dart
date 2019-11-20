@@ -34,7 +34,7 @@ class Meal {
     map['slot'] = _slot;
     map['totalCarb'] = _carb;
     map['note'] = _note;
-    map['dm'] = _dm;
+    map['date'] = _dm;
     return map;
   }
 
@@ -44,7 +44,7 @@ class Meal {
     this._slot = map['slot'];
     this._carb = map['totalCarb'];
     this._note = map['note'];
-    this._dm = map['dm'];
+    this._dm = map['date'];
 
   }
 }

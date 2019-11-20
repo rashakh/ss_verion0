@@ -22,8 +22,9 @@ class ExportPDF extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-    
+    return new Directionality(
+        textDirection: TextDirection.ltr,
+        child: Scaffold(
       appBar: AppBar(
         
         backgroundColor: Color(0xFF2A79D2), //Color(0xFF7EAFE5),
@@ -48,48 +49,35 @@ class ExportPDF extends StatelessWidget {
           SizedBox(width: 10),
         ],
       ),
+          body: new SingleChildScrollView(child: new Body()),
 
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            new UserAccountsDrawerHeader(
-           //   accountName: Text(id[0]['fname'].toString()),
-             // accountEmail: Text(id[0]['email'].toString()),
-            ),
-            new ListTile(
-              title: Text('الادوية'),
-              onTap: () {
-                Navigator.of(context).pushNamed('/MedAlert');
-              },
-            ),
-            new ListTile(
-              title: Text('الفحوصات الدورية'),
-              onTap: () {
-                Navigator.of(context).pushNamed('/PeriodicTest');
-              },
-            ),
-            new ListTile(
-              title: Text('التقارير'),
-              onTap: () { Navigator.of(context).pushNamed('/ExportPDF');},
-            ),
-            new ListTile(
-              title: Text('الاعدادات'),
-              onTap: () {},
-            ),
-            new ListTile(
-              title: Text('تسجيل الخروج'),
-              onTap: () {
-                Navigator.of(context).pushReplacementNamed('/LoginPage');
-              },
-            )
-          ],
-        ),
-      ),
-
-    );
-      
+    ));
+  }
   }
 
+class Body extends StatefulWidget {
+  @override
+  State createState() => new _Bodystate();
+}
+
+class _Bodystate extends State<Body> {
+  @override
+  Widget build(BuildContext context) {
+    return 
+    // new Directionality(
+    //     textDirection: TextDirection.ltr,
+    //   child:
+     new Container();
+      //  Center(
+      //  child:  new ButtonTheme(
+      //     height: 10,
+      //     minWidth: 20,
+          
+      //   )
+      // )
+   // );
+
+  }}
 
   _generatePdfAndView(context) async {
    final pdfLib.Document pdf = pdfLib.Document(deflate: zlib.encode);
@@ -136,7 +124,7 @@ class ExportPDF extends StatelessWidget {
 
 
 
-}
+
 
 
 

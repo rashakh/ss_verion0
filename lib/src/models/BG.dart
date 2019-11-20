@@ -29,7 +29,7 @@ class BG {
     map['slot'] = _slot;
     map['BG'] = _BG;
     map['note'] = _note;
-    map['dg'] = _dg;
+    map['date'] = _dg;
     return map;
   }
 
@@ -38,7 +38,7 @@ class BG {
     this._slot = map['slot'];
     this._BG = map['BG'];
     this._note = map['note'];
-    this._dg = map['dg'];
+    this._dg = map['date'];
 
   }
 }
