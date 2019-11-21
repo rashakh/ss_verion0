@@ -1,3 +1,5 @@
+import 'package:dtfbl/src/screen/profile.dart';
+import 'package:dtfbl/src/screen/pt.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:dtfbl/src/widgets/styles.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -5,7 +7,10 @@ import 'dart:math';
 import 'dart:async';
 import 'dart:convert'; // convert json into data
 import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+    as http;
+
+import 'exportPDF.dart';
+import 'medalert.dart'; // perform http request on API to get the into
 
 class Medications extends StatelessWidget {
   Medications(this.id);
@@ -32,22 +37,38 @@ class Medications extends StatelessWidget {
             new ListTile(
               title: Text('الادوية'),
               onTap: () {
-                Navigator.of(context).pushNamed('/MedAlert');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MedAlert(id)),
+                );
               },
             ),
             new ListTile(
               title: Text('الفحوصات الدورية'),
               onTap: () {
-                Navigator.of(context).pushNamed('/PeriodicTest');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PeriodicTest(id)),
+                );
               },
             ),
             new ListTile(
               title: Text('التقارير'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ExportPDF(id)),
+                );
+              },
             ),
             new ListTile(
-              title: Text('الاعدادات'),
-              onTap: () {},
+              title: Text('الملف الشخصي'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Profile(id)),
+                );
+              },
             ),
             new ListTile(
               title: Text('تسجيل الخروج'),
