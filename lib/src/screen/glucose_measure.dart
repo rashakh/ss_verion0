@@ -71,6 +71,8 @@ class _Bodystate extends State<Body> {
     'بعد العشاء',
     'قبل الرياضة',
     'بعد الرياضة',
+    'قبل وجبة خفيفة',
+    'بعد وجبة خفيفة',
   ];
 
   static int _slot() {

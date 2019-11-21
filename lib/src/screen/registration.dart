@@ -121,8 +121,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
           (((_weight / _height) / _height) * 10000));
       var id = await helper.insertUser(user);
       print('this result id : ${id}');
-      var route = new MaterialPageRoute(
-          builder: (context) => new LoginPage());
+      var route = new MaterialPageRoute(builder: (context) => new LoginPage());
       Navigator.of(context).push(route);
       _formKey.currentState.reset();
     } else {
@@ -428,6 +427,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                             );
                                           },
                                         ),
+                                        SizedBox(width: 100.0),
+                                        new Text(
+                                          intl.DateFormat.yMMMd()
+                                              .format(_birthday),
+                                          style: TextStyle(fontSize: 15.0),
+                                        ),
                                       ],
                                     ),
                                     Row(
@@ -451,6 +456,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                               },
                                             );
                                           },
+                                        ),
+                                        SizedBox(width: 15.0),
+                                        new Text(
+                                          intl.DateFormat.yMMMd()
+                                              .format(_dd),
+                                          style: TextStyle(fontSize: 15.0),
                                         ),
                                       ],
                                     ),
