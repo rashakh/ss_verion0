@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:percent_indicator/percent_indicator.dart';
+import './medalert.dart';
+import './pt.dart';
+import './profile.dart';
 
 import 'exportPDF.dart';
 
@@ -28,13 +31,19 @@ class HomePage extends StatelessWidget {
             new ListTile(
               title: Text('الادوية'),
               onTap: () {
-                Navigator.of(context).pushNamed('/MedAlert');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MedAlert(id)),
+                );
               },
             ),
             new ListTile(
               title: Text('الفحوصات الدورية'),
               onTap: () {
-                Navigator.of(context).pushNamed('/PeriodicTest');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PeriodicTest(id)),
+                );
               },
             ),
             new ListTile(
@@ -45,8 +54,13 @@ class HomePage extends StatelessWidget {
 
             ),
             new ListTile(
-              title: Text('الاعدادات'),
-              onTap: () {},
+              title: Text('الملف الشخصي'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Profile(id)),
+                );
+              },
             ),
             new ListTile(
               title: Text('تسجيل الخروج'),

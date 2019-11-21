@@ -15,9 +15,7 @@ import 'package:http/http.dart'
     as http; // perform http request on API to get the into
 import 'mainpage.dart';
 
-List<Map<String, double>> _carbs = [
-  {'meal': 0.0}
-];
+List<Map<String, double>> _carbs = [];
 double _sum = 0.0;
 int _inter = 0;
 double dbcarb, dbvarycarb;
@@ -30,7 +28,6 @@ var varty = new List();
 class Meals extends StatelessWidget {
   Meals(this.id);
   var id;
-
   @override
   Widget build(BuildContext context) {
     dbemail = id[0]['email'].toString();
@@ -205,6 +202,7 @@ class _Bodystate extends State<Body> {
   // function make the http request
   Future<String> getData() async {
     _sum = 0.0;
+    _carbs = [];
     _inter = 0;
 
     //print("click 3: sum= $_sum and inter= $_inter");
@@ -689,9 +687,8 @@ class _Bodystate extends State<Body> {
                           "click 28: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
 
                       setState(() {
-                        _carbs = [
-                          {'meal': 0.0}
-                        ];
+                        
+                        _carbs = [];
                         _sum = 0.0;
                         _inter = 0;
                         Navigator.pushReplacement(
@@ -850,6 +847,7 @@ class MealCardState extends State<MealCard> {
                 if (check == true) {
                   print(
                       "click 24: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+
                   _carbs.add({widget.name: widget.carbs});
                   print(
                       "click 25: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
@@ -858,14 +856,14 @@ class MealCardState extends State<MealCard> {
                   _sum += widget.carbs;
                 }
                 if (check == false) {
-                  //print(widget.name);
                   print(
                       "click 26: chech: $check , carb list: $_carbs, widget: $widget.name, $widget.carbs,");
-                  _carbs.remove({widget.name: widget.carbs});
                   //varty.remove;
                   
-                  print(
-                      "click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+                  print(                     "click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+              
+                  var index = _carbs.indexWhere((item)=>item.containsKey(widget.name));
+                  _carbs.removeAt(index);
                   _sum -= widget.carbs;
                 }
               });

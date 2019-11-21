@@ -19,7 +19,6 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedPage = 0;
    Widget pages(_selectedPage) {
-      print('here is id in main ${widget.id}');
     final List<Widget> _pages = [
       new HomePage(widget.id),
       new Meals(widget.id),

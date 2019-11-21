@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PeriodicTest extends StatelessWidget {
+  PeriodicTest(this.id);
+  var id;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -15,12 +17,14 @@ class PeriodicTest extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body()),
+          body: new SingleChildScrollView(child: new Body(id)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
+  Body(this.id);
+  var id;
   @override
   State createState() => new _Bodystate();
 }
@@ -165,8 +169,7 @@ class _Bodystate extends State<Body> {
                         fontSize: 20.0,
                         color: Colors.white,
                         fontWeight: FontWeight.bold))),
-
-                        SizedBox(
+            SizedBox(
               height: 30.0,
             ),
             new Text(
