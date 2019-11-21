@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:dtfbl/src/models/meal.dart';
 import 'package:dtfbl/src/models/variety.dart';
+import 'package:dtfbl/src/screen/profile.dart';
+import 'package:dtfbl/src/screen/pt.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:dtfbl/src/widgets/styles.dart';
@@ -13,7 +15,9 @@ import 'dart:async';
 import 'dart:convert'; // convert json into data
 import 'package:http/http.dart'
     as http; // perform http request on API to get the into
+import 'exportPDF.dart';
 import 'mainpage.dart';
+import 'medalert.dart';
 
 List<Map<String, double>> _carbs = [];
 double _sum = 0.0;
@@ -51,24 +55,38 @@ class Meals extends StatelessWidget {
             new ListTile(
               title: Text('الادوية'),
               onTap: () {
-                Navigator.of(context).pushNamed('/MedAlert');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MedAlert(id)),
+                );
               },
             ),
             new ListTile(
               title: Text('الفحوصات الدورية'),
               onTap: () {
-                Navigator.of(context).pushNamed('/PeriodicTest');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PeriodicTest(id)),
+                );
               },
             ),
             new ListTile(
               title: Text('التقارير'),
               onTap: () {
-                Navigator.of(context).pushNamed('/ExportPDF');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ExportPDF(id)),
+                );
               },
             ),
             new ListTile(
-              title: Text('الاعدادات'),
-              onTap: () {},
+              title: Text('الملف الشخصي'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Profile(id)),
+                );
+              },
             ),
             new ListTile(
               title: Text('تسجيل الخروج'),
@@ -687,7 +705,6 @@ class _Bodystate extends State<Body> {
                           "click 28: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
 
                       setState(() {
-                        
                         _carbs = [];
                         _sum = 0.0;
                         _inter = 0;
@@ -859,10 +876,12 @@ class MealCardState extends State<MealCard> {
                   print(
                       "click 26: chech: $check , carb list: $_carbs, widget: $widget.name, $widget.carbs,");
                   //varty.remove;
-                  
-                  print(                     "click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
-              
-                  var index = _carbs.indexWhere((item)=>item.containsKey(widget.name));
+
+                  print(
+                      "click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+
+                  var index = _carbs
+                      .indexWhere((item) => item.containsKey(widget.name));
                   _carbs.removeAt(index);
                   _sum -= widget.carbs;
                 }

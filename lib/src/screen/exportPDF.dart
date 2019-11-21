@@ -12,8 +12,8 @@ import 'package:pdf/pdf.dart';
 
 
 class ExportPDF extends StatelessWidget {
-     // ExportPDF(this.id)
-      // var id;
+     ExportPDF(this.id);
+     var id;
   //final SqliteBaseballService _databaseService =
     //  Ioc.get<SqliteBaseballService>();
 
