@@ -1,3 +1,8 @@
+import 'dart:ffi';
+
+import 'package:dtfbl/src/models/meal.dart';
+import 'package:dtfbl/src/models/variety.dart';
+import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:dtfbl/src/widgets/styles.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -13,12 +18,19 @@ import 'mainpage.dart';
 List<Map<String, double>> _carbs = [];
 double _sum = 0.0;
 int _inter = 0;
+double dbcarb, dbvarycarb;
+String dbemail, dbslot, dbnote, dbdm, dbeat;
+int dbvarId;
+int dbamount = 1;
+int coun = 0;
+var varty = new List();
 
 class Meals extends StatelessWidget {
   Meals(this.id);
   var id;
   @override
   Widget build(BuildContext context) {
+    dbemail = id[0]['email'].toString();
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF2A79D2), //Color(0xFF7EAFE5),
@@ -50,7 +62,9 @@ class Meals extends StatelessWidget {
             ),
             new ListTile(
               title: Text('التقارير'),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pushNamed('/ExportPDF');
+              },
             ),
             new ListTile(
               title: Text('الاعدادات'),
@@ -73,11 +87,14 @@ class Meals extends StatelessWidget {
 class Body extends StatefulWidget {
   Body(this.id);
   var id;
+
   @override
   State createState() => new _Bodystate();
 }
 
 class _Bodystate extends State<Body> {
+  DatabaseHelper helper = DatabaseHelper();
+
   final String url =
       'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   // Db db = new Db("mongodb://localhost:27017/mongo_dart-blog");
@@ -85,8 +102,10 @@ class _Bodystate extends State<Body> {
   var meals;
   bool _visible = true;
   DateTime dateTime = DateTime.now();
-  String note = '';
+
+  String note;
   int slot = _slot();
+
   List<String> slots = const <String>[
     'الفطور',
     'الغداء',
@@ -107,6 +126,7 @@ class _Bodystate extends State<Body> {
       slot = 0;
     return slot;
   }
+  //dbslot= slots[slot];
 
   Widget _buildSlotPicker(BuildContext context) {
     return Row(
@@ -130,9 +150,12 @@ class _Bodystate extends State<Body> {
                 size: 28,
               ),
               onPressed: () async {
+                //print("clik 1");
                 await showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
+                    //print("1:");
+                    //print(_cupPicker);
                     return _cupPicker();
                   },
                 );
@@ -157,20 +180,23 @@ class _Bodystate extends State<Body> {
 
   Widget _cupPicker() {
     return CupertinoPicker(
-      itemExtent: 40.0,
-      backgroundColor: Colors.white,
-      children: new List<Widget>.generate(slots.length, (slot) {
-        return new Center(
-          child: new Text(
-            slots[slot],
-            style: Styles.productRowItemName,
-          ),
-        );
-      }),
-      onSelectedItemChanged: (e) => setState(() {
-        slot = e;
-      }),
-    );
+        itemExtent: 40.0,
+        backgroundColor: Colors.white,
+        children: new List<Widget>.generate(slots.length, (slot) {
+          return new Center(
+            child: new Text(
+              slots[slot],
+              style: Styles.productRowItemName,
+            ),
+          );
+        }),
+        onSelectedItemChanged: (e) => {
+              //print("clik 2"),
+              setState(() {
+                slot = e;
+                dbslot = slots[slot];
+              }),
+            });
   }
 
   // function make the http request
@@ -178,17 +204,24 @@ class _Bodystate extends State<Body> {
     _sum = 0.0;
     _carbs = [];
     _inter = 0;
+
+    //print("click 3: sum= $_sum and inter= $_inter");
     var response = await http // .get(url)
         .get(Uri.encodeFull(url), headers: {
       'Accept': 'application/json' // 'key': 'ur key'
-    }); // .get(encode the response data as json) with headers which tell the code should be json
+    }
+            //    print("sum= $_sum and inter= $_inter");
+            ); // .get(encode the response data as json) with headers which tell the code should be json
 
     // after response back, setup the state for the application
     setState(() {
+      //print("click 4: sum= $_sum and inter= $_inter and meals= $meals");
       var responseBoddy = json.decode(response.body);
       meals = responseBoddy;
       print(responseBoddy);
       _visible = !_visible;
+      //print("click 5: sum= $_sum and inter= $_inter and meals= $meals");
+
       //['name of area in the database or in the json data']; // user for example
     });
 
@@ -254,9 +287,13 @@ class _Bodystate extends State<Body> {
                 size: 28,
               ),
               onPressed: () async {
+                print(
+                    "click 6: sum= $_sum and inter= $_inter and meals= $meals  and $_cupDate");
+
                 await showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
+                    print("click 7: $_cupDate");
                     return _cupDate();
                   },
                 );
@@ -289,6 +326,7 @@ class _Bodystate extends State<Body> {
           e = DateTime.now();
         }
         dateTime = e;
+        dbdm = e.toIso8601String();
       }),
     );
   }
@@ -315,6 +353,7 @@ class _Bodystate extends State<Body> {
       placeholder: 'ملاحظات',
       onChanged: (e) => setState(() {
         note = e;
+        dbnote = note;
       }),
     );
   }
@@ -376,7 +415,10 @@ class _Bodystate extends State<Body> {
                       color: Color(0xFF2A79D2),
                       onPressed: () {
                         setState(() {
+                          print("click 10: _inter = $_inter");
+
                           _inter = 0;
+                          print("click 11: _inter = $_inter");
                         });
                       }),
                 )
@@ -389,17 +431,17 @@ class _Bodystate extends State<Body> {
                 //physics: NeverScrollableScrollPhysics(),
                 itemCount: meals == null ? 0 : meals.length,
                 itemBuilder: (BuildContext context, int index) {
-                  var meal = MealCard('تفاح', 30, 50, this);
+                  var meal = MealCard(9, 'تفاح', 30, 50, this);
                   return Column(
                     children: <Widget>[
-                      MealCard('تفاح', 25.1, 95, this),
-                      MealCard('القهوة', 0, 2, this),
-                      MealCard('الموز', 34.3, 134, this),
-                      MealCard('البيض', 0.7, 134, this),
-                      MealCard('حليب', 10.9, 149, this),
-                      MealCard('رز ابيض', 44.5, 205, this),
-                      MealCard('الدجاج', 0, 114, this),
-                      MealCard('تفاح', 30, 50, this)
+                      MealCard(1, 'تفاح', 25.1, 95, this),
+                      MealCard(2, 'القهوة', 0, 2, this),
+                      MealCard(3, 'الموز', 34.3, 134, this),
+                      MealCard(4, 'البيض', 0.7, 134, this),
+                      MealCard(5, 'حليب', 10.9, 149, this),
+                      MealCard(6, 'رز ابيض', 44.5, 205, this),
+                      MealCard(7, 'الدجاج', 0, 114, this),
+                      MealCard(8, 'تفاح', 30, 50, this)
                     ],
                   );
                 }),
@@ -421,6 +463,7 @@ class _Bodystate extends State<Body> {
     ]);
   }
 
+// الفئات:
   Widget _grouping() {
     return Column(
       children: <Widget>[
@@ -439,7 +482,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
+                            print("click 12: _inter = $_inter");
                             _inter = 1;
+                            print("click 13: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -474,7 +519,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
+                            print("click 14: _inter = $_inter");
                             _inter = 1;
+                            print("click 15: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -514,7 +561,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
+                            print("click 16: _inter = $_inter, ");
                             _inter = 1;
+                            print("click 17: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -549,7 +598,9 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
+                            print("click 18: _inter = $_inter");
                             _inter = 1;
+                            print("click 19: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -590,6 +641,8 @@ class _Bodystate extends State<Body> {
   }
 
   List<Widget> _wid() {
+    print(
+        "click 20: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard(name, carbs, caloris, parent)");
     return [_grouping(), _insider()];
   }
 
@@ -602,6 +655,8 @@ class _Bodystate extends State<Body> {
         children: <Widget>[
           new SizedBox(
             height: 282,
+            //print("click 21: inter:$_inter");
+            //print("click 21: inter:$_wid()[_inter]");
             child: _wid()[_inter],
           ),
           new Card(
@@ -615,8 +670,24 @@ class _Bodystate extends State<Body> {
                   padding: const EdgeInsets.only(
                       left: 5.0, right: 180.0, top: 5.0, bottom: 5.0),
                   child: new GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      dbcarb = _sum;
+                      dbslot = slots[slot];
+                      dbdm = dateTime.toIso8601String();
+                      print(
+                          "click 27: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
+                      Meal meal = Meal(dbemail, dbslot, dbcarb, dbnote, dbdm);
+                      var mealw = await helper.insertMeal(meal);
+                      print('this result id : ${mealw}');
+
+                      // Variety variety= Variety(dbvarId,mealw,dbemail,dbeat,dbvarycarb,dbamount);
+                      // var varyw = await helper.insertVariety(variety);
+                      // print('this result id : ${varyw}');
+                      print(
+                          "click 28: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
+
                       setState(() {
+                        
                         _carbs = [];
                         _sum = 0.0;
                         _inter = 0;
@@ -657,6 +728,9 @@ class _Bodystate extends State<Body> {
 
   @override
   void initState() {
+    print(
+        "click 23: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard($this.name, $this.carbs, $this.caloris, $this.parent)");
+
     super.initState();
     this.getData();
   }
@@ -665,9 +739,11 @@ class _Bodystate extends State<Body> {
 class MealCard extends StatefulWidget {
   String name;
   double carbs;
+  int id;
   int caloris;
   _Bodystate parent;
-  MealCard(this.name, this.carbs, this.caloris, this.parent);
+
+  MealCard(this.id, this.name, this.carbs, this.caloris, this.parent);
   @override
   MealCardState createState() => MealCardState();
 }
@@ -677,6 +753,9 @@ class MealCardState extends State<MealCard> {
 
   @override
   Widget build(BuildContext context) {
+    //  print("click 21: check: $check, meal:$MealCard(name, carbs, caloris, parent)");
+    // print("click 22: chech: $check, meal: $MealCard(this.name, this.carbs, this.caloris, this.parent)");
+
     return new Stack(
       alignment: AlignmentDirectional.center,
       children: <Widget>[
@@ -762,12 +841,27 @@ class MealCardState extends State<MealCard> {
             value: check,
             onChanged: (bool e) {
               setState(() {
+                print(
+                    "click 28: chech: $check , widget: ${widget.name}, ${widget.carbs},");
                 check = e;
                 if (check == true) {
+                  print(
+                      "click 24: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+
                   _carbs.add({widget.name: widget.carbs});
+                  print(
+                      "click 25: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+
+                  //varty.add(widget.id,widget.name, widget.carbs,dbamount);
                   _sum += widget.carbs;
                 }
                 if (check == false) {
+                  print(
+                      "click 26: chech: $check , carb list: $_carbs, widget: $widget.name, $widget.carbs,");
+                  //varty.remove;
+                  
+                  print(                     "click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+              
                   var index = _carbs.indexWhere((item)=>item.containsKey(widget.name));
                   _carbs.removeAt(index);
                   _sum -= widget.carbs;

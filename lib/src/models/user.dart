@@ -8,11 +8,12 @@ class User {
   int _gender;
   int _type;
   double _hight;
-  double _weight;
-  double _bmi;
+  // double _weight;
+  // double _bmi;
 
   User(this._email, this._pass, this._fname, this._lname, this._dd, this._bd,
-      this._gender, this._type, this._hight, this._weight, this._bmi);
+      this._gender, this._type, this._hight, //this._weight, this._bmi
+      );
 
   String get email => _email;
   String get pass => _pass;
@@ -23,8 +24,8 @@ class User {
   int get gender => _gender;
   int get type => _type;
   double get hight => _hight;
-  double get weight => _weight;
-  double get bmi => _bmi;
+  // double get weight => _weight;
+  // double get bmi => _bmi;
 
   set email(String newemail) => _email = newemail;
   set pass(String newpass) => _pass = newpass;
@@ -35,8 +36,8 @@ class User {
   set gender(int newgender) => _gender = newgender;
   set type(int newtype) => _type = newtype;
   set hight(double newhight) => _hight = newhight;
-  set weight(double newweight) => _weight = newweight;
-  set bmi(double newbmi) => _bmi = newbmi;
+  // set weight(double newweight) => _weight = newweight;
+  // set bmi(double newbmi) => _bmi = newbmi;
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
@@ -51,8 +52,8 @@ class User {
     map['gender'] = _gender;
     map['type'] = _type;
     map['hight'] = _hight;
-    map['weight'] = _weight;
-    map['bmi'] = _bmi;
+    //map['weight'] = _weight;
+    //map['bmi'] = _bmi;
 
     return map;
   }
@@ -67,7 +68,7 @@ class User {
     this._gender = map['gender'];
     this._type = map['type'];
     this._hight = map['hight'];
-    this._weight = map['weight'];
-    this._bmi = map['bmi'];
+    //this._weight = map['weight'];
+    //this._bmi = map['bmi'];
   }
 }

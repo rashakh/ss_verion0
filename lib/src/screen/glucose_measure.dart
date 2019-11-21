@@ -1,13 +1,15 @@
+import 'package:dtfbl/src/models/BG.dart';
+import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'dart:ui';
 import '../widgets/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:intl/intl.dart' as intl; // flutter main package
-import 'dart:async';
-import 'dart:convert'; // convert json into data
-import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+// import 'dart:async';
+// import 'dart:convert'; // convert json into data
+// import 'package:http/http.dart'
+//     as http; // perform http request on API to get the into
 import 'mainpage.dart';
 class GlucoseMeasure extends StatelessWidget {
   GlucoseMeasure(this.id);
@@ -42,6 +44,8 @@ class Body extends StatefulWidget {
 class _Bodystate extends State<Body> {
   final String url =
       'mongodb+srv://ghida:ghida@cluster0-xskul.mongodb.net/test?retryWrites=true&w=majority'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+   DatabaseHelper helper = DatabaseHelper();
+
   bool _result;
   int gm = 110;
   DateTime dateTime = DateTime.now();
@@ -119,9 +123,9 @@ class _Bodystate extends State<Body> {
 
   void _changed(e) {
     setState(() {
-      print('this is glucose ${widget.id[0]['email']}');
+     // print('this is glucose ${widget.id[0]['email']}');
       gm = e;
-      if (gm < 80 || gm > 180) {
+      if (gm < 70 || gm > 180) {
         slider = Colors.redAccent[400];
         evaluation = 'هذا ليس جيد، يجب عليك الانتباه';
       } else {
@@ -530,7 +534,11 @@ class _Bodystate extends State<Body> {
                   //     style: TextStyle(
                   //       fontSize: 20.0,
                   //     )),
-                  onPressed: () => setState(() {
+                  onPressed: () => setState(() async {
+                    print("click 1 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
+                    BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
+                      var mealw = await helper.insertBG(bg);
+                    print("click 2: $mealw");
                     Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => MainPage(widget.id)),

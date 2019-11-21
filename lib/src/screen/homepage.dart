@@ -4,6 +4,8 @@ import './medalert.dart';
 import './pt.dart';
 import './profile.dart';
 
+import 'exportPDF.dart';
+
 class HomePage extends StatelessWidget {
   HomePage(this.id);
   var id;
@@ -46,7 +48,10 @@ class HomePage extends StatelessWidget {
             ),
             new ListTile(
               title: Text('التقارير'),
-              onTap: () {},
+              onTap: () { Navigator.of(context).pushNamed('/ExportPDF');},
+
+
+
             ),
             new ListTile(
               title: Text('الملف الشخصي'),

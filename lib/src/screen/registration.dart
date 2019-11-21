@@ -3,15 +3,16 @@
 
 import 'dart:convert';
 
+import 'package:dtfbl/src/models/wieght.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:intl/intl.dart' as intl; // flutter main package
 import 'package:flutter/cupertino.dart';
-import 'dart:async';
-import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+// import 'dart:async';
+// import 'package:http/http.dart'
+//     as http; // perform http request on API to get the into
 import 'loginpage.dart';
 
-import 'package:sqflite/sqflite.dart';
+// import 'package:sqflite/sqflite.dart';
 import '../models/user.dart';
 import '../utils/database_helper.dart';
 
@@ -117,11 +118,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
           _gender,
           _type,
           _height,
-          _weight,
-          (((_weight / _height) / _height) * 10000));
+          //_weight,
+          //(((_weight / _height) / _height) * 10000)
+          );
+       BW bw= BW(_email,_weight.floor(),(((_weight / _height) / _height) * 10000)," ",new DateTime.now().toIso8601String()); 
       var id = await helper.insertUser(user);
       print('this result id : ${id}');
+      var wi = await helper.insertBW(bw);
+      print('this result id : ${wi}');
       var route = new MaterialPageRoute(builder: (context) => new LoginPage());
+
       Navigator.of(context).push(route);
       _formKey.currentState.reset();
     } else {
