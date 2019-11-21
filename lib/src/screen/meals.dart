@@ -10,16 +10,13 @@ import 'package:http/http.dart'
     as http; // perform http request on API to get the into
 import 'mainpage.dart';
 
-List<Map<String, double>> _carbs = [
-  {'meal': 0.0}
-];
+List<Map<String, double>> _carbs = [];
 double _sum = 0.0;
 int _inter = 0;
 
 class Meals extends StatelessWidget {
   Meals(this.id);
   var id;
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -68,12 +65,14 @@ class Meals extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body()),
+      body: new SingleChildScrollView(child: new Body(id)),
     );
   }
 }
 
 class Body extends StatefulWidget {
+  Body(this.id);
+  var id;
   @override
   State createState() => new _Bodystate();
 }
@@ -177,6 +176,7 @@ class _Bodystate extends State<Body> {
   // function make the http request
   Future<String> getData() async {
     _sum = 0.0;
+    _carbs = [];
     _inter = 0;
     var response = await http // .get(url)
         .get(Uri.encodeFull(url), headers: {
@@ -617,12 +617,13 @@ class _Bodystate extends State<Body> {
                   child: new GestureDetector(
                     onTap: () {
                       setState(() {
+                        _carbs = [];
                         _sum = 0.0;
                         _inter = 0;
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MainPage('r@gmail.com')),
+                              builder: (context) => MainPage(widget.id)),
                         );
                       });
                     },
@@ -763,13 +764,12 @@ class MealCardState extends State<MealCard> {
               setState(() {
                 check = e;
                 if (check == true) {
-                  print(widget.name);
                   _carbs.add({widget.name: widget.carbs});
                   _sum += widget.carbs;
                 }
                 if (check == false) {
-                  print(widget.name);
-                  _carbs.remove({widget.name: widget.carbs});
+                  var index = _carbs.indexWhere((item)=>item.containsKey(widget.name));
+                  _carbs.removeAt(index);
                   _sum -= widget.carbs;
                 }
               });
