@@ -48,10 +48,12 @@ class HomePage extends StatelessWidget {
             ),
             new ListTile(
               title: Text('التقارير'),
-              onTap: () { Navigator.of(context).pushNamed('/ExportPDF');},
-
-
-
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ExportPDF(id)),
+                );
+              },
             ),
             new ListTile(
               title: Text('الملف الشخصي'),
