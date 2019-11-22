@@ -30,6 +30,9 @@ class Body extends StatefulWidget {
 }
 
 class _Bodystate extends State<Body> {
+  String _med;
+
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -210,18 +213,105 @@ class _Bodystate extends State<Body> {
             SizedBox(
               height: 20.0,
             ),
-            new Container(
-                alignment: Alignment.center,
-                height: 40.0,
-                width: 200.0,
-                decoration: new BoxDecoration(
-                    color: Color(0xFFBDD22A),
-                    borderRadius: new BorderRadius.circular(7.0)),
-                child: new Text("اضافة",
-                    style: new TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold))),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 90.0, right: 90.0, top: 5.0, bottom: 5.0),
+              child: new GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (
+                        BuildContext context,
+                      ) {
+                        return StatefulBuilder(builder: (context, setState) {
+                          return AlertDialog(
+                            content: Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: 20.0,
+                                    ),
+                                    child: new DropdownButton<String>(
+                                      iconEnabledColor: Color(0xFFBDD22A),
+                                      hint: Text('اختر الدواء'),
+                                      value: _med,
+                                      items: [
+                                        DropdownMenuItem<String>(
+                                          value: 'دواء١',
+                                          child: Text(
+                                            'دواء١',
+                                          ),
+                                        ),
+                                        DropdownMenuItem<String>(
+                                          value: 'دواء٢',
+                                          child: Text(
+                                            'دواء٢',
+                                          ),
+                                        ),
+                                        DropdownMenuItem<String>(
+                                          value: 'دواء٣',
+                                          child: Text(
+                                            'دواء٣',
+                                          ),
+                                        ),
+                                      ],
+                                      onChanged: (e) {
+                                        setState(() {
+                                          _med = e;
+                                        });
+                                      },
+                                      
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 50.0),
+                                    child: new GestureDetector(
+                                      onTap: () {
+                                        //database
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: new Container(
+                                          alignment: Alignment.center,
+                                          height: 40.0,
+                                          decoration: new BoxDecoration(
+                                              color: Color(0xFFBDD22A),
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      7.0)),
+                                          child: new Text('حفظ',
+                                              style: new TextStyle(
+                                                  fontSize: 15.0,
+                                                  color: Colors.white,
+                                                  fontWeight:
+                                                      FontWeight.bold))),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                      });
+                },
+                child: new Container(
+                    alignment: Alignment.center,
+                    height: 40.0,
+                    decoration: new BoxDecoration(
+                        color: Color(0xFFBDD22A),
+                        borderRadius: new BorderRadius.circular(7.0)),
+                    child: new Text("اضافة",
+                        style: new TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold))),
+              ),
+            ),
           ]),
         ));
   }
