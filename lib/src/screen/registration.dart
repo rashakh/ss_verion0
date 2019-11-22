@@ -44,7 +44,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   final String url =
       'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   final intl.DateFormat format = new intl.DateFormat('y-M-d');
-  String _email, _password, _fName, _lName;
+  String _email, _password, _fName, _lName, _phoneNumber;
   int _gender, _type;
   double _height, _weight;
   DateTime _birthday = new DateTime.now();
@@ -459,17 +459,42 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                         ),
                                         SizedBox(width: 15.0),
                                         new Text(
-                                          intl.DateFormat.yMMMd()
-                                              .format(_dd),
+                                          intl.DateFormat.yMMMd().format(_dd),
                                           style: TextStyle(fontSize: 15.0),
                                         ),
                                       ],
+                                    ),
+                                    new Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 20.0,
+                                          right: 20.0,
+                                          left: 30.0),
+                                      child: new TextFormField(
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 3.0),
+                                          hintText:
+                                              'رقم احد افراد العائلة للطوارئ',
+                                          hintStyle: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                          fillColor:
+                                              Colors.white54.withOpacity(0.5),
+                                        ),
+                                        keyboardType: TextInputType.phone,
+                                        validator: (value) => value.isEmpty
+                                            ? 'هذا الحقل مطلوب'
+                                            : null,
+                                        onSaved: (value) =>
+                                            _phoneNumber = value,
+                                      ),
                                     ),
                                   ],
                                 )),
                             new Divider(
                               color: Color(0xFFBDD22A),
-                              height: 30.0,
+                              height: 10.0,
                             ),
                             new Card(
                                 elevation: 5.0,
@@ -555,7 +580,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                 )),
                             new Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 20.0, vertical: 35.0),
+                                  horizontal: 20.0, vertical: 15.0),
                               child: new GestureDetector(
                                 onTap: validateAndSubmit,
                                 child: new Container(

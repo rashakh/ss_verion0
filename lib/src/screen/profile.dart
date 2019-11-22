@@ -290,6 +290,33 @@ class _Bodystate extends State<Body> {
                     ),
                     new Padding(
                       padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, top: 10.0),
+                      child: Row(
+                        children: <Widget>[
+                          new Text(
+                            'رقم الطوارئ : ',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          new Text(
+                            'here',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    new Divider(
+                      color: Color(0xFFBDD22A),
+                      height: 30.0,
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(
                           left: 20.0, right: 20.0, top: 10.0, bottom: 15.0),
                       child: Row(
                         children: <Widget>[
