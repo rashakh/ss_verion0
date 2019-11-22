@@ -294,23 +294,23 @@ class _Bodystate extends State<Body> {
     );
   }
 
-void _BGTotal() async{
-  var total = (await helper.BGTotal())[0]['Total'];
-    print("num3: $total");
+// void _BGTotal() async{
+//   var total = (await helper.BGTotal())[0]['Total'];
+//     print("num3: $total");
 
-  setState(() => _sum = total);
-}
+//   setState(() => _sum = total);
+// }
 
-void _BGRe() async{
-    var num= (await helper.BGRecord())[0]['r'];
-    print("num6: $num");
+// void _BGRe() async{
+//     var num= (await helper.BGRecord())[0]['r'];
+//     print("num6: $num");
   
-  setState(() => _num=num);
-}
+//   setState(() => _num=num);
+// }
 
 void a11c(){
-_BGTotal();
-_BGRe();
+//_BGTotal();
+//_BGRe();
 double average= _sum/_num;
 double wA1c = (46.7 + average) / 28.7;
 a1c=wA1c;

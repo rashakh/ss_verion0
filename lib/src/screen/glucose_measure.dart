@@ -589,7 +589,7 @@ class _Bodystate extends State<Body> {
 
 void BGTotal() async{
   var total = (await helper.BGTotal())[0]['Total'];
-    print("num: $total");
+    print("num9: $total");
 
   setState(() => _sum = total);
 }

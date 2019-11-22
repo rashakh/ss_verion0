@@ -410,6 +410,8 @@ print('updated 1: $result1');
     return result1;
   }
 //GET IN RENGE
+
+
 //----------------------------------PT Table--------------------------------------------------- 
 //add
   Future<int> insertPT(PT pt) async {
@@ -428,6 +430,7 @@ print('updated 1: $result1');
   }
   
 //UPDATE
+
 //GET All
 // value of A1C:
 Future getA1C() async {
