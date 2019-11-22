@@ -2,7 +2,6 @@ import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:sqflite/sqflite.dart';
 import './medalert.dart';
 import './pt.dart';
 import './profile.dart';
@@ -99,7 +98,7 @@ class _Bodystate extends State<Body> {
   );
 
   Color color = Colors.grey;
-  double a1c =0;
+  double a1c =4;
 
   double _a1c() {
     var n = a1c/ 14;
@@ -295,22 +294,22 @@ class _Bodystate extends State<Body> {
     );
   }
 
-void BGTotal() async{
+void _BGTotal() async{
   var total = (await helper.BGTotal())[0]['Total'];
-    print("num: $total");
+    print("num3: $total");
 
   setState(() => _sum = total);
 }
 
 void _BGRe() async{
     var num= (await helper.BGRecord())[0]['r'];
-    print("num: $num");
+    print("num6: $num");
   
   setState(() => _num=num);
 }
 
 void a11c(){
-BGTotal();
+_BGTotal();
 _BGRe();
 double average= _sum/_num;
 double wA1c = (46.7 + average) / 28.7;

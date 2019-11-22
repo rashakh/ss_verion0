@@ -596,7 +596,7 @@ void BGTotal() async{
 
 void _BGRe() async{
     var num= (await helper.BGRecord())[0]['r'];
-    print("num: $num");
+    print("num7: $num");
   
   setState(() => _num=num);
 }

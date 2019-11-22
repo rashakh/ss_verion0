@@ -429,13 +429,13 @@ print('updated 1: $result1');
   
 //UPDATE
 //GET All
-	Future<List<Map<String, dynamic>>> getA1CMapList() async {
-		Database db = await this.database;
-
-  	var result = await db.rawQuery('SELECT * FROM $A1CTable ');
-		// var result = await db.query(A1CTable, where: '$colA1C=!0',whereArgs:id);
-		return result;
-	}
+// value of A1C:
+Future getA1C() async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable');
+ // print(result.toList());
+  return result.toList();
+}
 
 
 //GET All with date
