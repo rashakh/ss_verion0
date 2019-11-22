@@ -6,14 +6,15 @@ class A1C {
 
 
   A1C(this._A1C, this._dS, this._dE );
+  A1C.A1c(this._A1C);
 
   int get id => _id;
-  String get Name => _dE;
+  String get dE => _dE;
   double get a1C => _A1C;
   String get dS => _dS;
 
 
-  set Name(String newName) => _dE = newName;
+  set dE(String newName) => _dE = newName;
   set a1C(double newA1C) => _A1C = newA1C;
   set dS(String newdg) => _dS = newdg;
 

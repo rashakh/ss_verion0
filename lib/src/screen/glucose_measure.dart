@@ -1,4 +1,6 @@
+import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/models/BG.dart';
+import 'package:dtfbl/src/models/PA.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'dart:ui';
@@ -45,7 +47,8 @@ class _Bodystate extends State<Body> {
   final String url =
       'mongodb+srv://ghida:ghida@cluster0-xskul.mongodb.net/test?retryWrites=true&w=majority'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
    DatabaseHelper helper = DatabaseHelper();
-
+  var _sum=0;
+  var _num=0;
   bool _result;
   int gm = 110;
   DateTime dateTime = DateTime.now();
@@ -477,7 +480,9 @@ class _Bodystate extends State<Body> {
         );
       }),
       onSelectedItemChanged: (e) => setState(() {
+        print("click 1: $pa");
         pa = e;
+        print("${ pas[pa]}");
       }),
     );
   }
@@ -535,14 +540,35 @@ class _Bodystate extends State<Body> {
                   //       fontSize: 20.0,
                   //     )),
                   onPressed: () => setState(() async {
-                    print("click 1 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
+
+                    if (slot==8){
+                          PA padb=new PA(widget.id[0]['email'].toString(),pas[pa],0, dateTime.toIso8601String());
+                      var palw = await helper.insertPA(padb);
                     BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
-                      var mealw = await helper.insertBG(bg);
-                    print("click 2: $mealw");
+                     var mealw = await helper.insertBG(bg);
+                     a11c();
+                    }
+                    else if (slot==9){
+                        int padu=dur.inMinutes;
+                    print("click 4:$padu, ");
+                      var palw = await helper.UpdatetPA(padu);
+               //     print("click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
+                   // BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
+                     // var mealw = await helper.insertBG(bg);                    
+                    print("click 4:$palw, ");
+                     a11c();
+
+                    }
+                     else{ 
+                    BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
+                    var mealw = await helper.insertBG(bg);
+                     a11c();
+                     }
                     Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => MainPage(widget.id)),
                         );
+                  
                   }),
                 ),
                 SizedBox(width: 160.0),
@@ -560,4 +586,35 @@ class _Bodystate extends State<Body> {
       ),
     );
   }
+
+void BGTotal() async{
+  var total = (await helper.BGTotal())[0]['Total'];
+    print("num: $total");
+
+  setState(() => _sum = total);
+}
+
+void _BGRe() async{
+    var num= (await helper.BGRecord())[0]['r'];
+    print("num: $num");
+  
+  setState(() => _num=num);
+}
+
+void _BGIn(A1C a) async{
+var ree= await helper.insertA1C(a);
+print(ree);
+  //setState(() => _num=num);
+}
+
+
+void a11c(){
+BGTotal();
+_BGRe();
+double average= _sum/_num;
+double wA1c = (46.7 + average) / 28.7;
+A1C ss=A1C.A1c(wA1c);
+_BGIn(ss);
+}  
+
 }

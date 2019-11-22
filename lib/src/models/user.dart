@@ -8,11 +8,12 @@ class User {
   int _gender;
   int _type;
   double _hight;
+  String _number;
   // double _weight;
   // double _bmi;
 
   User(this._email, this._pass, this._fname, this._lname, this._dd, this._bd,
-      this._gender, this._type, this._hight, //this._weight, this._bmi
+      this._gender, this._type, this._hight, this._number //this._weight, this._bmi
       );
 
   String get email => _email;
@@ -24,6 +25,7 @@ class User {
   int get gender => _gender;
   int get type => _type;
   double get hight => _hight;
+  String get number => _number;
   // double get weight => _weight;
   // double get bmi => _bmi;
 
@@ -31,6 +33,7 @@ class User {
   set pass(String newpass) => _pass = newpass;
   set fname(String newfname) => _fname = newfname;
   set lname(String newlname) => _lname = newlname;
+  set number(String newlname) => _number = newlname;
   set dd(String newdd) => _dd = newdd;
   set bd(String newbd) => _bd = newbd;
   set gender(int newgender) => _gender = newgender;
@@ -52,6 +55,7 @@ class User {
     map['gender'] = _gender;
     map['type'] = _type;
     map['hight'] = _hight;
+    map['number'] = _number;
     //map['weight'] = _weight;
     //map['bmi'] = _bmi;
 
@@ -68,6 +72,7 @@ class User {
     this._gender = map['gender'];
     this._type = map['type'];
     this._hight = map['hight'];
+    this._number = map['number'];
     //this._weight = map['weight'];
     //this._bmi = map['bmi'];
   }
