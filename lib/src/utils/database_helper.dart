@@ -1,13 +1,20 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/models/BG.dart';
+import 'package:dtfbl/src/models/PA.dart';
+import 'package:dtfbl/src/models/PT.dart';
+import 'package:dtfbl/src/models/a1cexam.dart';
+import 'package:dtfbl/src/models/carb.dart';
+import 'package:dtfbl/src/models/dug.dart';
+import 'package:dtfbl/src/models/exams.dart';
 import 'package:dtfbl/src/models/meal.dart';
+import 'package:dtfbl/src/models/med.dart';
 import 'package:dtfbl/src/models/pressure.dart';
 import 'package:dtfbl/src/models/variety.dart';
 import 'package:dtfbl/src/models/wieght.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:flutter/material.dart';
 import '../models/user.dart';
 
 class DatabaseHelper {
@@ -28,6 +35,7 @@ class DatabaseHelper {
   String colHight = 'hight';
   String colWeight = 'weight';
   String colBmi = 'bmi';
+  String colnumber = 'number';
 
 // meal table:
   String mealTable = 'meal_table';
@@ -74,9 +82,78 @@ class DatabaseHelper {
 
 //Instruction table:
   String instrTable= 'Instr_table';
-  String colinstId = 'id'; //auto
+  String colAototId = 'id'; //auto
   String coltitel='titel';
   String coldes='des';
+
+//PA table:
+  String PATable= 'PA_table';
+    // this._email = map['email'];
+  String colName = 'Name';
+  //String colPAid='id'; //auto
+  String coldur = 'dur';
+  //  this._dg = map['date'];
+
+//PT table:
+  String PTTable= 'PT_table';
+//  String colName = 'Name';
+  //String colPTid='id'; //auto
+
+//A1C table:
+  String A1CTable= 'A1C_table';
+//  String colName = 'Name';
+ // String colid='id'; //auto
+  String colA1C='a1C';
+  String coldS='dateS';
+  String coldE='dateE';
+
+//CARB table:
+  String CarbTable= 'Carb_table';
+  //String colName = 'Name';
+  //String colA1Cid='id'; //auto
+  String colcurnt='curnt';
+  String colmin='min';
+  String colmax='max';
+  //String _Dc;
+
+//Exams table:
+  String ExamsTable= 'Exams_table';
+  //String _id;//auto
+  String colPTId='PTId';
+  //String _email;
+  //String _name;
+  //String _dur;
+  //String _date;
+  String colresult='result';
+  String colRDate='RDate';
+
+//ExamA1C table:
+  String ExamA1CTable= 'ExamA1C_table';
+  //String _id;//auto
+  //String _PTId='PTId';
+  //String _email;
+  //String _name;
+  //String _dur;
+  //String _date;
+  //String _result='result';
+  //String _RDate='RDate';
+
+//med table:
+  //int _id; //auto
+  //String _Name;
+  String MedTable= 'med_table';
+  String colconf='conf';
+  String colwork='work';
+  String colsid='sid';
+
+
+//dug table:
+  String DugTable= 'Dug_table';
+  //int _id; //auto
+  //String _email;
+  //String _Name;
+  //String _type;
+  String coldug='dug';
 
 
   factory DatabaseHelper() {
@@ -94,21 +171,21 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user3.db';
+    String path = directory.path + 'user6.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
   }
 
   void _createDb(Database db, int newVersion) async {
-    await db.execute(
-        'CREATE TABLE $userTable($colEmail TEXT PRIMARY KEY, $colPass TEXT,'
+    await db.execute('CREATE TABLE $userTable('
+          '$colEmail TEXT PRIMARY KEY, $colPass TEXT,'
         '$colFname TEXT, $colLname TEXT, $colDd TEXT, $colBd TEXT,'
         '$colGender INTEGER, $colType INTEGER,'
-        '$colHight REAL)');
+        '$colHight REAL,$colnumber TEXT)');
 
-    await db.execute(
-        'CREATE TABLE $mealTable($colId INTEGER PRIMARY KEY AUTOINCREMENT,'
+    await db.execute('CREATE TABLE $mealTable('
+        '$colId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT , $colMealSlot TEXT,'
         '$colCarb REAL, $colnote TEXT, $coldate TEXT)');
 
@@ -129,12 +206,47 @@ class DatabaseHelper {
         '$colEmail TEXT,$coldate TEXT,$colwieght INT,'
         ' $colBmi REAL,$colnote TEXT,PRIMARY KEY ($colEmail,$coldate))');
 
-    await db.execute(
-        'CREATE TABLE $instrTable($colinstId INTEGER PRIMARY KEY AUTOINCREMENT,'
+    await db.execute('CREATE TABLE $instrTable('
+    '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$coltitel TEXT , $coldes TEXT)');
 
+    await db.execute('CREATE TABLE $PATable('
+        '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$colEmail TEXT ,$coldate TEXT ,$colName TEXT , $coldur REAL)');
 
+    await db.execute('CREATE TABLE $PTTable('
+        '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$colName TEXT)');
+  
+    await db.execute( 'CREATE TABLE $A1CTable('
+    '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$coldS TEXT ,$coldE TEXT ,$colA1C TEXT)');
+
+    await db.execute('CREATE TABLE $ExamsTable('
+        '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$colEmail TEXT, $colPTId INTEGER,'
+        '$colName TEXT, $coldate TEXT, $colresult TEXT, $colRDate TEXT,'
+        '$coldur INTEGER)');
+
+    await db.execute('CREATE TABLE $ExamA1CTable('
+        '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$colEmail TEXT, $colPTId INTEGER,'
+        '$colName TEXT, $coldate TEXT, $colresult TEXT, $colRDate TEXT,'
+        '$coldur INTEGER)');
+    
+    await db.execute( 'CREATE TABLE $CarbTable('
+    '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$colcurnt REAL ,$colmin REAL ,$colmax REAL,$coldate TEXT )');
+
+    await db.execute( 'CREATE TABLE $DugTable('
+    '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$colEmail TEXT ,$colName TEXT ,$colType TEXT,$coldug INTEGER )');
+
+    await db.execute( 'CREATE TABLE $MedTable('
+    '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$colconf TEXT ,$colName TEXT ,$colwork TEXT,$colsid TEXT )');
   }
+
 
 //----------------------------------User Table------------------------------------------
   //reg
@@ -190,8 +302,6 @@ class DatabaseHelper {
     return null;
   }
   
- 
-
 //-------------------------------Variety Table--------------------------------------------
 //add
   Future<int> insertVariety(Variety variety) async {
@@ -228,6 +338,22 @@ class DatabaseHelper {
     return result;
   }
 
+//get total BG
+Future BGTotal() async {
+  var dbClient = await this.database;
+  var result = await dbClient.rawQuery("SELECT SUM($colBg) as Total FROM $BGTable");
+  //print(result.toList());
+  return result.toList();
+}
+
+// nuber of record:
+Future BGRecord() async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable');
+  print(result.toList());
+  return result.toList();
+}
+
 //----------------------------------Prusser Table--------------------------------------------------- 
 //add
   Future<int> insertBP(BP bp) async {
@@ -250,7 +376,7 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getInstruction(int id) async {
     Database db = await this.database;
     var result =
-        await db.query(instrTable, where: '$colinstId = ?', whereArgs: [id]);
+        await db.query(instrTable, where: '$colAototId = ?', whereArgs: [id]);
     if (result.length > 0) {
       return result;
     }
@@ -259,9 +385,125 @@ class DatabaseHelper {
 //get All Instruction
 Future<List<Map<String, dynamic>>> getInstructionMapList() async {
 		Database db = await this.database;
-		var result = await db.query(instrTable, orderBy: '$colinstId ASC');
+		var result = await db.query(instrTable, orderBy: '$colAototId ASC');
 		return result;
 	}
+
+//----------------------------------PA Table--------------------------------------------------- 
+//ADD
+//add
+  Future<int> insertPA(PA pa) async {
+    Database db = await this.database;
+    var result = await db.insert(PATable, pa.toMap());
+print('updated: $result');
+    return result;
+  }
+//UPDATE //not complet
+  Future<int> UpdatetPA(int pa) async {
+    Database db = await this.database;
+ //   int count = await database.rawUpdate(SELECT * FROM tablename ORDER BY column DESC LIMIT 1);
+    var result = await db.rawQuery('SELECT * FROM $PATable ORDER BY $colAototId DESC LIMIT 1');
+   // var result1 = await db.update(PATable, pa.map(), where: '$colAototId = ?', whereArgs: [variety.id]));
+    var result1 = await db.rawUpdate('UPDATE $PATable  SET $coldur = $pa  WHERE colAototId=${result[0]['id']}');
+print('updated: $result');
+print('updated 1: $result1');
+    return result1;
+  }
+//GET IN RENGE
+//----------------------------------PT Table--------------------------------------------------- 
+//add
+  Future<int> insertPT(PT pt) async {
+    Database db = await this.database;
+    var result = await db.insert(PTTable, pt.toMap());
+    return result;
+  }
+//GET
+//UPDATE
+//----------------------------------A1C Table--------------------------------------------------- 
+//add
+  Future<int> insertA1C(A1C a1c) async {
+    Database db = await this.database;
+    var result = await db.insert(A1CTable, a1c.toMap());
+    return result;
+  }
+  
+//UPDATE
+//GET All
+// value of A1C:
+Future getA1C() async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable');
+ // print(result.toList());
+  return result.toList();
+}
+
+
+//GET All with date
+
+//DELETE
+//----------------------------------CARB Table--------------------------------------------------- 
+//add
+  Future<int> insertCARB(Carb pa) async {
+    Database db = await this.database;
+    var result = await db.insert(CarbTable, pa.toMap());
+    return result;
+  }
+
+//UPDATE
+//GET
+
+//----------------------------------Exam Table---------------------------------------------------
+//add
+  Future<int> insertExam(Exam pa) async {
+    Database db = await this.database;
+    var result = await db.insert(ExamsTable, pa.toMap());
+    return result;
+  }
+//UPDATE
+//GET
+//----------------------------------ExamA1C Table------------------------------------------------
+//add
+  Future<int> insertExamA1C(ExamA1C pa) async {
+    Database db = await this.database;
+    var result = await db.insert(ExamA1CTable, pa.toMap());
+    return result;
+  }
+//UPDATE
+//GET
+//----------------------------------med table----------------------------------------------------
+//ADD
+  Future<int> insertmed(Med pa) async {
+    Database db = await this.database;
+    var result = await db.insert(MedTable, pa.toMap());
+    return result;
+  }
+//UPDATE
+//GET
+
+//----------------------------------dug table----------------------------------------------------
+//ADD
+  Future<int> insertDUB(Dug pa) async {
+    Database db = await this.database;
+    var result = await db.insert(DugTable, pa.toMap());
+    return result;
+  }
+  
+//UPDATE
+//GET
+
+
+
+
+
+
+
+// // delet database:
+// Future<int> DB(Srting pa) async {
+//     Database db = await this.database;
+//     var result = await db.insert(DugTable, pa.toMap());
+//     return result;
+//   }
+
 }
 
 

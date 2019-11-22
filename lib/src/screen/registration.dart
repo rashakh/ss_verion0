@@ -45,7 +45,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   final String url =
       'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   final intl.DateFormat format = new intl.DateFormat('y-M-d');
-  String _email, _password, _fName, _lName;
+  String _email, _password, _fName, _lName, _number;
   int _gender, _type;
   double _height, _weight;
   DateTime _birthday = new DateTime.now();
@@ -118,6 +118,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
           _gender,
           _type,
           _height,
+          _number
           //_weight,
           //(((_weight / _height) / _height) * 10000)
           );
@@ -471,6 +472,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                         ),
                                       ],
                                     ),
+                                    // new Row(
+                                    //   children: <Widget>[
+                                    //     new Text('رقم شخص مقرب في حالة الطوارئ:',
+                                    //     style: new TextStyle(
+                                    //           fontSize: 17.0,
+                                    //           color: Colors.grey),
+                                    //           ),
+                                              
+                                    //                                                 ],
+                                    // )
                                   ],
                                 )),
                             new Divider(

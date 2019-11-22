@@ -2,7 +2,7 @@ class BG {
  // int _id; //auto
   String _email;
   String _slot;
-  int _BG;
+  int _BG=0;
   String _note;
   String _dg;
 
