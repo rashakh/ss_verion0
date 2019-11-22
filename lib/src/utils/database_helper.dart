@@ -78,6 +78,29 @@ class DatabaseHelper {
   String coltitel='titel';
   String coldes='des';
 
+//PA table:
+  String PATable= 'PA_table';
+    // this._email = map['email'];
+  String colName = 'Name';
+  String colPAid='id'; //auto
+  String coldur = 'dur';
+  //  this._dg = map['date'];
+
+//PT table:
+  String PTTable= 'PT_table';
+//  String colName = 'Name';
+  String colPTid='id'; //auto
+
+//PT table:
+  String A1CTable= 'A1C_table';
+//  String colName = 'Name';
+  String colA1Cid='id'; //auto
+  String colA1C='a1C';
+  String coldS='dateS';
+  String coldE='dateE';
+
+
+
 
   factory DatabaseHelper() {
     if (_databaseHelper == null) {
@@ -132,6 +155,18 @@ class DatabaseHelper {
     await db.execute(
         'CREATE TABLE $instrTable($colinstId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$coltitel TEXT , $coldes TEXT)');
+
+    await db.execute(
+        'CREATE TABLE $PATable($colPAid INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$colEmail TEXT ,$coldate TEXT ,$colName TEXT , $coldur REAL)');
+
+    await db.execute(
+        'CREATE TABLE $PTTable($colPTid INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$colName TEXT)');
+  
+    await db.execute(
+        'CREATE TABLE $A1CTable($colA1C INTEGER PRIMARY KEY AUTOINCREMENT,'
+        '$coldS TEXT ,$coldE TEXT ,$colA1C TEXT)');
 
 
   }

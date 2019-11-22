@@ -8,19 +8,19 @@ import 'package:flutter/material.dart'; // flutter main package
 import 'src/screen/loginpage.dart'; //import login page file
 import 'src/screen/registration.dart'; //import registration file
 import 'src/screen/lostPassword.dart'; //import registration file
-import 'src/screen/pt.dart';
+//import 'src/screen/pt.dart';
 // import 'src/screen/meals.dart'; //import meals file
 // import 'src/screen/physical_activity.dart'; //import physical_activity file
 // import 'src/screen/instructions.dart'; //import instructions file
 // import 'src/screen/medications.dart'; //import medications file
 import 'src/widgets/maintheme.dart';
-import 'src/screen/medalert.dart';
+//import 'src/screen/medalert.dart';
 // import 'src/screen/glucose_measure.dart';
 // import 'src/widgets/fancy_fab.dart';
 // import 'src/screen/weight_input.dart';
 // import 'src/screen/pressure_input.dart';
-import 'src/screen/exportPDF.dart';
-import 'src/screen/path_provider.dart';
+//import 'src/screen/exportPDF.dart';
+//import 'src/screen/path_provider.dart';
 void main() => runApp(new SS()); // the App main function call SS class
 
 // the main class of the App
@@ -55,7 +55,7 @@ class SS extends StatelessWidget {
         '/MainTheme': (BuildContext context) => new MainTheme(),
         //'/Weightinput': (BuildContext context) => new Weightinput(),
         //'/Pressureinput': (BuildContext context) => new Pressureinput(),
-        '/ExportPDF': (BuildContext context) => new ExportPDF(),
+       // '/ExportPDF': (BuildContext context) => new ExportPDF(),
 
 
       },
