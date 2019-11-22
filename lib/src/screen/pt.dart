@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 
 class PeriodicTest extends StatelessWidget {
   PeriodicTest(this.id);
@@ -30,6 +32,28 @@ class Body extends StatefulWidget {
 }
 
 class _Bodystate extends State<Body> {
+  final _formKey = GlobalKey<FormState>();
+  String _pt;
+  DateTime _ptDate = new DateTime.now();
+  var _result;
+
+  Widget _cupdate() {
+    return CupertinoDatePicker(
+      initialDateTime: _ptDate,
+      minimumDate: DateTime(2018),
+      maximumDate: DateTime.now(),
+      mode: CupertinoDatePickerMode.date,
+      onDateTimeChanged: (e) {
+        setState(() {
+          if (e.isAfter(DateTime.now())) {
+            e = DateTime.now();
+          }
+          _ptDate = e;
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -157,18 +181,140 @@ class _Bodystate extends State<Body> {
             SizedBox(
               height: 20.0,
             ),
-            new Container(
-                alignment: Alignment.center,
-                height: 40.0,
-                width: 200.0,
-                decoration: new BoxDecoration(
-                    color: Color(0xFFBDD22A),
-                    borderRadius: new BorderRadius.circular(7.0)),
-                child: new Text("اضافة",
-                    style: new TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold))),
+            new Padding(
+              padding: const EdgeInsets.only(
+                  left: 90.0, right: 90.0, top: 5.0, bottom: 5.0),
+              child: new GestureDetector(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (
+                        BuildContext context,
+                      ) {
+                        return StatefulBuilder(builder: (context, setState) {
+                          return AlertDialog(
+                            content: Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: 10.0,
+                                    ),
+                                    child: new DropdownButton<String>(
+                                      iconEnabledColor: Color(0xFFBDD22A),
+                                      hint: Text('اختر الفحص'),
+                                      value: _pt,
+                                      items: [
+                                        DropdownMenuItem<String>(
+                                          value: 'التراكمي',
+                                          child: Text(
+                                            'التراكمي',
+                                          ),
+                                        ),
+                                        DropdownMenuItem<String>(
+                                          value: 'الكلى',
+                                          child: Text(
+                                            'الكلى',
+                                          ),
+                                        ),
+                                        DropdownMenuItem<String>(
+                                          value: 'العين',
+                                          child: Text(
+                                            'العين',
+                                          ),
+                                        ),
+                                      ],
+                                      onChanged: (e) {
+                                        setState(() {
+                                          _pt = e;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: 20.0,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        new Text(
+                                          intl.DateFormat.yMMMd()
+                                              .format(_ptDate),
+                                          style: TextStyle(fontSize: 15.0),
+                                        ),
+                                        new IconButton(
+                                          color: Colors.blue,
+                                          icon: new Icon(
+                                            Icons.calendar_today,
+                                          ),
+                                          onPressed: () async {
+                                            await showModalBottomSheet(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return _cupdate();
+                                              },
+                                            );
+                                          },
+                                        ),
+                                        new Text(
+                                          ': الموعد',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 50.0),
+                                    child: new GestureDetector(
+                                      onTap: () {
+                                        //database
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: new Container(
+                                          alignment: Alignment.center,
+                                          height: 40.0,
+                                          decoration: new BoxDecoration(
+                                              color: Color(0xFFBDD22A),
+                                              borderRadius:
+                                                  new BorderRadius.circular(
+                                                      7.0)),
+                                          child: new Text('حفظ',
+                                              style: new TextStyle(
+                                                  fontSize: 15.0,
+                                                  color: Colors.white,
+                                                  fontWeight:
+                                                      FontWeight.bold))),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                      });
+                },
+                child: new Container(
+                    alignment: Alignment.center,
+                    height: 40.0,
+                    decoration: new BoxDecoration(
+                        color: Color(0xFFBDD22A),
+                        borderRadius: new BorderRadius.circular(7.0)),
+                    child: new Text("اضافة",
+                        style: new TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold))),
+              ),
+            ),
             SizedBox(
               height: 30.0,
             ),
