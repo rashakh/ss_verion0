@@ -6,7 +6,7 @@ import './medalert.dart';
 import './pt.dart';
 import './profile.dart';
 import 'exportPDF.dart';
-
+//import 'package:intl/intl.dart';
 class HomePage extends StatelessWidget {
   HomePage(this.id);
   var id;
@@ -98,14 +98,15 @@ class _Bodystate extends State<Body> {
   );
 
   Color color = Colors.grey;
-  double a1c =4;
+  double a1c =0;
 
-  double _a1c() {
-    var n = a1c/ 14;
-    print('n: $n');
-    _bgratio();
-    return n;
-  }
+  // double _a1c() {
+  //   _getA1c();
+  //   var n = a1c/ 14;
+  //   print('n: $n');
+  //   _bgratio();
+  //   return alc;
+  // }
 
   void _bgratio() {
     if (a1c <= 6.0) {
@@ -134,7 +135,9 @@ class _Bodystate extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-        //a11c();
+    _getA1c();
+    _bgratio() ;
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: new Column(
@@ -150,8 +153,8 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: _a1c(),
-                  center: Text((_a1c() * 14).toString() + 'التراكمي',
+                  percent: a1c/14, //_a1c(),
+                  center: Text(( a1c).toString() + 'التراكمي',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: color,
@@ -164,7 +167,7 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: _a1c(),
+                  // percent: _a1c(),
                   center: Text('الكابرو هيدرات',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
@@ -178,7 +181,7 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: _a1c(),
+               //   percent: _a1c(),
                   center: Text('الانسولين',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
@@ -190,9 +193,9 @@ class _Bodystate extends State<Body> {
                 child: new LinearPercentIndicator(
                   width: MediaQuery.of(context).size.width - 70,
                   animation: true,
-                  lineHeight: 20.0,
+                  lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: _a1c(),
+                //  percent: _a1c(),
                   center: Text('النشاط البدني',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
@@ -315,21 +318,21 @@ class _Bodystate extends State<Body> {
 //   setState(() => _sum = total);
 // }
 
-// void _BGRe() async{
-//     var num= (await helper.BGRecord())[0]['r'];
-//     print("num6: $num");
-  
-//   setState(() => _num=num);
-// }
+ void _getA1c() async{
+String re= (await helper.getA1C())[0]['a1C'];
+print("_getA1c :$re"); 
 
-void a11c(){
-//_BGTotal();
-//_BGRe();
-double average= _sum/_num;
-double wA1c = (46.7 + average) / 28.7;
-a1c=wA1c;
-setState(() => a1c=wA1c);
-}  
+  a1c=double.parse(re);
+print("_getA1c :$a1c"); 
+
+//   setState(() => _num=num);
+ }
+
+//  a11c()  {
+
+// _getA1c();
+
+// }  
 
 }
 

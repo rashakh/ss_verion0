@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/models/BG.dart';
 import 'package:dtfbl/src/models/PA.dart';
@@ -13,6 +15,7 @@ import 'package:intl/intl.dart' as intl; // flutter main package
 // import 'package:http/http.dart'
 //     as http; // perform http request on API to get the into
 import 'mainpage.dart';
+
 class GlucoseMeasure extends StatelessWidget {
   GlucoseMeasure(this.id);
   var id;
@@ -46,9 +49,10 @@ class Body extends StatefulWidget {
 class _Bodystate extends State<Body> {
   final String url =
       'mongodb+srv://ghida:ghida@cluster0-xskul.mongodb.net/test?retryWrites=true&w=majority'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
-   DatabaseHelper helper = DatabaseHelper();
-  var _sum=0;
-  var _num=0;
+  DatabaseHelper helper = DatabaseHelper();
+  var _sum = 0;
+  var _num = 0;
+  var _rec=0;
   bool _result;
   int gm = 110;
   DateTime dateTime = DateTime.now();
@@ -56,13 +60,13 @@ class _Bodystate extends State<Body> {
   Color slider = Colors.greenAccent[400];
   String note = '';
   int slot = _slot();
-    int pa = 0;
+  int pa = 0;
   Duration dur = new Duration(
     hours: 0,
     minutes: 30,
   );
-   List<String> pas = const <String>[
-     'المشي',
+  List<String> pas = const <String>[
+    'المشي',
     'تمارين هوائية',
     'ركوب الدراجة',
     'السباحة',
@@ -126,7 +130,7 @@ class _Bodystate extends State<Body> {
 
   void _changed(e) {
     setState(() {
-     // print('this is glucose ${widget.id[0]['email']}');
+      // print('this is glucose ${widget.id[0]['email']}');
       gm = e;
       if (gm < 70 || gm > 180) {
         slider = Colors.redAccent[400];
@@ -467,11 +471,12 @@ class _Bodystate extends State<Body> {
       ],
     );
   }
-    Widget _cupType() {
+
+  Widget _cupType() {
     return CupertinoPicker(
       itemExtent: 40.0,
       backgroundColor: Colors.white,
-      children: new List<Widget>.generate(pas.length,(pa) {
+      children: new List<Widget>.generate(pas.length, (pa) {
         return new Center(
           child: new Text(
             pas[pa],
@@ -482,7 +487,7 @@ class _Bodystate extends State<Body> {
       onSelectedItemChanged: (e) => setState(() {
         print("click 1: $pa");
         pa = e;
-        print("${ pas[pa]}");
+        print("${pas[pa]}");
       }),
     );
   }
@@ -526,7 +531,7 @@ class _Bodystate extends State<Body> {
           if (slot == 9) _buildActivityPicker(context),
           SizedBox(height: 20.0),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 0 , horizontal: 10.0),
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10.0),
             child: _buildNoteField(),
           ),
           SizedBox(height: 30.0),
@@ -534,46 +539,51 @@ class _Bodystate extends State<Body> {
             child: new ButtonBar(
               children: <Widget>[
                 new FlatButton(
-                  child: Icon(Icons.check,size: 30.0,),
+                  child: Icon(
+                    Icons.check,
+                    size: 30.0,
+                  ),
                   // Text('تمام',
                   //     style: TextStyle(
                   //       fontSize: 20.0,
                   //     )),
                   onPressed: () => setState(() async {
-
-                    if (slot==8){
-                          PA padb=new PA(widget.id[0]['email'].toString(),pas[pa],0, dateTime.toIso8601String());
+                    if (slot == 8) {
+                      PA padb = new PA(widget.id[0]['email'].toString(),
+                          pas[pa], 0, dateTime.toIso8601String());
                       var palw = await helper.insertPA(padb);
-                    BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
-                     var mealw = await helper.insertBG(bg);
-                     a11c();
-                    }
-                    else if (slot==9){
-                        int padu=dur.inMinutes;
-                    print("click 4:$padu, ");
+                      BG bg = BG(widget.id[0]['email'].toString(), slots[slot],
+                          gm, note, dateTime.toIso8601String());
+                      var mealw = await helper.insertBG(bg);
+                      a11c();
+                    } else if (slot == 9) {
+                      int padu = dur.inMinutes;
+                      print("click 4:$padu, ");
                       var palw = await helper.UpdatetPA(padu);
-               //     print("click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
-                   // BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
-                     // var mealw = await helper.insertBG(bg);                    
-                    print("click 4:$palw, ");
-                     a11c();
-
+                      //     print("click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
+                      // BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
+                      // var mealw = await helper.insertBG(bg);
+                      print("click 4:$palw, ");
+                      a11c();
+                    } else {
+                      BG bg = BG(widget.id[0]['email'].toString(), slots[slot],
+                          gm, note, dateTime.toIso8601String());
+                      var mealw = await helper.insertBG(bg);
+                      print("click 4:$mealw, ");
+                      _BGRe();
+                      _BGTotal();
+                     // a11c();
                     }
-                     else{ 
-                    BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
-                    var mealw = await helper.insertBG(bg);
-                     a11c();
-                     }
                     Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => MainPage(widget.id)),
-                        );
-                  
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MainPage(widget.id)),
+                    );
                   }),
                 ),
                 SizedBox(width: 160.0),
                 new FlatButton(
-                  child: Icon(Icons.close,size: 30.0,color: Colors.red),
+                  child: Icon(Icons.close, size: 30.0, color: Colors.red),
                   // Text('الغاء',
                   //     style: TextStyle(fontSize: 20.0, color: Colors.red)),
                   onPressed: () => Navigator.pop(context),
@@ -587,34 +597,79 @@ class _Bodystate extends State<Body> {
     );
   }
 
-void BGTotal() async{
-  var total = (await helper.BGTotal())[0]['Total'];
+ //get total BG:
+  void _BGTotal() async {
+    var total = (await helper.BGTotal())[0]['Total'];
     print("num9: $total");
-
-  setState(() => _sum = total);
-}
-
-void _BGRe() async{
-    var num= (await helper.BGRecord())[0]['r'];
-    print("num7: $num");
-  
-  setState(() => _num=num);
-}
-
-void _BGIn(A1C a) async{
-var ree= await helper.insertA1C(a);
-print(ree);
-  //setState(() => _num=num);
-}
-
-
-void a11c(){
-BGTotal();
+    _sum = total;
 _BGRe();
-double average= _sum/_num;
-double wA1c = (46.7 + average) / 28.7;
-A1C ss=A1C.A1c(wA1c);
-_BGIn(ss);
-}  
+   // setState(() => _sum = total);
+  }
 
+//get total record in BG table:
+  void _BGRe() async {
+    var num = (await helper.BGRecord())[0]['r'];
+    print("num7: $num");
+
+    _num = num;
+    print("_num7: $_num");
+  _A1CRe();  
+   // setState(() => {});
+  }
+
+//get total record in A1C table:
+  void _A1CRe() async {
+    var num = (await helper.A1CRecord())[0]['r'];
+    print("num6: $num");
+
+    _rec = num;
+    print("_rec1: $_rec");
+  a11c();  
+   // setState(() => {});
+  }
+
+// new A1C:
+  void a11c() {
+    double wA1c;
+    print("$_sum  : $_num");
+    if (_num == 0 && _sum == 0) {
+      double average = 0;
+      print("average0: $average");
+      wA1c = (46.7 + average) / 28.7;
+    } else {
+      double average = _sum / _num;
+      print("average1: $average");
+      wA1c = (46.7 + average) / 28.7;
+    }
+    print("wA1c: $wA1c");
+
+    double mod = pow(10.0, 1); 
+    var nwe =((wA1c * mod).round().toDouble() / mod);
+    print("wA1c After: $nwe");
+
+    if(_rec==0){ //if new user 
+    DateTime newdate = dateTime.add(new Duration(days: 90));
+    A1C ss = A1C(nwe, dateTime.toIso8601String(), newdate.toIso8601String());
+    print("ss: ${ss.dS}, : ${ss.dE} :${ss.a1C}");
+    _A1CIn(ss);
+      print("insert");
+    }
+    else{  //else update the number:
+    _A1CUP(nwe);
+    print("update");
+
+    }
+  }
+  
+  //insert A1C:
+  void _A1CIn(A1C a) async {
+    var ree = await helper.insertA1C(a);
+    print("insert: $ree");
+  }
+
+//Update A1C:
+ void _A1CUP(double a) async {
+    var ree = await helper.UpdatetA1C(a);
+print("update: $ree");
+  }
 }
