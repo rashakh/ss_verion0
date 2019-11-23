@@ -410,6 +410,8 @@ print('updated 1: $result1');
     return result1;
   }
 //GET IN RENGE
+
+
 //----------------------------------PT Table--------------------------------------------------- 
 //add
   Future<int> insertPT(PT pt) async {
@@ -427,16 +429,37 @@ print('updated 1: $result1');
     return result;
   }
   
-//UPDATE
-//GET All
-// value of A1C:
+   //UPDATE
+   Future<int> UpdatetA1C(double a1c) async {
+     Database db = await this.database;
+    var result1 = await db.rawQuery('SELECT $colAototId  FROM $A1CTable ORDER BY $colAototId  DESC LIMIT 1 ');
+    var result = await db.rawUpdate('UPDATE $A1CTable  SET $colA1C = $a1c  WHERE $colAototId=${(result1.toList())[0]['id']}');
+  print("UpdatetA1C:$a1c, ( $result1 ),($result)");
+    return result;
+   }
+
+//GET last value of A1C:
 Future getA1C() async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable');
- // print(result.toList());
+var result = await db.rawQuery('SELECT $colA1C FROM $A1CTable ORDER BY $colAototId  DESC LIMIT 1 ');
+  print("getA1C: ${result.toList()}");
+  return result.toList();
+}
+//GET last value of id:
+Future getA1Cid() async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT $colAototId FROM $A1CTable ORDER BY $colAototId  DESC LIMIT 1 ');
+print(result.toList());
   return result.toList();
 }
 
+// nuber of record:
+Future A1CRecord() async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT COUNT(*) as r FROM $A1CTable');
+  print("A1CRecord ${result.toList()}");
+  return result.toList();
+}
 
 //GET All with date
 
