@@ -1,13 +1,17 @@
+import 'package:dtfbl/src/models/A1C.dart';
+import 'package:dtfbl/src/models/BG.dart';
+import 'package:dtfbl/src/models/PA.dart';
+import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'dart:ui';
 import '../widgets/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:intl/intl.dart' as intl; // flutter main package
-import 'dart:async';
-import 'dart:convert'; // convert json into data
-import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+// import 'dart:async';
+// import 'dart:convert'; // convert json into data
+// import 'package:http/http.dart'
+//     as http; // perform http request on API to get the into
 import 'mainpage.dart';
 class GlucoseMeasure extends StatelessWidget {
   GlucoseMeasure(this.id);
@@ -42,6 +46,9 @@ class Body extends StatefulWidget {
 class _Bodystate extends State<Body> {
   final String url =
       'mongodb+srv://ghida:ghida@cluster0-xskul.mongodb.net/test?retryWrites=true&w=majority'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+   DatabaseHelper helper = DatabaseHelper();
+  var _sum=0;
+  var _num=0;
   bool _result;
   int gm = 110;
   DateTime dateTime = DateTime.now();
@@ -119,9 +126,9 @@ class _Bodystate extends State<Body> {
 
   void _changed(e) {
     setState(() {
-      print('this is glucose ${widget.id[0]['email']}');
+     // print('this is glucose ${widget.id[0]['email']}');
       gm = e;
-      if (gm < 80 || gm > 180) {
+      if (gm < 70 || gm > 180) {
         slider = Colors.redAccent[400];
         evaluation = 'هذا ليس جيد، يجب عليك الانتباه';
       } else {
@@ -473,7 +480,9 @@ class _Bodystate extends State<Body> {
         );
       }),
       onSelectedItemChanged: (e) => setState(() {
+        print("click 1: $pa");
         pa = e;
+        print("${ pas[pa]}");
       }),
     );
   }
@@ -530,11 +539,36 @@ class _Bodystate extends State<Body> {
                   //     style: TextStyle(
                   //       fontSize: 20.0,
                   //     )),
-                  onPressed: () => setState(() {
+                  onPressed: () => setState(() async {
+
+                    if (slot==8){
+                          PA padb=new PA(widget.id[0]['email'].toString(),pas[pa],0, dateTime.toIso8601String());
+                      var palw = await helper.insertPA(padb);
+                    BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
+                     var mealw = await helper.insertBG(bg);
+                     a11c();
+                    }
+                    else if (slot==9){
+                        int padu=dur.inMinutes;
+                    print("click 4:$padu, ");
+                      var palw = await helper.UpdatetPA(padu);
+               //     print("click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
+                   // BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
+                     // var mealw = await helper.insertBG(bg);                    
+                    print("click 4:$palw, ");
+                     a11c();
+
+                    }
+                     else{ 
+                    BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
+                    var mealw = await helper.insertBG(bg);
+                     a11c();
+                     }
                     Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => MainPage(widget.id)),
                         );
+                  
                   }),
                 ),
                 SizedBox(width: 160.0),
@@ -552,4 +586,35 @@ class _Bodystate extends State<Body> {
       ),
     );
   }
+
+void BGTotal() async{
+  var total = (await helper.BGTotal())[0]['Total'];
+    print("num: $total");
+
+  setState(() => _sum = total);
+}
+
+void _BGRe() async{
+    var num= (await helper.BGRecord())[0]['r'];
+    print("num7: $num");
+  
+  setState(() => _num=num);
+}
+
+void _BGIn(A1C a) async{
+var ree= await helper.insertA1C(a);
+print(ree);
+  //setState(() => _num=num);
+}
+
+
+void a11c(){
+BGTotal();
+_BGRe();
+double average= _sum/_num;
+double wA1c = (46.7 + average) / 28.7;
+A1C ss=A1C.A1c(wA1c);
+_BGIn(ss);
+}  
+
 }

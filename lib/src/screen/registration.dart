@@ -3,15 +3,16 @@
 
 import 'dart:convert';
 
+import 'package:dtfbl/src/models/wieght.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:intl/intl.dart' as intl; // flutter main package
 import 'package:flutter/cupertino.dart';
-import 'dart:async';
-import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+// import 'dart:async';
+// import 'package:http/http.dart'
+//     as http; // perform http request on API to get the into
 import 'loginpage.dart';
 
-import 'package:sqflite/sqflite.dart';
+// import 'package:sqflite/sqflite.dart';
 import '../models/user.dart';
 import '../utils/database_helper.dart';
 
@@ -44,7 +45,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
   final String url =
       'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   final intl.DateFormat format = new intl.DateFormat('y-M-d');
-  String _email, _password, _fName, _lName, _phoneNumber;
+
+  String _email, _password, _fName, _lName, _number;
   int _gender, _type;
   double _height, _weight;
   DateTime _birthday = new DateTime.now();
@@ -117,11 +119,17 @@ class _RegistrationFormState extends State<RegistrationForm> {
           _gender,
           _type,
           _height,
-          _weight,
-          (((_weight / _height) / _height) * 10000));
+          _number
+          //_weight,
+          //(((_weight / _height) / _height) * 10000)
+          );
+       BW bw= BW(_email,_weight.floor(),(((_weight / _height) / _height) * 10000)," ",new DateTime.now().toIso8601String()); 
       var id = await helper.insertUser(user);
       print('this result id : ${id}');
+      var wi = await helper.insertBW(bw);
+      print('this result id : ${wi}');
       var route = new MaterialPageRoute(builder: (context) => new LoginPage());
+
       Navigator.of(context).push(route);
       _formKey.currentState.reset();
     } else {
@@ -487,9 +495,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                             ? 'هذا الحقل مطلوب'
                                             : null,
                                         onSaved: (value) =>
-                                            _phoneNumber = value,
+                                            _number = value,
                                       ),
                                     ),
+
                                   ],
                                 )),
                             new Divider(

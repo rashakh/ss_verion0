@@ -2,14 +2,14 @@
 // this file allows user to log in into the App, represented by 'l_1' Use-Case
 
 import 'package:flutter/material.dart'; // flutter main package
-import 'dart:async';
-import 'dart:convert'; // convert json into data
-import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+// import 'dart:async';
+// import 'dart:convert'; // convert json into data
+// import 'package:http/http.dart';
+    // as http; // perform http request on API to get the into
 import '../widgets/aimagesize.dart'; //import animation widget
 import 'mainpage.dart';
-import 'package:sqflite/sqflite.dart';
-import '../models/user.dart';
+// import 'package:sqflite/sqflite.dart';
+// import '../models/user.dart';
 import '../utils/database_helper.dart';
 
 // StatefulWidget LoginPage class which has variable state

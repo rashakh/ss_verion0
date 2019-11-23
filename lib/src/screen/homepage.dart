@@ -1,8 +1,11 @@
+import 'package:dtfbl/src/models/A1C.dart';
+import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:percent_indicator/percent_indicator.dart';
 import './medalert.dart';
 import './pt.dart';
 import './profile.dart';
+import 'exportPDF.dart';
 
 class HomePage extends StatelessWidget {
   HomePage(this.id);
@@ -46,7 +49,12 @@ class HomePage extends StatelessWidget {
             ),
             new ListTile(
               title: Text('التقارير'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ExportPDF(id)),
+                );
+              },
             ),
             new ListTile(
               title: Text('الملف الشخصي'),
@@ -76,7 +84,11 @@ class Body extends StatefulWidget {
   State createState() => new _Bodystate();
 }
 
+
 class _Bodystate extends State<Body> {
+   DatabaseHelper helper = DatabaseHelper();
+  var _sum=0;
+  var _num=0;
   var dd = 45 * 0.55;
   var bgratio;
   Widget icon = Icon(
@@ -84,12 +96,13 @@ class _Bodystate extends State<Body> {
     color: Colors.green,
     size: 40.0,
   );
-  Color color = Colors.green;
-  double a1c = 4.0;
+
+  Color color = Colors.grey;
+  double a1c =4;
 
   double _a1c() {
-    var n = a1c / 14;
-    print(n);
+    var n = a1c/ 14;
+    print('n: $n');
     _bgratio();
     return n;
   }
@@ -121,6 +134,7 @@ class _Bodystate extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+        //a11c();
     return Directionality(
       textDirection: TextDirection.rtl,
       child: new Column(
@@ -134,7 +148,7 @@ class _Bodystate extends State<Body> {
                 child: new LinearPercentIndicator(
                   width: MediaQuery.of(context).size.width - 70,
                   animation: true,
-                  lineHeight: 20.0,
+                  lineHeight: 30.0,
                   animationDuration: 2000,
                   percent: _a1c(),
                   center: Text((_a1c() * 14).toString() + 'التراكمي',
@@ -148,7 +162,7 @@ class _Bodystate extends State<Body> {
                 child: new LinearPercentIndicator(
                   width: MediaQuery.of(context).size.width - 70,
                   animation: true,
-                  lineHeight: 20.0,
+                  lineHeight: 30.0,
                   animationDuration: 2000,
                   percent: _a1c(),
                   center: Text('الكابرو هيدرات',
@@ -162,7 +176,7 @@ class _Bodystate extends State<Body> {
                 child: new LinearPercentIndicator(
                   width: MediaQuery.of(context).size.width - 70,
                   animation: true,
-                  lineHeight: 20.0,
+                  lineHeight: 30.0,
                   animationDuration: 2000,
                   percent: _a1c(),
                   center: Text('الانسولين',
@@ -293,4 +307,30 @@ class _Bodystate extends State<Body> {
       ),
     );
   }
+
+void _BGTotal() async{
+  var total = (await helper.BGTotal())[0]['Total'];
+    print("num3: $total");
+
+  setState(() => _sum = total);
 }
+
+void _BGRe() async{
+    var num= (await helper.BGRecord())[0]['r'];
+    print("num6: $num");
+  
+  setState(() => _num=num);
+}
+
+void a11c(){
+_BGTotal();
+_BGRe();
+double average= _sum/_num;
+double wA1c = (46.7 + average) / 28.7;
+a1c=wA1c;
+setState(() => a1c=wA1c);
+}  
+
+}
+
+
