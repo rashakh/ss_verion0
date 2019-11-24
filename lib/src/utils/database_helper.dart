@@ -171,7 +171,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user6.db';
+    String path = directory.path + 'user7.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
@@ -203,8 +203,9 @@ class DatabaseHelper {
         ' $colDiastolic INT,$colnote TEXT,PRIMARY KEY ($colEmail,$coldate))');
 
      await db.execute('CREATE TABLE $BWTable ('
+        '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT,$coldate TEXT,$colwieght INT,'
-        ' $colBmi REAL,$colnote TEXT,PRIMARY KEY ($colEmail,$coldate))');
+        ' $colBmi REAL,$colnote TEXT)');
 
     await db.execute('CREATE TABLE $instrTable('
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
@@ -220,7 +221,7 @@ class DatabaseHelper {
   
     await db.execute( 'CREATE TABLE $A1CTable('
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
-        '$coldS TEXT ,$coldE TEXT ,$colA1C TEXT)');
+        '$colEmail TEXT,$coldS TEXT ,$coldE TEXT ,$colA1C TEXT)');
 
     await db.execute('CREATE TABLE $ExamsTable('
         '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
@@ -339,17 +340,17 @@ class DatabaseHelper {
   }
 
 //get total BG
-Future BGTotal() async {
+Future BGTotal(String email) async {
   var dbClient = await this.database;
-  var result = await dbClient.rawQuery("SELECT SUM($colBg) as Total FROM $BGTable");
+  var result = await dbClient.rawQuery("SELECT SUM($colBg) as Total FROM $BGTable  WHERE $colEmail=\"$email\"");
   //print(result.toList());
   return result.toList();
 }
 
 // nuber of record:
-Future BGRecord() async {
+Future BGRecord(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable');
+var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable  WHERE  $colEmail=\"$email\"');
   print(result.toList());
   return result.toList();
 }
@@ -370,6 +371,14 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable');
     return result;
   }
 
+//get wight
+ Future<List<Map<String, dynamic>>> getWight(String email) async {
+    Database db = await this.database;
+   var result = await db.rawQuery('SELECT $colwieght as wit FROM $BWTable  WHERE  $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');  
+print(result.toList());
+    
+    return result.toList();
+  }
 //----------------------------------Instruction Table--------------------------------------------------- 
 
 //get one Instruction
@@ -430,33 +439,33 @@ print('updated 1: $result1');
   }
   
    //UPDATE
-   Future<int> UpdatetA1C(double a1c) async {
+   Future<int> UpdatetA1C(double a1c,String email) async {
      Database db = await this.database;
-    var result1 = await db.rawQuery('SELECT $colAototId  FROM $A1CTable ORDER BY $colAototId  DESC LIMIT 1 ');
+    var result1 = await db.rawQuery('SELECT $colAototId  FROM $A1CTable WHERE  $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
     var result = await db.rawUpdate('UPDATE $A1CTable  SET $colA1C = $a1c  WHERE $colAototId=${(result1.toList())[0]['id']}');
   print("UpdatetA1C:$a1c, ( $result1 ),($result)");
     return result;
    }
 
 //GET last value of A1C:
-Future getA1C() async {
+Future getA1C(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT $colA1C FROM $A1CTable ORDER BY $colAototId  DESC LIMIT 1 ');
+var result = await db.rawQuery('SELECT $colA1C FROM $A1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
   print("getA1C: ${result.toList()}");
   return result.toList();
 }
 //GET last value of id:
-Future getA1Cid() async {
+Future getA1Cid(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT $colAototId FROM $A1CTable ORDER BY $colAototId  DESC LIMIT 1 ');
+var result = await db.rawQuery('SELECT $colAototId FROM $A1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
 print(result.toList());
   return result.toList();
 }
 
 // nuber of record:
-Future A1CRecord() async {
+Future A1CRecord(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT COUNT(*) as r FROM $A1CTable');
+var result = await db.rawQuery('SELECT COUNT(*) as r FROM $A1CTable WHERE $colEmail=\"$email\"');
   print("A1CRecord ${result.toList()}");
   return result.toList();
 }
@@ -464,6 +473,7 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $A1CTable');
 //GET All with date
 
 //DELETE
+
 //----------------------------------CARB Table--------------------------------------------------- 
 //add
   Future<int> insertCARB(Carb pa) async {

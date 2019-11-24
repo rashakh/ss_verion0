@@ -74,12 +74,14 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body()),
+      body: new SingleChildScrollView(child: new Body(id)),
     );
   }
 }
 
 class Body extends StatefulWidget {
+  Body(this.id);
+  var id;
   @override
   State createState() => new _Bodystate();
 }
@@ -133,10 +135,23 @@ class _Bodystate extends State<Body> {
     }
   }
 
+  // void initState() { 
+  //  super.initState();
+  //   //this._getA1c();
+  //   this._bgratio();}
+  
   @override
   Widget build(BuildContext context) {
-    _getA1c();
-    _bgratio() ;
+ 
+//  setState(() {
+//     //super.initState();
+//     _getA1c();    
+//     _bgratio();  
+//  });
+  initState(){ 
+   super.initState();
+    this._getA1c();
+    this._bgratio();}
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -319,12 +334,12 @@ class _Bodystate extends State<Body> {
 // }
 
  void _getA1c() async{
-String re= (await helper.getA1C())[0]['a1C'];
+String re= (await helper.getA1C(widget.id[0]['email'].toString()))[0]['a1C'];
 print("_getA1c :$re"); 
 
-  a1c=double.parse(re);
+  //a1c=double.parse(re);
 print("_getA1c :$a1c"); 
-
+setState(() => a1c=double.parse(re));
 //   setState(() => _num=num);
  }
 

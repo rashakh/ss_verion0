@@ -599,7 +599,7 @@ class _Bodystate extends State<Body> {
 
  //get total BG:
   void _BGTotal() async {
-    var total = (await helper.BGTotal())[0]['Total'];
+    var total = (await helper.BGTotal(widget.id[0]['email']))[0]['Total'];
     print("num9: $total");
     _sum = total;
 _BGRe();
@@ -608,7 +608,7 @@ _BGRe();
 
 //get total record in BG table:
   void _BGRe() async {
-    var num = (await helper.BGRecord())[0]['r'];
+    var num = (await helper.BGRecord(widget.id[0]['email'].toString()))[0]['r'];
     print("num7: $num");
 
     _num = num;
@@ -619,7 +619,7 @@ _BGRe();
 
 //get total record in A1C table:
   void _A1CRe() async {
-    var num = (await helper.A1CRecord())[0]['r'];
+    var num = (await helper.A1CRecord(widget.id[0]['email'].toString()))[0]['r'];
     print("num6: $num");
 
     _rec = num;
@@ -649,7 +649,7 @@ _BGRe();
 
     if(_rec==0){ //if new user 
     DateTime newdate = dateTime.add(new Duration(days: 90));
-    A1C ss = A1C(nwe, dateTime.toIso8601String(), newdate.toIso8601String());
+    A1C ss = A1C(nwe,widget.id[0]['email'].toString() ,dateTime.toIso8601String(), newdate.toIso8601String());
     print("ss: ${ss.dS}, : ${ss.dE} :${ss.a1C}");
     _A1CIn(ss);
       print("insert");
@@ -669,7 +669,7 @@ _BGRe();
 
 //Update A1C:
  void _A1CUP(double a) async {
-    var ree = await helper.UpdatetA1C(a);
+    var ree = await helper.UpdatetA1C(a,widget.id[0]['email'].toString());
 print("update: $ree");
   }
 }
