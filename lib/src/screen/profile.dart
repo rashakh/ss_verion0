@@ -65,7 +65,7 @@ class _Bodystate extends State<Body> {
                                     ),
                                   ),
                                   new Text(
-                                    'here',
+                                    '${widget.id[0]['fname'].toString()}',
                                     style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.w800,
@@ -86,7 +86,7 @@ class _Bodystate extends State<Body> {
                                     ),
                                   ),
                                   new Text(
-                                    'here',
+                                    '${widget.id[0]['lname'].toString()}',
                                     style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.w800,
@@ -154,7 +154,7 @@ class _Bodystate extends State<Body> {
                                   ),
                                 ),
                                 new Text(
-                                  'here',
+                                 '${widget.id[0]['hight'].toString()}',
                                   style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.w800,
@@ -194,7 +194,7 @@ class _Bodystate extends State<Body> {
                             ),
                           ),
                           new Text(
-                            'here',
+                            '$gender',
                             style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w800,
@@ -221,7 +221,7 @@ class _Bodystate extends State<Body> {
                             ),
                           ),
                           new Text(
-                            'here',
+                            '$type',
                             style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w800,
@@ -248,7 +248,7 @@ class _Bodystate extends State<Body> {
                             ),
                           ),
                           new Text(
-                            'here',
+                           '${widget.id[0]['bd'].toString()}',
                             style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w800,
@@ -275,7 +275,7 @@ class _Bodystate extends State<Body> {
                             ),
                           ),
                           new Text(
-                            'here',
+                            '${widget.id[0]['dd'].toString()}',
                             style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w800,
@@ -302,7 +302,7 @@ class _Bodystate extends State<Body> {
                             ),
                           ),
                           new Text(
-                            'here',
+                            '${widget.id[0]['number'].toString()}',
                             style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w800,
@@ -329,7 +329,7 @@ class _Bodystate extends State<Body> {
                             ),
                           ),
                           new Text(
-                            'here',
+                            '${widget.id[0]['email'].toString()}',
                             style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.w800,
