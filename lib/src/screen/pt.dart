@@ -1,3 +1,6 @@
+import 'package:dtfbl/src/models/PT.dart';
+import 'package:dtfbl/src/models/exams.dart';
+import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
@@ -32,6 +35,7 @@ class Body extends StatefulWidget {
 }
 
 class _Bodystate extends State<Body> {
+   DatabaseHelper helper = DatabaseHelper();
   final _formKey = GlobalKey<FormState>();
   String _pt;
   DateTime _ptDate = new DateTime.now();
@@ -41,13 +45,13 @@ class _Bodystate extends State<Body> {
     return CupertinoDatePicker(
       initialDateTime: _ptDate,
       minimumDate: DateTime(2018),
-      maximumDate: DateTime.now(),
+      maximumDate: DateTime(2025),
       mode: CupertinoDatePickerMode.date,
       onDateTimeChanged: (e) {
         setState(() {
-          if (e.isAfter(DateTime.now())) {
-            e = DateTime.now();
-          }
+          // if (e.isBefore(DateTime.now())) {
+          //   e = DateTime.now();
+          // }
           _ptDate = e;
         });
       },
@@ -99,88 +103,153 @@ class _Bodystate extends State<Body> {
             SizedBox(
               height: 10.0,
             ),
-            Card(
-              child: Padding(
-                padding: EdgeInsets.only(right: 20.0, bottom: 10.0, top: 10.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+           FutureBuilder(
+             future: helper.getPT(widget.id[0]['email']),
+             builder: (context, snapshot){
+               print(snapshot.data);
+      // //        if (data.connectionState == ConnectionState.none && data.hasData == null) {
+      // //   //print('project snapshot data is: ${projectSnap.data}');
+      // //   return Container();
+      // // }
+        if (snapshot.connectionState == ConnectionState.done) {
+          print("hi list view 1");
+        final Pt=snapshot.data;
+        var l= 65.0*Pt.length; //lenght of the view for carunt record (to be flixable)
+       return 
+       new Row(
+       children: <Widget>[
+         Expanded(
+           child:SizedBox(
+             height: l as double,
+      child: ListView.builder(
+        
+      //   //   itemCount: data.data.length,
+                    itemCount: Pt.length,
+         itemBuilder: (context, index) {
+         // print("{Pt[index]['Name']}");
+
+         // var project = snapshot.data[index];
+           return Card(
+               child: Padding(
+               padding: EdgeInsets.only(right: 20.0, bottom: 6.0, top: 10.0),
+               child: new Row(
+                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'فحص العين',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
+                   children: <Widget>[
+                     Text(
+                       '${Pt[index]['Name']}',
+                       style: TextStyle(
+                         fontSize: 16.0,
+                         color: Colors.black,
+                       ),
+                                           textAlign:TextAlign.center ,
+
                     ),
                     SizedBox(
-                      width: 40.0,
-                    ),
+                     width: 40.0,// height:20 ,
+                   ),
                     Text(
-                      '1/1/2020',
+                      '${Pt[index]['date']}',
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.black,
                       ),
+                    textAlign:TextAlign.center ,
+
                     ),
                     SizedBox(
-                      width: 80.0,
+                      width: 80.0,//height: 20,
                     ),
                     Text(
-                      '88 يوما',
+                      '${Pt[index]['dur']}',
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.black,
                       ),
-                    ),
+                                          textAlign:TextAlign.center ,
+
+                     ),
+                     new Padding( // but didn't make any  cheng!
+                      padding: EdgeInsets.only(left: 0),
+                   child: 
+                     IconButton(
+                       icon:Icon( Icons.delete, textDirection:TextDirection.ltr,size:20),
+
+                       onPressed:() async {
+                       var result= await helper.deletExam(Pt[index]['id'],Pt[index]['email'].toString());
+                       print(result);
+                     // Navigator.pop(context);
+                       //Navigator.of(context).popAndPushNamed(routeName)
+                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
+                      //
+                       },)
+
+                 )
                   ],
                 ),
-              ),
-            ),
+               ),
+             );
+           },
+           
+
+//            itemCount: Pt.length,
+                  )
+//--
+         )  )  ] );
+        }
+        else{
+          return Card();
+          //C]enter(child: CircularProgressIndicator());
+        }
+             },
+
+             //future: getProjectDetails(),
+             ),
             SizedBox(
-              height: 5.0,
+              height: 1.0,
             ),
-            Card(
-              child: Padding(
-                padding: EdgeInsets.only(right: 20.0, bottom: 10.0, top: 10.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'فحص الكلى',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 35.0,
-                    ),
-                    Text(
-                      '1/12/2019',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 80.0,
-                    ),
-                    Text(
-                      '58 يوما',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // Card(
+            //   child: Padding(
+            //     padding: EdgeInsets.only(right: 20.0, bottom: 10.0, top: 10.0),
+            //     child: new Row(
+            //       mainAxisAlignment: MainAxisAlignment.start,
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: <Widget>[
+            //         Text(
+            //           'here',
+            //           style: TextStyle(
+            //             fontSize: 16.0,
+            //             color: Colors.black,
+            //           ),
+            //         ),
+            //         SizedBox(
+            //           width: 35.0,
+            //         ),
+            //         Text(
+            //           'here',
+            //           style: TextStyle(
+            //             fontSize: 16.0,
+            //             color: Colors.black,
+            //           ),
+            //         ),
+            //         SizedBox(
+            //           width: 80.0,
+            //         ),
+            //         Text(
+            //           'here',
+            //           style: TextStyle(
+            //             fontSize: 16.0,
+            //             color: Colors.black,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: 20.0,
             ),
+            
             new Padding(
               padding: const EdgeInsets.only(
                   left: 90.0, right: 90.0, top: 5.0, bottom: 5.0),
@@ -275,9 +344,25 @@ class _Bodystate extends State<Body> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 50.0),
                                     child: new GestureDetector(
-                                      onTap: () {
-                                        //database
-                                        Navigator.of(context).pop();
+                                      onTap: () async{
+                                          final date2= DateTime.now();
+                                         final difference = _ptDate.difference(date2).inDays;
+                                           int id;
+                                            if(_pt=="العين"){
+                                                id=3;
+                                            }
+                                            else if(_pt=="التراكمي"){
+                                                id=1;
+                                            }
+                                            else{
+                                              id=2;
+                                            }
+                                        Exam pts= new Exam.withId(id,_pt,widget.id[0]['email'],_ptDate.toIso8601String().substring(0,10),difference);
+                                        print("exam: $_pt,${widget.id[0]['email']},${_ptDate.toIso8601String().substring(0,10)},$difference");
+                                        var he= await helper.insertExam(pts);
+                                       Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
+                                      // Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
+
                                       },
                                       child: new Container(
                                           alignment: Alignment.center,
@@ -315,6 +400,8 @@ class _Bodystate extends State<Body> {
                             fontWeight: FontWeight.bold))),
               ),
             ),
+          
+          
             SizedBox(
               height: 30.0,
             ),
@@ -350,9 +437,43 @@ class _Bodystate extends State<Body> {
                 ),
               ],
             ),
+
+
+
+
+
+            
             SizedBox(
               height: 10.0,
             ),
+           FutureBuilder(
+             future: helper.getPT(widget.id[0]['email']),
+             builder: (context, snapshot){
+               print(snapshot.data);
+      // //        if (data.connectionState == ConnectionState.none && data.hasData == null) {
+      // //   //print('project snapshot data is: ${projectSnap.data}');
+      // //   return Container();
+      // // }
+        if (snapshot.connectionState == ConnectionState.done) {
+          print("hi list view 1");
+        final Pt=snapshot.data;
+        var l= 60.0*Pt.length;
+       return 
+       new Row(
+       children: <Widget>[
+         Expanded(
+           child:SizedBox(
+             height: l as double,
+      child: ListView.builder(
+        
+      //   //   itemCount: data.data.length,
+                    itemCount: Pt.length,
+         itemBuilder: (context, index) {
+         // print("{Pt[index]['Name']}");
+
+         // var project = snapshot.data[index];
+
+
             Card(
               child: Padding(
                 padding: EdgeInsets.only(right: 20.0, bottom: 10.0, top: 10.0),
@@ -390,10 +511,10 @@ class _Bodystate extends State<Body> {
                   ],
                 ),
               ),
-            ),
+            );
             SizedBox(
               height: 5.0,
-            ),
+            );
             Card(
               child: Padding(
                 padding: EdgeInsets.only(right: 20.0, bottom: 10.0, top: 10.0),
@@ -431,7 +552,26 @@ class _Bodystate extends State<Body> {
                   ],
                 ),
               ),
-            ),
+            );
+
+           },
+           
+
+//            itemCount: Pt.length,
+                  )
+//--
+         )  )  ] );
+        }
+        else{
+          return Card();
+          //C]enter(child: CircularProgressIndicator());
+        }
+             },
+
+             //future: getProjectDetails(),
+             ),
+
+
           ]),
         ));
   }

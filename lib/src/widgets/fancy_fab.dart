@@ -8,9 +8,11 @@ class FancyFab extends StatefulWidget {
   final String tooltip;
   IconData icon;
   List<Map<String, dynamic>> id;
+  List<Map<String, dynamic>> BMI;
+  var A1c;
 
   FancyFab(
-    this.id, {
+    this.id, this.A1c, {
     this.onPressed,
     this.tooltip,
     this.icon,
@@ -90,7 +92,7 @@ class _FancyFabState extends State<FancyFab>
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => GlucoseMeasure(widget.id)),
+                builder: (context) => GlucoseMeasure(widget.id,widget.A1c)),
           );
           //Navigator.of(context).pushNamed('/GlucoseMeasure');
         },
@@ -108,7 +110,7 @@ class _FancyFabState extends State<FancyFab>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Weightinput(widget.id)),
+            MaterialPageRoute(builder: (context) => Weightinput(widget.id,widget.A1c)),
           );
           //Navigator.of(context).pushNamed('/Weightinput');
         },

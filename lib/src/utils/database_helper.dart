@@ -355,6 +355,16 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable  WHERE  $colE
   return result.toList();
 }
 
+// GET BG LIST FOR ONE USER:
+  Future<List<Map<String, dynamic>>> getNoteList( String email) async {
+  Database db = await this.database;
+    var result =await db.query(BGTable,where:"$colEmail =\"$email\"",orderBy:"$coldate DESC"  );
+    if (result == null) {
+     return null;
+    }
+    return result;
+  }
+
 //----------------------------------Prusser Table--------------------------------------------------- 
 //add
   Future<int> insertBP(BP bp) async {
@@ -374,7 +384,7 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable  WHERE  $colE
 //get wight
  Future<List<Map<String, dynamic>>> getWight(String email) async {
     Database db = await this.database;
-   var result = await db.rawQuery('SELECT $colwieght as wit FROM $BWTable  WHERE  $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');  
+   var result = await db.rawQuery('SELECT $colwieght as wit,$colBmi as bmi FROM $BWTable  WHERE  $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');  
 print(result.toList());
     
     return result.toList();
@@ -451,14 +461,17 @@ print('updated 1: $result1');
 Future getA1C(String email) async {
  Database db = await this.database;
 var result = await db.rawQuery('SELECT $colA1C FROM $A1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
-  print("getA1C: ${result.toList()}");
-  return result.toList();
+ // print("getA1C: ${result.toList()}");
+
+  print("hi list");
+  return result;
 }
 //GET last value of id:
 Future getA1Cid(String email) async {
  Database db = await this.database;
 var result = await db.rawQuery('SELECT $colAototId FROM $A1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
 print(result.toList());
+
   return result.toList();
 }
 
@@ -494,6 +507,23 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $A1CTable WHERE $colEm
   }
 //UPDATE
 //GET
+Future getPT(String email) async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$email\" ORDER BY $coldur  DESC  ');
+ print("getA1C: ${result.toList()}");
+
+  print("hi list");
+ return result;
+}
+
+// delete:
+Future deletExam(int id,String email) async {
+ Database db = await this.database;
+var result = await db.rawDelete('DELETE FROM $ExamsTable WHERE $colEmail=\"$email\" AND $colAototId=$id');
+
+ print("delet exam: $result");
+ return result;
+}
 //----------------------------------ExamA1C Table------------------------------------------------
 //add
   Future<int> insertExamA1C(ExamA1C pa) async {

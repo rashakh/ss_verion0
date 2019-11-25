@@ -13,8 +13,9 @@ import 'exportPDF.dart';
 import 'medalert.dart'; // perform http request on API to get the into
 
 class Medications extends StatelessWidget {
-  Medications(this.id);
+  Medications(this.id,this.BMI);
   var id;
+  var BMI;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -66,7 +67,7 @@ class Medications extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id)),
+                  MaterialPageRoute(builder: (context) => Profile(id,BMI)),
                 );
               },
             ),

@@ -4,8 +4,9 @@ import '../models/user.dart';
 import '../utils/database_helper.dart';
 
 class Profile extends StatelessWidget {
-  Profile(this.id);
+  Profile(this.id,this.BMI);
   var id;
+  var BMI;
   DatabaseHelper helper = DatabaseHelper();
 
   @override
@@ -22,14 +23,16 @@ class Profile extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id)),
+          body: new SingleChildScrollView(child: new Body(id,BMI)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id);
+  Body(this.id,this.BMI);
   var id;
+  var BMI;
+
    // String gender,type;
 
   @override
@@ -39,7 +42,6 @@ class Body extends StatefulWidget {
 }
 
 class _Bodystate extends State<Body> {
-          var weight=0;
 
  DatabaseHelper helper = DatabaseHelper();
 
@@ -56,7 +58,8 @@ class _Bodystate extends State<Body> {
       Widget build(BuildContext context) {
      //   _getwight();
 
-      
+                var weight=widget.BMI[0]['wit'];
+
       if((widget.id[0]['gender'])==0){
        gender="أنثى"; 
       }
@@ -283,7 +286,7 @@ class _Bodystate extends State<Body> {
                                 ),
                               ),
                               new Text(
-                               '${(widget.id[0]['bd'].toString()).substring(0,9)}',
+                               '${(widget.id[0]['bd'].toString()).substring(0,10)}',
                                 style: TextStyle(
                                   fontSize: 15.0,
                                   fontWeight: FontWeight.w800,
@@ -310,7 +313,7 @@ class _Bodystate extends State<Body> {
                                 ),
                               ),
                               new Text(
-                                '${(widget.id[0]['dd'].toString()).substring(0,9)}',
+                                '${(widget.id[0]['dd'].toString()).substring(0,10)}',
                                 style: TextStyle(
                                   fontSize: 15.0,
                                   fontWeight: FontWeight.w800,

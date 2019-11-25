@@ -30,8 +30,10 @@ int coun = 0;
 var varty = new List();
 
 class Meals extends StatelessWidget {
-  Meals(this.id);
+  Meals(this.id,this.BMI,this.A1c);
+  var BMI;
   var id;
+  var A1c;
   @override
   Widget build(BuildContext context) {
     dbemail = id[0]['email'].toString();
@@ -84,7 +86,7 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id)),
+                  MaterialPageRoute(builder: (context) => Profile(id,BMI)),
                 );
               },
             ),
@@ -97,15 +99,16 @@ class Meals extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id)),
+      body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id);
+  Body(this.id,this.BMI,this.A1c);
   var id;
-
+var BMI;
+var A1c;
   @override
   State createState() => new _Bodystate();
 }
@@ -113,8 +116,8 @@ class Body extends StatefulWidget {
 class _Bodystate extends State<Body> {
   DatabaseHelper helper = DatabaseHelper();
 
-  final String url =
-      'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+  // final String url =
+  //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   // Db db = new Db("mongodb://localhost:27017/mongo_dart-blog");
   // await db.open();
   var meals;
@@ -218,33 +221,33 @@ class _Bodystate extends State<Body> {
   }
 
   // function make the http request
-  Future<String> getData() async {
-    _sum = 0.0;
-    _carbs = [];
-    _inter = 0;
+  // Future<String> getData() async {
+  //   _sum = 0.0;
+  //   _carbs = [];
+  //   _inter = 0;
 
-    //print("click 3: sum= $_sum and inter= $_inter");
-    var response = await http // .get(url)
-        .get(Uri.encodeFull(url), headers: {
-      'Accept': 'application/json' // 'key': 'ur key'
-    }
-            //    print("sum= $_sum and inter= $_inter");
-            ); // .get(encode the response data as json) with headers which tell the code should be json
+  //   //print("click 3: sum= $_sum and inter= $_inter");
+  //   // var response = await http // .get(url)
+  //   //     .get(Uri.encodeFull(url), headers: {
+  //   //   'Accept': 'application/json' // 'key': 'ur key'
+  //   // }
+  //   //         //    print("sum= $_sum and inter= $_inter");
+  //           // ); // .get(encode the response data as json) with headers which tell the code should be json
 
-    // after response back, setup the state for the application
-    setState(() {
-      //print("click 4: sum= $_sum and inter= $_inter and meals= $meals");
-      var responseBoddy = json.decode(response.body);
-      meals = responseBoddy;
-      print(responseBoddy);
-      _visible = !_visible;
-      //print("click 5: sum= $_sum and inter= $_inter and meals= $meals");
+  //   // after response back, setup the state for the application
+  //   setState(() {
+  //     //print("click 4: sum= $_sum and inter= $_inter and meals= $meals");
+  //     var responseBoddy = json.decode(response.body);
+  //     meals = responseBoddy;
+  //     print(responseBoddy);
+  //     _visible = !_visible;
+  //     //print("click 5: sum= $_sum and inter= $_inter and meals= $meals");
 
-      //['name of area in the database or in the json data']; // user for example
-    });
+  //     //['name of area in the database or in the json data']; // user for example
+  //   });
 
-    return 'Success!'; // tell whether|not get the json
-  }
+  //   return 'Success!'; // tell whether|not get the json
+  // }
 
   // @override
   // void dispose() {
@@ -711,7 +714,7 @@ class _Bodystate extends State<Body> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MainPage(widget.id)),
+                              builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c)),
                         );
                       });
                     },
@@ -749,7 +752,7 @@ class _Bodystate extends State<Body> {
         "click 23: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard($this.name, $this.carbs, $this.caloris, $this.parent)");
 
     super.initState();
-    this.getData();
+   // this.getData();
   }
 }
 

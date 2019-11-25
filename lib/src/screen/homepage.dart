@@ -7,9 +7,13 @@ import './pt.dart';
 import './profile.dart';
 import 'exportPDF.dart';
 //import 'package:intl/intl.dart';
+
+
 class HomePage extends StatelessWidget {
-  HomePage(this.id);
+  HomePage(this.id,this.BMI,this.A1c);
+  var BMI;
   var id;
+  var A1c;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -61,7 +65,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id)),
+                  MaterialPageRoute(builder: (context) => Profile(id,BMI)),
                 );
               },
             ),
@@ -74,19 +78,23 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id)),
+      body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id);
+  Body(this.id,this.BMI,this.A1c);
   var id;
+  var BMI;
+  var A1c;
   @override
   State createState() => new _Bodystate();
 }
 
-
+ double _a1c = 0;
+ double a1c = 0;
+ 
 class _Bodystate extends State<Body> {
    DatabaseHelper helper = DatabaseHelper();
   var _sum=0;
@@ -98,10 +106,9 @@ class _Bodystate extends State<Body> {
     color: Colors.green,
     size: 40.0,
   );
+  
 
-  Color color = Colors.grey;
-  double a1c =0;
-
+  Color color = Colors.green;
   // double _a1c() {
   //   _getA1c();
   //   var n = a1c/ 14;
@@ -110,30 +117,30 @@ class _Bodystate extends State<Body> {
   //   return alc;
   // }
 
-  void _bgratio() {
-    if (a1c <= 6.0) {
-      icon = Icon(
-        Icons.mood,
-        color: Colors.green,
-        size: 40.0,
-      );
-      color = Colors.green;
-    } else if (a1c > 6.0 && a1c <= 8.0) {
-      icon = Icon(
-        Icons.mood,
-        color: Colors.orangeAccent,
-        size: 40.0,
-      );
-      color = Colors.orangeAccent;
-    } else {
-      icon = Icon(
-        Icons.mood_bad,
-        color: Colors.redAccent,
-        size: 40.0,
-      );
-      color = Colors.redAccent;
-    }
-  }
+  // Future _bgratio() {
+  //   if (_a1c <= 6.0) {
+  //     icon = Icon(
+  //       Icons.mood,
+  //       color: Colors.green,
+  //       size: 40.0,
+  //     );
+  //     color = Colors.green;
+  //   } else if (_a1c > 6.0 && _a1c <= 8.0) {
+  //     icon = Icon(
+  //       Icons.mood,
+  //       color: Colors.orangeAccent,
+  //       size: 40.0,
+  //     );
+  //     color = Colors.orangeAccent;
+  //   } else {
+  //     icon = Icon(
+  //       Icons.mood_bad,
+  //       color: Colors.redAccent,
+  //       size: 40.0,
+  //     );
+  //     color = Colors.redAccent;
+  //   }
+  // }
 
   // void initState() { 
   //  super.initState();
@@ -142,17 +149,29 @@ class _Bodystate extends State<Body> {
   
   @override
   Widget build(BuildContext context) {
- 
 //  setState(() {
 //     //super.initState();
 //     _getA1c();    
 //     _bgratio();  
 //  });
-  initState(){ 
-   super.initState();
-    this._getA1c();
-    this._bgratio();}
-
+  // initState(){ 
+  //   _getA1c();
+  //  super.initState();
+  //   this._getA1c();
+  //   // this._bgratio();
+  //   }
+  _getA1c(); 
+  // setState(() {
+  //     _a1c = a1c ;
+  //      print('this $_a1c and this $a1c');
+  //   });
+  // somfun(){
+  //   setState(() {
+  //     _getA1c();  
+  //     _a1c = a1c ;
+  //      print('this $_a1c and this $a1c');
+  //   });
+  // }
     return Directionality(
       textDirection: TextDirection.rtl,
       child: new Column(
@@ -168,8 +187,8 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: a1c/14, //_a1c(),
-                  center: Text(( a1c).toString() + 'التراكمي',
+                   percent: double.parse(widget.A1c)/14,//  _a1c/14, //_a1c(),
+                  center: Text(( widget.A1c).toString() + 'التراكمي',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: color,
@@ -333,13 +352,13 @@ class _Bodystate extends State<Body> {
 //   setState(() => _sum = total);
 // }
 
- void _getA1c() async{
+ Future _getA1c() async{
 String re= (await helper.getA1C(widget.id[0]['email'].toString()))[0]['a1C'];
 print("_getA1c :$re"); 
 
-  //a1c=double.parse(re);
-print("_getA1c :$a1c"); 
-setState(() => a1c=double.parse(re));
+   a1c= double.parse(re);
+print("******************_getA1c :$_a1c"); 
+// setState(() => a1c=double.parse(re));
 //   setState(() => _num=num);
  }
 

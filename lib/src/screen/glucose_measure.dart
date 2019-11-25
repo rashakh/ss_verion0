@@ -17,8 +17,10 @@ import 'package:intl/intl.dart' as intl; // flutter main package
 import 'mainpage.dart';
 
 class GlucoseMeasure extends StatelessWidget {
-  GlucoseMeasure(this.id);
+  GlucoseMeasure(this.id,this.A1c);
   var id;
+  var BMI;
+  var A1c;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -33,27 +35,29 @@ class GlucoseMeasure extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id)),
+          body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
           // Padding(padding: const EdgeInsets.only(top: 100), child: Body()),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id);
+  Body(this.id,this.BMI,this.A1c);
   var id;
+  var BMI;
+  var A1c;
   @override
   State createState() => new _Bodystate();
 }
 
 class _Bodystate extends State<Body> {
-  final String url =
-      'mongodb+srv://ghida:ghida@cluster0-xskul.mongodb.net/test?retryWrites=true&w=majority'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+  // final String url =
+  //     'mongodb+srv://ghida:ghida@cluster0-xskul.mongodb.net/test?retryWrites=true&w=majority'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   DatabaseHelper helper = DatabaseHelper();
   var _sum = 0;
   var _num = 0;
   var _rec=0;
-  bool _result;
+  //bool _result;
   int gm = 110;
   DateTime dateTime = DateTime.now();
   String evaluation = '';
@@ -555,29 +559,43 @@ class _Bodystate extends State<Body> {
                       BG bg = BG(widget.id[0]['email'].toString(), slots[slot],
                           gm, note, dateTime.toIso8601String());
                       var mealw = await helper.insertBG(bg);
+                      setState(() {
                       a11c();
+                     });
                     } else if (slot == 9) {
                       int padu = dur.inMinutes;
-                      print("click 4:$padu, ");
+                      print("click 9:$padu, ");
                       var palw = await helper.UpdatetPA(padu);
                       //     print("click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
                       // BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
                       // var mealw = await helper.insertBG(bg);
-                      print("click 4:$palw, ");
+                      print("click 9.1:$palw, ");
+                       setState(() {
                       a11c();
+                                              print("hi set stet");
+
+                     }); 
                     } else {
                       BG bg = BG(widget.id[0]['email'].toString(), slots[slot],
                           gm, note, dateTime.toIso8601String());
                       var mealw = await helper.insertBG(bg);
                       print("click 4:$mealw, ");
-                      _BGRe();
+                     setState(() {
+
+                       _BGRe();
                       _BGTotal();
+                                              print("hi set stet");
+
+                     }); 
                      // a11c();
                     }
+                    widget.A1c=(await helper.getA1C(widget.id[0]['email']))[0]['a1C'];
+                    print("reples to home: widget.A1c");
+                    print(widget.A1c);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MainPage(widget.id)),
+                          builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c)),
                     );
                   }),
                 ),
@@ -629,7 +647,7 @@ _BGRe();
   }
 
 // new A1C:
-  void a11c() {
+  Future a11c() {
     double wA1c;
     print("$_sum  : $_num");
     if (_num == 0 && _sum == 0) {
@@ -646,7 +664,7 @@ _BGRe();
     double mod = pow(10.0, 1); 
     var nwe =((wA1c * mod).round().toDouble() / mod);
     print("wA1c After: $nwe");
-
+    widget.A1c=nwe;
     if(_rec==0){ //if new user 
     DateTime newdate = dateTime.add(new Duration(days: 90));
     A1C ss = A1C(nwe,widget.id[0]['email'].toString() ,dateTime.toIso8601String(), newdate.toIso8601String());
@@ -672,4 +690,6 @@ _BGRe();
     var ree = await helper.UpdatetA1C(a,widget.id[0]['email'].toString());
 print("update: $ree");
   }
+
+  
 }
