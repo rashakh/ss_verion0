@@ -1,3 +1,4 @@
+import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/models/pressure.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,8 @@ import 'mainpage.dart';
 class Pressureinput extends StatelessWidget {
   Pressureinput(this.id);
   var id;
+  var BMI;
+  var A1c;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -28,14 +31,16 @@ class Pressureinput extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id)),
+          body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id);
+  Body(this.id,this.BMI,this.A1c);
   var id;
+  var BMI;
+  var A1c;
   @override
   State createState() => new _Bodystate();
 }
@@ -304,7 +309,7 @@ class _Bodystate extends State<Body> {
                     print("click 2: $mealw");
                     Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MainPage(widget.id)),
+                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c)),
                         );
                   }),
                 ),

@@ -1,6 +1,7 @@
 // LogIn file which contains the LogIn page, and its properties
 // this file allows user to log in into the App, represented by 'l_1' Use-Case
 
+import 'package:dtfbl/src/models/A1C.dart';
 import 'package:flutter/material.dart'; // flutter main package
 // import 'dart:async';
 // import 'dart:convert'; // convert json into data
@@ -22,8 +23,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   DatabaseHelper helper = DatabaseHelper();
   final _formKey = GlobalKey<FormState>();
-  final String url =
-      'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+  // final String url =
+  //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
 
   // list item to get from http request:
   TextEditingController emailController = TextEditingController();
@@ -63,9 +64,22 @@ class _LoginPageState extends State<LoginPage> {
           'form invalid, Email: ${emailController.text}, Passwoer: ${passwordController.text}');
     } else if (_validateAndSave(id)) {
       print('here is login id : ${id}');
+var BMI;
+var A1c;
+    //  setState(() async{
+          BMI=(await helper.getWight(id[0]['email']));
+        
+         A1c=(await helper.getA1C(id[0]['email']))[0]['a1C'];
+        // if(A1C){
+      // print("A1c list: null");
+
+        // }
+     // });
+      print("A1c list: $A1c");
+      print("BMI list: $BMI");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => new MainPage(id)),
+        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c)),
       );
       //Navigator.of(context).pushNamed('/MainPage',arguments: _email);
       _formKey.currentState.reset();

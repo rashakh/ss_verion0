@@ -12,8 +12,10 @@ import 'package:http/http.dart'
     as http; // perform http request on API to get the into
 import 'mainpage.dart';
 class Weightinput extends StatelessWidget {
-  Weightinput(this.id);
+  Weightinput(this.id,this.A1c);
   var id;
+  var BMI;
+  var A1c;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -28,45 +30,47 @@ class Weightinput extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id)),
+          body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id);
+  Body(this.id,this.BMI,this.A1c);
   var id;
+  var BMI;
+  var A1c;
   @override
   State createState() => new _Bodystate();
 }
 
 class _Bodystate extends State<Body> {
     DatabaseHelper helper = DatabaseHelper();
-  final String url =
-      'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
-  bool _result;
+  // final String url =
+  //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+  // bool _result;
   int weight = 57;
   String evaluation = '';
   Color slider = Colors.greenAccent[400];
   DateTime dateTime = DateTime.now();
   String note = '';
 
-  Future<bool> _postData() async {
-    // map data to converted to json data
-    final Map<String, dynamic> userData = {
-      'email': widget.id[0]['email'],
-      'Weight': weight,
-      'DateTime': dateTime.toIso8601String(),
-      'Note': note,
-    };
-    var jsonData = JsonCodec().encode(userData); // encode data to json
-    var httpclient = new http.Client();
-    var response = await httpclient.post(url,
-        body: jsonData, headers: {'Content-type': 'application/json'});
-    print('the body of the response = \n${response.body}\n.');
-    _result =
-        response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
-  }
+  // Future<bool> _postData() async {
+  //   // map data to converted to json data
+  //   final Map<String, dynamic> userData = {
+  //     'email': widget.id[0]['email'],
+  //     'Weight': weight,
+  //     'DateTime': dateTime.toIso8601String(),
+  //     'Note': note,
+  //   };
+  //   var jsonData = JsonCodec().encode(userData); // encode data to json
+  //   var httpclient = new http.Client();
+  //   var response = await httpclient.post(url,
+  //       body: jsonData, headers: {'Content-type': 'application/json'});
+  //   print('the body of the response = \n${response.body}\n.');
+  //   _result =
+  //       response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
+  // }
 
   Widget _weight() {
     return Card(
@@ -275,7 +279,7 @@ class _Bodystate extends State<Body> {
                     print("click 2: $mealw");
                     Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MainPage(widget.id)),
+                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c)),
                         );
                   }),
                 ),

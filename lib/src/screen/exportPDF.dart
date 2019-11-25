@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 //import 'package:playground_flutter/services/sqlite_basebal_team.service.dart';
 //import 'package:playground_flutter/shared/widgets/crud_demo_list_item.widget.dart';
 import 'package:pdf/pdf.dart';
-
+import 'package:charts_flutter/flutter.dart';
 
 class ExportPDF extends StatelessWidget {
      ExportPDF(this.id);
@@ -27,7 +27,7 @@ class ExportPDF extends StatelessWidget {
         child: Scaffold(
       appBar: AppBar(
         
-        backgroundColor: Color(0xFF2A79D2), //Color(0xFF7EAFE5),
+//backgroundColor: Color(0xFF2A79D2), //Color(0xFF7EAFE5),
         automaticallyImplyLeading: true,
         brightness: Brightness.light,
      //   bottom: new TabBar(
@@ -43,6 +43,7 @@ class ExportPDF extends StatelessWidget {
 
         actions: <Widget>[
           IconButton(
+
             icon: Icon(Icons.picture_as_pdf),
            onPressed:()=> _generatePdfAndView(context)
           ),
@@ -103,7 +104,7 @@ class _Bodystate extends State<Body> {
       build: (context) => [
           
              pdfLib.Table.fromTextArray(context: context, data: <List<String>>[
-               <String>['Name', 'Coach', 'players'],
+               <String>['الملاحظة', 'الوقت', 'تاريخ'],
                //...data.map(
                  //  (item) => [item.name, item.coach, item.players.toString()])
              ]), 

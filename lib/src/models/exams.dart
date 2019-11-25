@@ -9,7 +9,10 @@
   String _result;
   String _RDate;
 
-  Exam(this._PTId,this._name, this._email, this._date,this._dur,this._result,this._RDate);
+//  Exam.withId(this._PTId,this._name, this._email, this._date,this._dur,this._result,this._RDate);
+  Exam.withId(this._PTId,this._name, this._email, this._date,this._dur);
+
+  Exam(this._name, this._email, this._date,this._dur);
 
   int get id => _id;
   int get PTId => _PTId;

@@ -13,8 +13,9 @@ import 'exportPDF.dart';
 import 'medalert.dart'; // perform http request on API to get the into
 
 class Instructions extends StatelessWidget {
-  Instructions(this.id);
+  Instructions(this.id,this.BMI);
   var id;
+  var BMI;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -66,7 +67,7 @@ class Instructions extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id)),
+                  MaterialPageRoute(builder: (context) => Profile(id,BMI)),
                 );
               },
             ),
@@ -195,10 +196,14 @@ class _Bodystate extends State<Body> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
+  //  future: NoteProvider.getNoteList(),
+  //     Builder: (context,snapshot){}
     return new Directionality(
+        
         textDirection: TextDirection.rtl,
-        child: Stack(
+        
+        child:  Stack(
           children: <Widget>[
             new ListView.builder(
                 shrinkWrap: true,
