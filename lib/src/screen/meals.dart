@@ -431,7 +431,18 @@ class _Bodystate extends State<Body> {
               return new Column(
                 children: <Widget>[
                   new SizedBox(
-                    height: 3.0,
+                    height: 5.0,
+                  ),
+                  Text(
+                    'اختر صنف الطعام :',
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  new SizedBox(
+                    height: 10.0,
                   ),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -445,7 +456,7 @@ class _Bodystate extends State<Body> {
                         child: new Container(
                           alignment: Alignment.center,
                           width: 170.0,
-                          height: 134.0,
+                          height: 100.0,
                           decoration: BoxDecoration(
                             color: Colors.brown[400],
                             shape: BoxShape.rectangle,
@@ -480,7 +491,7 @@ class _Bodystate extends State<Body> {
                         child: new Container(
                           alignment: Alignment.center,
                           width: 170.0,
-                          height: 134.0,
+                          height: 100.0,
                           decoration: BoxDecoration(
                             color: Colors.green[400],
                             shape: BoxShape.rectangle,
@@ -520,7 +531,7 @@ class _Bodystate extends State<Body> {
                         child: new Container(
                           alignment: Alignment.center,
                           width: 170.0,
-                          height: 134.0,
+                          height: 100.0,
                           decoration: BoxDecoration(
                             color: Colors.orange[400],
                             shape: BoxShape.rectangle,
@@ -555,7 +566,7 @@ class _Bodystate extends State<Body> {
                         child: new Container(
                           alignment: Alignment.center,
                           width: 170.0,
-                          height: 134.0,
+                          height: 100.0,
                           decoration: BoxDecoration(
                             color: Colors.pink[300],
                             shape: BoxShape.rectangle,
@@ -601,7 +612,7 @@ class _Bodystate extends State<Body> {
       child: new Column(
         children: <Widget>[
           new SizedBox(
-            height: 282,
+            height: 255,
             child: _wid()[_inter],
           ),
           new Card(
@@ -768,7 +779,8 @@ class MealCardState extends State<MealCard> {
                   _sum += widget.carbs;
                 }
                 if (check == false) {
-                  var index = _carbs.indexWhere((item)=>item.containsKey(widget.name));
+                  var index = _carbs
+                      .indexWhere((item) => item.containsKey(widget.name));
                   _carbs.removeAt(index);
                   _sum -= widget.carbs;
                 }

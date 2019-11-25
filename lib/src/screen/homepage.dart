@@ -185,6 +185,137 @@ class _Bodystate extends State<Body> {
                   progressColor: color,
                 ),
               ),
+              Container(
+                padding:
+                    const EdgeInsets.only(top: 20.0, left: 1.0, right: 1.0),
+                child: Column(
+                  children: <Widget>[
+                    new Card(
+                        elevation: 5.0,
+                        color: Colors.white,
+                        child: new Column(
+                          children: <Widget>[
+                            new Container(
+                              color: Colors.grey[200],
+                              padding: const EdgeInsets.only(
+                                  left: 234.0,
+                                  right: 30.0,
+                                  top: 10.0,
+                                  bottom: 10.0),
+                              child: new Text(
+                                'الوجبة الاخيرة : ',
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ),
+                            new Divider(
+                              color: Color(0xFFBDD22A),
+                              height: 0.0,
+                            ),
+                            new Padding(
+                              padding: const EdgeInsets.only(
+                                right: 20.0,
+                              ),
+                              child: new Row(
+                                children: <Widget>[
+                                  new Text(
+                                    'name',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  new Container(
+                                      margin: new EdgeInsets.only(
+                                          top: 10.0, left: 5.0, right: 5.0),
+                                      height: 2.0,
+                                      width: 10.0,
+                                      color: Colors.blueGrey),
+                                  new Text(
+                                    'الكاربوهيدرات: ',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  new Text(
+                                    'carb',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 80.0,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.close,
+                                        size: 30.0, color: Colors.red),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            new Divider(
+                              color: Color(0xFFBDD22A),
+                              height: 0.0,
+                            ),
+                            new Padding(
+                              padding: const EdgeInsets.only(
+                                right: 20.0,
+                              ),
+                              child: new Row(
+                                children: <Widget>[
+                                  new Text(
+                                    'name',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  new Container(
+                                      margin: new EdgeInsets.only(
+                                          top: 10.0, left: 5.0, right: 5.0),
+                                      height: 2.0,
+                                      width: 10.0,
+                                      color: Colors.blueGrey),
+                                  new Text(
+                                    'الكاربوهيدرات: ',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  new Text(
+                                    'carb',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 80.0,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.close,
+                                        size: 30.0, color: Colors.red),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            new Divider(
+                              color: Color(0xFFBDD22A),
+                              height: 0.0,
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
+              ),
             ],
           ),
           // new Container(
@@ -266,7 +397,7 @@ class _Bodystate extends State<Body> {
           //             new Container(
           //               padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
           //               child: Text(
-          //                 'مجموع جرعات العكر: ',
+          //                 'مجموع ج����عات العكر: ',
           //                 style: TextStyle(
           //                   fontSize: 13.0,
           //                   fontWeight: FontWeight.w500,
