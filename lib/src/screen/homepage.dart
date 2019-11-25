@@ -8,9 +8,8 @@ import './profile.dart';
 import 'exportPDF.dart';
 //import 'package:intl/intl.dart';
 
-
 class HomePage extends StatelessWidget {
-  HomePage(this.id,this.BMI,this.A1c);
+  HomePage(this.id, this.BMI, this.A1c);
   var BMI;
   var id;
   var A1c;
@@ -65,7 +64,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id,BMI)),
+                  MaterialPageRoute(builder: (context) => Profile(id, BMI)),
                 );
               },
             ),
@@ -78,13 +77,13 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
+      body: new SingleChildScrollView(child: new Body(id, BMI, A1c)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id,this.BMI,this.A1c);
+  Body(this.id, this.BMI, this.A1c);
   var id;
   var BMI;
   var A1c;
@@ -92,13 +91,13 @@ class Body extends StatefulWidget {
   State createState() => new _Bodystate();
 }
 
- double _a1c = 0;
- double a1c = 0;
- 
+double _a1c = 0;
+double a1c = 0;
+
 class _Bodystate extends State<Body> {
-   DatabaseHelper helper = DatabaseHelper();
-  var _sum=0;
-  var _num=0;
+  DatabaseHelper helper = DatabaseHelper();
+  var _sum = 0;
+  var _num = 0;
   var dd = 45 * 0.55;
   var bgratio;
   Widget icon = Icon(
@@ -106,7 +105,6 @@ class _Bodystate extends State<Body> {
     color: Colors.green,
     size: 40.0,
   );
-  
 
   Color color = Colors.green;
   // double _a1c() {
@@ -142,36 +140,36 @@ class _Bodystate extends State<Body> {
   //   }
   // }
 
-  // void initState() { 
+  // void initState() {
   //  super.initState();
   //   //this._getA1c();
   //   this._bgratio();}
-  
+
   @override
   Widget build(BuildContext context) {
 //  setState(() {
 //     //super.initState();
-//     _getA1c();    
-//     _bgratio();  
+//     _getA1c();
+//     _bgratio();
 //  });
-  // initState(){ 
-  //   _getA1c();
-  //  super.initState();
-  //   this._getA1c();
-  //   // this._bgratio();
-  //   }
-  _getA1c(); 
-  // setState(() {
-  //     _a1c = a1c ;
-  //      print('this $_a1c and this $a1c');
-  //   });
-  // somfun(){
-  //   setState(() {
-  //     _getA1c();  
-  //     _a1c = a1c ;
-  //      print('this $_a1c and this $a1c');
-  //   });
-  // }
+    // initState(){
+    //   _getA1c();
+    //  super.initState();
+    //   this._getA1c();
+    //   // this._bgratio();
+    //   }
+    _getA1c();
+    // setState(() {
+    //     _a1c = a1c ;
+    //      print('this $_a1c and this $a1c');
+    //   });
+    // somfun(){
+    //   setState(() {
+    //     _getA1c();
+    //     _a1c = a1c ;
+    //      print('this $_a1c and this $a1c');
+    //   });
+    // }
     return Directionality(
       textDirection: TextDirection.rtl,
       child: new Column(
@@ -187,8 +185,8 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                   percent: double.parse(widget.A1c)/14,//  _a1c/14, //_a1c(),
-                  center: Text(( widget.A1c).toString() + 'التراكمي',
+                  percent: double.parse(widget.A1c) / 14, //  _a1c/14, //_a1c(),
+                  center: Text((widget.A1c).toString() + 'التراكمي',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: color,
@@ -215,7 +213,7 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-               //   percent: _a1c(),
+                  //   percent: _a1c(),
                   center: Text('الانسولين',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
@@ -229,13 +227,150 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                //  percent: _a1c(),
+                  //  percent: _a1c(),
                   center: Text('النشاط البدني',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: color,
                 ),
               ),
+              Container(
+                padding:
+                    const EdgeInsets.only(top: 20.0, left: 1.0, right: 1.0),
+                child: Column(
+                  children: <Widget>[
+                    new Card(
+                        elevation: 5.0,
+                        color: Colors.white,
+                        child: new Column(
+                          children: <Widget>[
+                            new Container(
+                              color: Colors.grey[200],
+                              padding: const EdgeInsets.only(
+                                  left: 234.0,
+                                  right: 30.0,
+                                  top: 10.0,
+                                  bottom: 10.0),
+                              child: new Text(
+                                'الوجبة الاخيرة : ',
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ),
+                            new Divider(
+                              color: Color(0xFFBDD22A),
+                              height: 0.0,
+                            ),
+                            new Padding(
+                              padding: const EdgeInsets.only(
+                                right: 20.0,
+                              ),
+                              child: new Row(
+                                children: <Widget>[
+                                  new Text(
+                                    'name',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  new Container(
+                                      margin: new EdgeInsets.only(
+                                          top: 10.0, left: 5.0, right: 5.0),
+                                      height: 2.0,
+                                      width: 10.0,
+                                      color: Colors.blueGrey),
+                                  new Text(
+                                    'الكاربوهيدرات: ',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  new Text(
+                                    'carb',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 80.0,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.close,
+                                        size: 30.0, color: Colors.red),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            new Divider(
+                              color: Color(0xFFBDD22A),
+                              height: 0.0,
+                            ),
+                            new Padding(
+                              padding: const EdgeInsets.only(
+                                right: 20.0,
+                              ),
+                              child: new Row(
+                                children: <Widget>[
+                                  new Text(
+                                    'name',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  new Container(
+                                      margin: new EdgeInsets.only(
+                                          top: 10.0, left: 5.0, right: 5.0),
+                                      height: 2.0,
+                                      width: 10.0,
+                                      color: Colors.blueGrey),
+                                  new Text(
+                                    'الكاربوهيدرات: ',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  new Text(
+                                    'carb',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 80.0,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.close,
+                                        size: 30.0, color: Colors.red),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                            new Divider(
+                              color: Color(0xFFBDD22A),
+                              height: 0.0,
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
+              ),
+            
+            
+            
+            
+            
+            
             ],
           ),
           // new Container(
@@ -352,22 +487,21 @@ class _Bodystate extends State<Body> {
 //   setState(() => _sum = total);
 // }
 
- Future _getA1c() async{
-String re= (await helper.getA1C(widget.id[0]['email'].toString()))[0]['a1C'];
-print("_getA1c :$re"); 
+  Future _getA1c() async {
+    String re =
+        (await helper.getA1C(widget.id[0]['email'].toString()))[0]['a1C'];
+    print("_getA1c :$re");
 
-   a1c= double.parse(re);
-print("******************_getA1c :$_a1c"); 
+    a1c = double.parse(re);
+    print("******************_getA1c :$_a1c");
 // setState(() => a1c=double.parse(re));
 //   setState(() => _num=num);
- }
+  }
 
 //  a11c()  {
 
 // _getA1c();
 
-// }  
+// }
 
 }
-
-
