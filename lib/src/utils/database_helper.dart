@@ -56,7 +56,7 @@ class DatabaseHelper {
   String colamount = 'amount';
   
   // BG table:
-  String BGTable= 'BG_table';
+  String bGTable= 'BG_table';
   //colEmail
   String colBGSlot = 'slot';
   String colBg='BG';
@@ -64,7 +64,7 @@ class DatabaseHelper {
 // String colDg='dg';
 
    // BP table:
-  String BPTable= 'BP_table';
+  String bPTable= 'BP_table';
   //colEmail
   String colDiastolic = 'Diastolic';
   String colSystolic='Systolic';
@@ -73,7 +73,7 @@ class DatabaseHelper {
 
 
 //BW table:
-  String BWTable= 'BW_table';
+  String bWTable= 'BW_table';
  // String _email;
   String colwieght='wieght';
  // double _bmi;
@@ -87,7 +87,7 @@ class DatabaseHelper {
   String coldes='des';
 
 //PA table:
-  String PATable= 'PA_table';
+  String pATable= 'PA_table';
     // this._email = map['email'];
   String colName = 'Name';
   //String colPAid='id'; //auto
@@ -100,7 +100,7 @@ class DatabaseHelper {
   //String colPTid='id'; //auto
 
 //A1C table:
-  String A1CTable= 'A1C_table';
+  String a1CTable= 'A1C_table';
 //  String colName = 'Name';
  // String colid='id'; //auto
   String colA1C='a1C';
@@ -108,7 +108,7 @@ class DatabaseHelper {
   String coldE='dateE';
 
 //CARB table:
-  String CarbTable= 'Carb_table';
+  String carbTable= 'Carb_table';
   //String colName = 'Name';
   //String colA1Cid='id'; //auto
   String colcurnt='curnt';
@@ -171,7 +171,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user7.db';
+    String path = directory.path + 'user9.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
@@ -194,15 +194,15 @@ class DatabaseHelper {
         'colEmail TEXT, $colvarcarb REAL,'
         '$colamount REAL,PRIMARY KEY ($colid,$colId))');
 
-    await db.execute('CREATE TABLE $BGTable ('
+    await db.execute('CREATE TABLE $bGTable ('
         '$colEmail TEXT,$coldate TEXT,$colBGSlot TEXT,'
         ' $colBg INT,$colnote TEXT,PRIMARY KEY ($colEmail,$coldate))');
     
-    await db.execute('CREATE TABLE $BPTable ('
+    await db.execute('CREATE TABLE $bPTable ('
         '$colEmail TEXT,$coldate TEXT,$colSystolic INT,'
         ' $colDiastolic INT,$colnote TEXT,PRIMARY KEY ($colEmail,$coldate))');
 
-     await db.execute('CREATE TABLE $BWTable ('
+     await db.execute('CREATE TABLE $bWTable ('
         '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT,$coldate TEXT,$colwieght INT,'
         ' $colBmi REAL,$colnote TEXT)');
@@ -211,7 +211,7 @@ class DatabaseHelper {
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$coltitel TEXT , $coldes TEXT)');
 
-    await db.execute('CREATE TABLE $PATable('
+    await db.execute('CREATE TABLE $pATable('
         '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT ,$coldate TEXT ,$colName TEXT , $coldur REAL)');
 
@@ -219,7 +219,7 @@ class DatabaseHelper {
         '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colName TEXT)');
   
-    await db.execute( 'CREATE TABLE $A1CTable('
+    await db.execute( 'CREATE TABLE $a1CTable('
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT,$coldS TEXT ,$coldE TEXT ,$colA1C TEXT)');
 
@@ -235,9 +235,9 @@ class DatabaseHelper {
         '$colName TEXT, $coldate TEXT, $colresult TEXT, $colRDate TEXT,'
         '$coldur INTEGER)');
     
-    await db.execute( 'CREATE TABLE $CarbTable('
+    await db.execute( 'CREATE TABLE $carbTable('
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
-        '$colcurnt REAL ,$colmin REAL ,$colmax REAL,$coldate TEXT )');
+        '$colEmail TEXT,$colcurnt REAL ,$colmin REAL ,$colmax REAL,$coldate TEXT )');
 
     await db.execute( 'CREATE TABLE $DugTable('
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
@@ -296,7 +296,7 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getMeal(String email) async {
     Database db = await this.database;
     var result =
-        await db.query(mealTable, where: '$colEmail = ?', whereArgs: [email]);
+        await db.rawQuery('SELECT * as r FROM $mealTable  WHERE  $colEmail=\"$email\" ORDER BY $colAototId DESC LIMIT 1 ');
     if (result.length > 0) {
       return result;
     }
@@ -335,14 +335,14 @@ class DatabaseHelper {
 //add
   Future<int> insertBG(BG bg) async {
     Database db = await this.database;
-    var result = await db.insert(BGTable, bg.toMap());
+    var result = await db.insert(bGTable, bg.toMap());
     return result;
   }
 
 //get total BG
 Future BGTotal(String email) async {
   var dbClient = await this.database;
-  var result = await dbClient.rawQuery("SELECT SUM($colBg) as Total FROM $BGTable  WHERE $colEmail=\"$email\"");
+  var result = await dbClient.rawQuery("SELECT SUM($colBg) as Total FROM $bGTable  WHERE $colEmail=\"$email\"");
   //print(result.toList());
   return result.toList();
 }
@@ -350,7 +350,7 @@ Future BGTotal(String email) async {
 // nuber of record:
 Future BGRecord(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable  WHERE  $colEmail=\"$email\"');
+var result = await db.rawQuery('SELECT COUNT(*) as r FROM $bGTable  WHERE  $colEmail=\"$email\"');
   print(result.toList());
   return result.toList();
 }
@@ -358,7 +358,7 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable  WHERE  $colE
 // GET BG LIST FOR ONE USER:
   Future<List<Map<String, dynamic>>> getNoteList( String email) async {
   Database db = await this.database;
-    var result =await db.query(BGTable,where:"$colEmail =\"$email\"",orderBy:"$coldate DESC"  );
+    var result =await db.query(bGTable,where:"$colEmail =\"$email\"",orderBy:"$coldate DESC"  );
     if (result == null) {
      return null;
     }
@@ -369,7 +369,7 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable  WHERE  $colE
 //add
   Future<int> insertBP(BP bp) async {
     Database db = await this.database;
-    var result = await db.insert(BPTable, bp.toMap());
+    var result = await db.insert(bPTable, bp.toMap());
     return result;
   }
   
@@ -377,14 +377,14 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $BGTable  WHERE  $colE
 //add
   Future<int> insertBW(BW bw) async {
     Database db = await this.database;
-    var result = await db.insert(BWTable, bw.toMap());
+    var result = await db.insert(bWTable, bw.toMap());
     return result;
   }
 
 //get wight
  Future<List<Map<String, dynamic>>> getWight(String email) async {
     Database db = await this.database;
-   var result = await db.rawQuery('SELECT $colwieght as wit,$colBmi as bmi FROM $BWTable  WHERE  $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');  
+   var result = await db.rawQuery('SELECT $colwieght as wit,$colBmi as bmi FROM $bWTable  WHERE  $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');  
 print(result.toList());
     
     return result.toList();
@@ -413,7 +413,7 @@ Future<List<Map<String, dynamic>>> getInstructionMapList() async {
 //add
   Future<int> insertPA(PA pa) async {
     Database db = await this.database;
-    var result = await db.insert(PATable, pa.toMap());
+    var result = await db.insert(pATable, pa.toMap());
 print('updated: $result');
     return result;
   }
@@ -421,9 +421,9 @@ print('updated: $result');
   Future<int> UpdatetPA(int pa) async {
     Database db = await this.database;
  //   int count = await database.rawUpdate(SELECT * FROM tablename ORDER BY column DESC LIMIT 1);
-    var result = await db.rawQuery('SELECT * FROM $PATable ORDER BY $colAototId DESC LIMIT 1');
-   // var result1 = await db.update(PATable, pa.map(), where: '$colAototId = ?', whereArgs: [variety.id]));
-    var result1 = await db.rawUpdate('UPDATE $PATable  SET $coldur = $pa  WHERE colAototId=${result[0]['id']}');
+    var result = await db.rawQuery('SELECT * FROM $pATable ORDER BY $colAototId DESC LIMIT 1');
+   // var result1 = await db.update(pATable, pa.map(), where: '$colAototId = ?', whereArgs: [variety.id]));
+    var result1 = await db.rawUpdate('UPDATE $pATable  SET $coldur = $pa  WHERE colAototId=${result[0]['id']}');
 print('updated: $result');
 print('updated 1: $result1');
     return result1;
@@ -444,15 +444,15 @@ print('updated 1: $result1');
 //add
   Future<int> insertA1C(A1C a1c) async {
     Database db = await this.database;
-    var result = await db.insert(A1CTable, a1c.toMap());
+    var result = await db.insert(a1CTable, a1c.toMap());
     return result;
   }
   
    //UPDATE
    Future<int> UpdatetA1C(double a1c,String email) async {
      Database db = await this.database;
-    var result1 = await db.rawQuery('SELECT $colAototId  FROM $A1CTable WHERE  $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
-    var result = await db.rawUpdate('UPDATE $A1CTable  SET $colA1C = $a1c  WHERE $colAototId=${(result1.toList())[0]['id']}');
+    var result1 = await db.rawQuery('SELECT $colAototId  FROM $a1CTable WHERE  $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
+    var result = await db.rawUpdate('UPDATE $a1CTable  SET $colA1C = $a1c  WHERE $colAototId=${(result1.toList())[0]['id']}');
   print("UpdatetA1C:$a1c, ( $result1 ),($result)");
     return result;
    }
@@ -460,7 +460,7 @@ print('updated 1: $result1');
 //GET last value of A1C:
 Future<List<Map<String, dynamic>>> getA1C(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT $colA1C as a1C FROM $A1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
+var result = await db.rawQuery('SELECT $colA1C as a1C FROM $a1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
  print("getA1C: ${result.isEmpty}");
 result.toList();
 
@@ -475,7 +475,7 @@ if(result.isEmpty){ //result.add({'a1C':0.0});
 //GET last value of id:
 Future getA1Cid(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT $colAototId FROM $A1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
+var result = await db.rawQuery('SELECT $colAototId FROM $a1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
 print(result.toList());
 
   return result.toList();
@@ -484,7 +484,7 @@ print(result.toList());
 // nuber of record:
 Future A1CRecord(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT COUNT(*) as r FROM $A1CTable WHERE $colEmail=\"$email\"');
+var result = await db.rawQuery('SELECT COUNT(*) as r FROM $a1CTable WHERE $colEmail=\"$email\"');
   print("A1CRecord ${result.toList()}");
   return result.toList();
 }
@@ -497,13 +497,28 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $A1CTable WHERE $colEm
 //add
   Future<int> insertCARB(Carb pa) async {
     Database db = await this.database;
-    var result = await db.insert(CarbTable, pa.toMap());
+    var result = await db.insert(carbTable, pa.toMap());
     return result;
   }
 
 //UPDATE
-//GET
 
+
+//GET last value:
+Future<List<Map<String, dynamic>>> getCarb(String email) async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT $colcurnt as carbe FROM $carbTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
+ print("getCarb: ${result.isEmpty}");
+result.toList();
+
+
+if(result.isEmpty){ //result.add({'a1C':0.0});
+  return [];}
+  else{
+  print("carbe list: $result");
+
+  return result;}
+}
 //----------------------------------Exam Table---------------------------------------------------
 //add
   Future<int> insertExam(Exam pa) async {

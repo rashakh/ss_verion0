@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../screen/glucose_measure.dart';
 import '../screen/weight_input.dart';
 import '../screen/pressure_input.dart';
-
+import 'package:dtfbl/my_flutter_app_icons.dart';
 class FancyFab extends StatefulWidget {
   final Function() onPressed;
   final String tooltip;
@@ -98,7 +98,7 @@ class _FancyFabState extends State<FancyFab>
           //Navigator.of(context).pushNamed('/GlucoseMeasure');
         },
         tooltip: 'اضافة قراءة السكر في الدم',
-        child: Icon(Icons.add),
+        child: Icon(MyFlutterApp.BG),
       ),
     );
   }
@@ -116,7 +116,7 @@ class _FancyFabState extends State<FancyFab>
           //Navigator.of(context).pushNamed('/Weightinput');
         },
         tooltip: 'اضافة الوزن',
-        child: Icon(Icons.add),
+        child: Icon(MyFlutterApp.wet),
       ),
     );
   }
@@ -135,7 +135,11 @@ class _FancyFabState extends State<FancyFab>
           //Navigator.of(context).pushNamed('/Pressureinput');
         },
         tooltip: 'اضافة ضغط الدم',
-        child: Icon(Icons.add 
+        child: 
+        Icon(Icons.favorite
+          //MyFlutterApp.pro 
+        ,//color: Color.fromRGBO(0, 1, 0,1
+       // ),
         ),
       ),
     );

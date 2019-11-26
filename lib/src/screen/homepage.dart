@@ -9,7 +9,7 @@ import 'exportPDF.dart';
 //import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage(this.id, this.BMI, this.A1c,this.carb);
+  HomePage(this.id, this.BMI, this.A1c, this.carb);
   var id;
   var BMI;
   var A1c;
@@ -38,7 +38,8 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c,carb)),
+                  MaterialPageRoute(
+                      builder: (context) => MedAlert(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -47,7 +48,8 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PeriodicTest(id,BMI,A1c,carb)),
+                  MaterialPageRoute(
+                      builder: (context) => PeriodicTest(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -56,7 +58,8 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ExportPDF(id,BMI,A1c,carb)),
+                  MaterialPageRoute(
+                      builder: (context) => ExportPDF(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -65,7 +68,8 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id,BMI,A1c,carb)),
+                  MaterialPageRoute(
+                      builder: (context) => Profile(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -78,13 +82,13 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
+      body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c,this.carb);
+  Body(this.id, this.BMI, this.A1c, this.carb);
   var id;
   var BMI;
   var A1c;
@@ -93,8 +97,8 @@ class Body extends StatefulWidget {
   State createState() => new _Bodystate();
 }
 
-double _a1c = 0;
-double a1c = 0;
+// double _a1c = 0;
+// double a1c = 0;
 
 class _Bodystate extends State<Body> {
   DatabaseHelper helper = DatabaseHelper();
@@ -108,39 +112,75 @@ class _Bodystate extends State<Body> {
     size: 40.0,
   );
 
-  Color color = Colors.green;
-  // double _a1c() {
-  //   _getA1c();
-  //   var n = a1c/ 14;
-  //   print('n: $n');
-  //   _bgratio();
-  //   return alc;
-  // }
+  Color colorA1c = Colors.green;
+  Color colorcarb = Colors.green;
 
-  // Future _bgratio() {
-  //   if (_a1c <= 6.0) {
-  //     icon = Icon(
-  //       Icons.mood,
-  //       color: Colors.green,
-  //       size: 40.0,
-  //     );
-  //     color = Colors.green;
-  //   } else if (_a1c > 6.0 && _a1c <= 8.0) {
-  //     icon = Icon(
-  //       Icons.mood,
-  //       color: Colors.orangeAccent,
-  //       size: 40.0,
-  //     );
-  //     color = Colors.orangeAccent;
-  //   } else {
-  //     icon = Icon(
-  //       Icons.mood_bad,
-  //       color: Colors.redAccent,
-  //       size: 40.0,
-  //     );
-  //     color = Colors.redAccent;
-  //   }
-  // }
+  double _a1c() {
+    // _getA1c();
+    var n = double.parse(widget.A1c) / 14;
+    print('n: $n');
+    _bgratio();
+    return n;
+  }
+
+  double _carb() {
+    // _getA1c();
+    var n = widget.carb / 100;
+    print('n: $n');
+    _bgratiocarb();
+    return n;
+  }
+
+  Future _bgratio() {
+    if (double.parse(widget.A1c) <= 6.0) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorA1c = Colors.green;
+    } else if (double.parse(widget.A1c) > 6.0 &&
+        double.parse(widget.A1c) <= 8.0) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorA1c = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
+        color: Colors.redAccent,
+        size: 40.0,
+      );
+      colorA1c = Colors.redAccent;
+    }
+  }
+
+  Future _bgratiocarb() {
+    if (double.parse(widget.A1c) <= 6.0) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorcarb = Colors.green;
+    } else if (widget.A1c > 6.0 && widget.A1c <= 8.0) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorcarb = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
+        color: Colors.redAccent,
+        size: 40.0,
+      );
+      colorcarb = Colors.redAccent;
+    }
+  }
 
   // void initState() {
   //  super.initState();
@@ -150,29 +190,8 @@ class _Bodystate extends State<Body> {
   @override
   Widget build(BuildContext context) {
     print(double.parse(widget.A1c.toString()));
-//  setState(() {
-//     //super.initState();
-//     _getA1c();
-//     _bgratio();
-//  });
-    // initState(){
-    //   _getA1c();
-    //  super.initState();
-    //   this._getA1c();
-    //   // this._bgratio();
-    //   }
-  //  _getA1c();
-    // setState(() {
-    //     _a1c = a1c ;
-    //      print('this $_a1c and this $a1c');
-    //   });
-    // somfun(){
-    //   setState(() {
-    //     _getA1c();
-    //     _a1c = a1c ;
-    //      print('this $_a1c and this $a1c');
-    //   });
-    // }
+    String m = 'موز';
+    double carb = 13.41;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: new Column(
@@ -188,11 +207,12 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent:double.parse( widget.A1c.toString()) / 14, //  _a1c/14, //_a1c(),
-                  center: Text ('${widget.A1c} التراكمي',
+                  percent:
+                      _a1c(), //double.parse( widget.A1c.toString()) / 14, //  _a1c/14, /
+                  center: Text('${widget.A1c} التراكمي',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: color,
+                  progressColor: colorA1c,
                 ),
               ),
               Padding(
@@ -202,11 +222,11 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  // percent: _a1c(),
-                  center: Text('الكابرو هيدرات',
+                  percent: _carb(),
+                  center: Text('${widget.carb}الكابرو هيدرات',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: color,
+                  progressColor: colorcarb,
                 ),
               ),
               Padding(
@@ -220,7 +240,7 @@ class _Bodystate extends State<Body> {
                   center: Text('الانسولين',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: color,
+                  progressColor: colorA1c,
                 ),
               ),
               Padding(
@@ -234,7 +254,7 @@ class _Bodystate extends State<Body> {
                   center: Text('النشاط البدني',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: color,
+                  progressColor: colorA1c,
                 ),
               ),
               Container(
@@ -243,241 +263,281 @@ class _Bodystate extends State<Body> {
                 child: Column(
                   children: <Widget>[
                     new Card(
-                        elevation: 5.0,
-                        color: Colors.white,
-                        child: new Column(
-                          children: <Widget>[
-                            new Container(
-                              color: Colors.grey[200],
-                              padding: const EdgeInsets.only(
-                                  left: 234.0,
-                                  right: 30.0,
-                                  top: 10.0,
-                                  bottom: 10.0),
-                              child: new Text(
-                                'الوجبة الاخيرة : ',
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.grey[700],
-                                ),
+                      elevation: 5.0,
+                      color: Colors.white,
+                      child: new Column(
+                        children: <Widget>[
+                          new Container(
+                            color: Colors.grey[200],
+                            padding: const EdgeInsets.only(
+                                left: 234.0,
+                                right: 30.0,
+                                top: 10.0,
+                                bottom: 10.0),
+                            child: new Text(
+                              'الوجبة الاخيرة : ',
+                              style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.grey[700],
                               ),
                             ),
-                            new Divider(
-                              color: Color(0xFFBDD22A),
-                              height: 0.0,
-                            ),
-                            new Padding(
-                              padding: const EdgeInsets.only(
-                                right: 20.0,
-                              ),
-                              child: new Row(
-                                children: <Widget>[
-                                  new Text(
-                                    'name',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                  new Container(
-                                      margin: new EdgeInsets.only(
-                                          top: 10.0, left: 5.0, right: 5.0),
-                                      height: 2.0,
-                                      width: 10.0,
-                                      color: Colors.blueGrey),
-                                  new Text(
-                                    'الكاربوهيدرات: ',
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  new Text(
-                                    'carb',
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 80.0,
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.close,
-                                        size: 30.0, color: Colors.red),
-                                    onPressed: () {},
-                                  ),
-                                ],
-                              ),
-                            ),
-                            new Divider(
-                              color: Color(0xFFBDD22A),
-                              height: 0.0,
-                            ),
-                            new Padding(
-                              padding: const EdgeInsets.only(
-                                right: 20.0,
-                              ),
-                              child: new Row(
-                                children: <Widget>[
-                                  new Text(
-                                    'name',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                  new Container(
-                                      margin: new EdgeInsets.only(
-                                          top: 10.0, left: 5.0, right: 5.0),
-                                      height: 2.0,
-                                      width: 10.0,
-                                      color: Colors.blueGrey),
-                                  new Text(
-                                    'الكاربوهيدرات: ',
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  new Text(
-                                    'carb',
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 80.0,
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.close,
-                                        size: 30.0, color: Colors.red),
-                                    onPressed: () {},
-                                  ),
-                                ],
-                              ),
-                            ),
-                            new Divider(
-                              color: Color(0xFFBDD22A),
-                              height: 0.0,
-                            ),
-                          ],
-                        )),
+                          ),
+
+                          FutureBuilder(
+                              future: helper.getMeal(widget.id[0]['email']),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  final Pt = snapshot.data;
+                                  var l = 65.0 *
+                                      Pt.length; //lenght of the view for carunt record (to be flixable)
+                                      print("$Pt");
+                                  return new Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: SizedBox(
+                                        height: l as double,
+                                        child: ListView.builder(
+                                          itemCount: Pt.length,
+                                          itemBuilder: (context, index) {
+                                            return
+                                                // new Divider(
+                                                //   color: Color(0xFFBDD22A),
+                                                //   height: 0.0,
+                                                // );
+                                                new Padding(
+                                              padding: const EdgeInsets.only(
+                                                right: 20.0,
+                                              ),
+                                              child: new Row(
+                                                children: <Widget>[
+                                                  new Text(
+                                                    'تفاح',
+                                                    style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                    ),
+                                                  ),
+                                                  new Container(
+                                                      margin:
+                                                          new EdgeInsets.only(
+                                                              top: 10.0,
+                                                              left: 5.0,
+                                                              right: 5.0),
+                                                      height: 2.0,
+                                                      width: 10.0,
+                                                      color: Colors.blueGrey),
+                                                  new Text(
+                                                    'الكاربوهيدرات: ',
+                                                    style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  new Text(
+                                                    '25.13',
+                                                    style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 80.0,
+                                                  ),
+                                                  IconButton(
+                                                    icon: Icon(Icons.delete,
+                                                        size: 30.0,
+                                                        color: Colors.red),
+                                                    onPressed: () {},
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                            // new Divider(
+                                            //   color: Color(0xFFBDD22A),
+                                            //   height: 0.0,
+                                            // );
+                                            // new Padding(
+                                            //   padding: const EdgeInsets.only(
+                                            //     right: 20.0,
+                                            //   ),
+                                            //   child: new Row(
+                                            //     children: <Widget>[
+                                            //       new Text(
+                                            //         m,
+                                            //         style: TextStyle(
+                                            //           fontSize: 18.0,
+                                            //           fontWeight:
+                                            //               FontWeight.w800,
+                                            //         ),
+                                            //       ),
+                                            //       new Container(
+                                            //           margin:
+                                            //               new EdgeInsets.only(
+                                            //                   top: 10.0,
+                                            //                   left: 5.0,
+                                            //                   right: 5.0),
+                                            //           height: 2.0,
+                                            //           width: 10.0,
+                                            //           color: Colors.blueGrey),
+                                            //       new Text(
+                                            //         'الكاربوهيدرات: ',
+                                            //         style: TextStyle(
+                                            //           fontSize: 15.0,
+                                            //           fontWeight:
+                                            //               FontWeight.w500,
+                                            //         ),
+                                            //       ),
+                                            //       new Text(
+                                            //         carb.toString(),
+                                            //         style: TextStyle(
+                                            //           fontSize: 15.0,
+                                            //           fontWeight:
+                                            //               FontWeight.w500,
+                                            //         ),
+                                            //       ),
+                                            //       SizedBox(
+                                            //         width: 80.0,
+                                            //       ),
+                                            //       IconButton(
+                                            //         icon: Icon(Icons.delete,
+                                            //             size: 30.0,
+                                            //             color: Colors.red),
+                                            //         onPressed: () {
+                                            //           setState(() {
+                                            //             m = 'تم الحذف';
+                                            //             carb = 0.0;
+                                            //           });
+                                            //         },
+                                            //       ),
+                                            //     ],
+                                            //   ),
+                                            // );
+                                            // new Divider(
+                                            //   color: Color(0xFFBDD22A),
+                                            //   height: 0.0,
+                                            // );
+                                          },
+                                        ),
+                                      ))
+                                    ],
+                                  );
+                                }
+                              }),
+                          // new Container(
+                          //     width: 380.0,
+                          //     height: 114.0,
+                          //     decoration: BoxDecoration(
+                          //       gradient: LinearGradient(begin: Alignment.bottomLeft, colors: [
+                          //         Colors.white70.withOpacity(0.3),
+                          //         Colors.white10.withOpacity(0.3)
+                          //       ]),
+                          //       shape: BoxShape.rectangle,
+                          //       borderRadius: new BorderRadius.circular(8.0),
+                          //       boxShadow: <BoxShadow>[
+                          //         new BoxShadow(
+                          //           color: Colors.black12,
+                          //           blurRadius: 50.0,
+                          //           offset: new Offset(0.0, 5.0),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     child: new Column(
+                          //       children: <Widget>[
+                          //         new Row(
+                          //           children: <Widget>[
+                          //             Container(
+                          //               padding: EdgeInsets.only(
+                          //                   top: 15.0, bottom: 15.0, right: 20.0),
+                          //               child: Text(
+                          //                 'مجموع جرعات الانسولين اليومي: ',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w500,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //             new Container(
+                          //               padding: EdgeInsets.only(
+                          //                 bottom: 15.0,
+                          //                 top: 15.0,
+                          //               ),
+                          //               child: Text(
+                          //                 dd.toInt().toString() + ' وحدة',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w800,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //         new Row(
+                          //           children: <Widget>[
+                          //             new Container(
+                          //               padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
+                          //               child: Text(
+                          //                 'مجموع جرعات الصافي: ',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w500,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //             new Container(
+                          //               padding: EdgeInsets.only(
+                          //                 bottom: 15.0,
+                          //               ),
+                          //               child: Text(
+                          //                 (dd / 2).toInt().toString() + ' وحدة',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w800,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //         new Row(
+                          //           children: <Widget>[
+                          //             new Container(
+                          //               padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
+                          //               child: Text(
+                          //                 'مجموع جرعات العكر: ',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w500,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //             new Container(
+                          //               padding: EdgeInsets.only(
+                          //                 bottom: 15.0,
+                          //               ),
+                          //               child: Text(
+                          //                 (dd / 2).toInt().toString() + ' وحدة',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w800,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ],
+                          //     )),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
-            
-            
-            
-            
-            
-            
             ],
           ),
-          // new Container(
-          //     width: 380.0,
-          //     height: 114.0,
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(begin: Alignment.bottomLeft, colors: [
-          //         Colors.white70.withOpacity(0.3),
-          //         Colors.white10.withOpacity(0.3)
-          //       ]),
-          //       shape: BoxShape.rectangle,
-          //       borderRadius: new BorderRadius.circular(8.0),
-          //       boxShadow: <BoxShadow>[
-          //         new BoxShadow(
-          //           color: Colors.black12,
-          //           blurRadius: 50.0,
-          //           offset: new Offset(0.0, 5.0),
-          //         ),
-          //       ],
-          //     ),
-          //     child: new Column(
-          //       children: <Widget>[
-          //         new Row(
-          //           children: <Widget>[
-          //             Container(
-          //               padding: EdgeInsets.only(
-          //                   top: 15.0, bottom: 15.0, right: 20.0),
-          //               child: Text(
-          //                 'مجموع جرعات الانسولين اليومي: ',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w500,
-          //                 ),
-          //               ),
-          //             ),
-          //             new Container(
-          //               padding: EdgeInsets.only(
-          //                 bottom: 15.0,
-          //                 top: 15.0,
-          //               ),
-          //               child: Text(
-          //                 dd.toInt().toString() + ' وحدة',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w800,
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         new Row(
-          //           children: <Widget>[
-          //             new Container(
-          //               padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
-          //               child: Text(
-          //                 'مجموع جرعات الصافي: ',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w500,
-          //                 ),
-          //               ),
-          //             ),
-          //             new Container(
-          //               padding: EdgeInsets.only(
-          //                 bottom: 15.0,
-          //               ),
-          //               child: Text(
-          //                 (dd / 2).toInt().toString() + ' وحدة',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w800,
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         new Row(
-          //           children: <Widget>[
-          //             new Container(
-          //               padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
-          //               child: Text(
-          //                 'مجموع جرعات العكر: ',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w500,
-          //                 ),
-          //               ),
-          //             ),
-          //             new Container(
-          //               padding: EdgeInsets.only(
-          //                 bottom: 15.0,
-          //               ),
-          //               child: Text(
-          //                 (dd / 2).toInt().toString() + ' وحدة',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w800,
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ],
-          //     )),
         ],
       ),
     );
@@ -499,7 +559,7 @@ class _Bodystate extends State<Body> {
   //   print("******************_getA1c :$_a1c");
 // setState(() => a1c=double.parse(re));
 //   setState(() => _num=num);
- // }
+  // }
 
 //  a11c()  {
 

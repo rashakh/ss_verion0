@@ -1,6 +1,7 @@
 // Home file which contains the Home page, and its properties
 // this file allows enter and navigate into the App features
 
+import 'package:dtfbl/my_flutter_app_icons.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'homepage.dart'; //import homepage file
 import 'meals.dart'; //import meals file
@@ -62,8 +63,8 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           BottomNavigationBarItem(
-            icon: new Icon(
-              Icons.local_dining,
+            icon: new Icon(// MyFlutterApp.meal,
+            Icons.local_dining,
               color: Colors.black,
             ),
             title: new Text(
