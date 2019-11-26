@@ -9,10 +9,11 @@ import 'exportPDF.dart';
 //import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage(this.id, this.BMI, this.A1c);
-  var BMI;
+  HomePage(this.id, this.BMI, this.A1c,this.carb);
   var id;
+  var BMI;
   var A1c;
+  var carb;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -37,7 +38,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id)),
+                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -46,7 +47,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PeriodicTest(id)),
+                  MaterialPageRoute(builder: (context) => PeriodicTest(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -55,7 +56,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ExportPDF(id)),
+                  MaterialPageRoute(builder: (context) => ExportPDF(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -64,7 +65,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id, BMI)),
+                  MaterialPageRoute(builder: (context) => Profile(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -77,16 +78,17 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id, BMI, A1c)),
+      body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c);
+  Body(this.id, this.BMI, this.A1c,this.carb);
   var id;
   var BMI;
   var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }
@@ -147,6 +149,7 @@ class _Bodystate extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    print(double.parse(widget.A1c.toString()));
 //  setState(() {
 //     //super.initState();
 //     _getA1c();
@@ -158,7 +161,7 @@ class _Bodystate extends State<Body> {
     //   this._getA1c();
     //   // this._bgratio();
     //   }
-    _getA1c();
+  //  _getA1c();
     // setState(() {
     //     _a1c = a1c ;
     //      print('this $_a1c and this $a1c');
@@ -185,8 +188,8 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: double.parse(widget.A1c) / 14, //  _a1c/14, //_a1c(),
-                  center: Text((widget.A1c).toString() + 'التراكمي',
+                  percent:double.parse( widget.A1c.toString()) / 14, //  _a1c/14, //_a1c(),
+                  center: Text ('${widget.A1c} التراكمي',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: color,
@@ -487,16 +490,16 @@ class _Bodystate extends State<Body> {
 //   setState(() => _sum = total);
 // }
 
-  Future _getA1c() async {
-    String re =
-        (await helper.getA1C(widget.id[0]['email'].toString()))[0]['a1C'];
-    print("_getA1c :$re");
+  // Future _getA1c() async {
+  //   String re =
+  //       (await helper.getA1C(widget.id[0]['email'].toString()))[0]['a1C'];
+  //   print("_getA1c :$re");
 
-    a1c = double.parse(re);
-    print("******************_getA1c :$_a1c");
+  //   a1c = double.parse(re);
+  //   print("******************_getA1c :$_a1c");
 // setState(() => a1c=double.parse(re));
 //   setState(() => _num=num);
-  }
+ // }
 
 //  a11c()  {
 

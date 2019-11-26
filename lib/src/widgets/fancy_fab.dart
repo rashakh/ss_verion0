@@ -10,9 +10,10 @@ class FancyFab extends StatefulWidget {
   List<Map<String, dynamic>> id;
   List<Map<String, dynamic>> BMI;
   var A1c;
-
+var carb;
+var bMI;
   FancyFab(
-    this.id, this.A1c, {
+    this.id, this.A1c,this.bMI,this.carb, {
     this.onPressed,
     this.tooltip,
     this.icon,
@@ -92,7 +93,7 @@ class _FancyFabState extends State<FancyFab>
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => GlucoseMeasure(widget.id,widget.A1c)),
+                builder: (context) => GlucoseMeasure(widget.id,widget.BMI,widget.A1c, widget.carb)),
           );
           //Navigator.of(context).pushNamed('/GlucoseMeasure');
         },
@@ -110,7 +111,7 @@ class _FancyFabState extends State<FancyFab>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Weightinput(widget.id,widget.A1c)),
+            MaterialPageRoute(builder: (context) => Weightinput(widget.id,widget.BMI,widget.A1c, widget.carb)),
           );
           //Navigator.of(context).pushNamed('/Weightinput');
         },
@@ -129,12 +130,13 @@ class _FancyFabState extends State<FancyFab>
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Pressureinput(widget.id)),
+                builder: (context) => Pressureinput(widget.id,widget.BMI,widget.A1c, widget.carb)),
           );
           //Navigator.of(context).pushNamed('/Pressureinput');
         },
         tooltip: 'اضافة ضغط الدم',
-        child: Icon(Icons.add),
+        child: Icon(Icons.add 
+        ),
       ),
     );
   }

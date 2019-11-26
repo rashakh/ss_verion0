@@ -458,13 +458,19 @@ print('updated 1: $result1');
    }
 
 //GET last value of A1C:
-Future getA1C(String email) async {
+Future<List<Map<String, dynamic>>> getA1C(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT $colA1C FROM $A1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
- // print("getA1C: ${result.toList()}");
+var result = await db.rawQuery('SELECT $colA1C as a1C FROM $A1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
+ print("getA1C: ${result.isEmpty}");
+result.toList();
 
-  print("hi list");
-  return result;
+
+if(result.isEmpty){ //result.add({'a1C':0.0});
+  return [];}
+  else{
+  print("hi list: $result");
+
+  return result;}
 }
 //GET last value of id:
 Future getA1Cid(String email) async {

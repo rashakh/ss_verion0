@@ -30,10 +30,11 @@ int coun = 0;
 var varty = new List();
 
 class Meals extends StatelessWidget {
-  Meals(this.id,this.BMI,this.A1c);
-  var BMI;
+  Meals(this.id, this.BMI, this.A1c,this.carb);
   var id;
+  var BMI;
   var A1c;
+  var carb;
   @override
   Widget build(BuildContext context) {
     dbemail = id[0]['email'].toString();
@@ -59,7 +60,7 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id)),
+                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -68,7 +69,7 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PeriodicTest(id)),
+                  MaterialPageRoute(builder: (context) => PeriodicTest(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -77,7 +78,7 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ExportPDF(id)),
+                  MaterialPageRoute(builder: (context) => ExportPDF(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -86,7 +87,7 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id,BMI)),
+                  MaterialPageRoute(builder: (context) => Profile(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -99,16 +100,17 @@ class Meals extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
+      body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id,this.BMI,this.A1c);
+  Body(this.id, this.BMI, this.A1c,this.carb);
   var id;
-var BMI;
-var A1c;
+  var BMI;
+  var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }
@@ -488,6 +490,7 @@ class _Bodystate extends State<Body> {
   Widget _grouping() {
     return Column(
       children: <Widget>[
+        
         Expanded(
           child: new ListView.builder(
             itemCount: 1,
@@ -495,8 +498,19 @@ class _Bodystate extends State<Body> {
               return new Column(
                 children: <Widget>[
                   new SizedBox(
-                    height: 3.0,
+	                    height: 5.0,
                   ),
+                  Text(
+                    'اختر صنف الطعام :',
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  new SizedBox(
+                    height: 10.0,
+                  ),	        
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -675,7 +689,7 @@ class _Bodystate extends State<Body> {
       child: new Column(
         children: <Widget>[
           new SizedBox(
-            height: 282,
+            height: 330,
             //print("click 21: inter:$_inter");
             //print("click 21: inter:$_wid()[_inter]");
             child: _wid()[_inter],
@@ -714,13 +728,13 @@ class _Bodystate extends State<Body> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c)),
+                              builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c, widget.carb)),
                         );
                       });
                     },
                     child: new Container(
                         alignment: Alignment.center,
-                        height: 40.0,
+                        height: 47.0,
                         decoration: new BoxDecoration(
                             color: Color(0xFFBDD22A),
                             borderRadius: new BorderRadius.circular(7.0)),

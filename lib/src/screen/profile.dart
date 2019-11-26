@@ -4,9 +4,11 @@ import '../models/user.dart';
 import '../utils/database_helper.dart';
 
 class Profile extends StatelessWidget {
-  Profile(this.id,this.BMI);
+  Profile(this.id, this.BMI, this.A1c,this.carb);
   var id;
   var BMI;
+  var A1c;
+  var carb;
   DatabaseHelper helper = DatabaseHelper();
 
   @override
@@ -23,15 +25,17 @@ class Profile extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id,BMI)),
+          body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id,this.BMI);
+  Body(this.id, this.BMI, this.A1c,this.carb);
   var id;
   var BMI;
+  var A1c;
+  var carb;
 
    // String gender,type;
 
@@ -57,7 +61,7 @@ class _Bodystate extends State<Body> {
     
       Widget build(BuildContext context) {
      //   _getwight();
-
+print(widget.BMI[0]['wit']);
                 var weight=widget.BMI[0]['wit'];
 
       if((widget.id[0]['gender'])==0){

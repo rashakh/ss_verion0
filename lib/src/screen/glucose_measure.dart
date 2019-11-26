@@ -17,10 +17,11 @@ import 'package:intl/intl.dart' as intl; // flutter main package
 import 'mainpage.dart';
 
 class GlucoseMeasure extends StatelessWidget {
-  GlucoseMeasure(this.id,this.A1c);
+  GlucoseMeasure(this.id, this.BMI, this.A1c,this.carb);
   var id;
   var BMI;
   var A1c;
+  var carb;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -35,17 +36,18 @@ class GlucoseMeasure extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
+          body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
           // Padding(padding: const EdgeInsets.only(top: 100), child: Body()),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id,this.BMI,this.A1c);
+  Body(this.id, this.BMI, this.A1c,this.carb);
   var id;
   var BMI;
   var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }
@@ -595,7 +597,7 @@ class _Bodystate extends State<Body> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c)),
+                          builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c,widget.carb)),
                     );
                   }),
                 ),

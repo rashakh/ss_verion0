@@ -13,10 +13,11 @@ import 'package:http/http.dart'
     as http; // perform http request on API to get the into
 import 'mainpage.dart';
 class Pressureinput extends StatelessWidget {
-  Pressureinput(this.id);
+  Pressureinput(this.id, this.BMI, this.A1c,this.carb);
   var id;
   var BMI;
   var A1c;
+  var carb;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -31,16 +32,17 @@ class Pressureinput extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
+          body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id,this.BMI,this.A1c);
+  Body(this.id, this.BMI, this.A1c,this.carb);
   var id;
   var BMI;
   var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }
@@ -309,7 +311,7 @@ class _Bodystate extends State<Body> {
                     print("click 2: $mealw");
                     Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c)),
+                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c, widget.carb)),
                         );
                   }),
                 ),

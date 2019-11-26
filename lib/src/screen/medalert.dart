@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class MedAlert extends StatelessWidget {
-  MedAlert(this.id);
+  MedAlert(this.id, this.BMI, this.A1c,this.carb);
   var id;
+  var BMI;
+  var A1c;
+  var carb;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -17,14 +20,17 @@ class MedAlert extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id)),
+          body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id);
+  Body(this.id, this.BMI, this.A1c,this.carb);
   var id;
+  var BMI;
+  var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }

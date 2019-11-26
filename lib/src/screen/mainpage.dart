@@ -10,10 +10,11 @@ import 'medications.dart'; //import medications file
 import '../widgets/fancy_fab.dart';
 
 class MainPage extends StatefulWidget {
-  MainPage(@required this.id, @required this.BMI,  @required this.A1c);
+  MainPage(@required this.id,@required this.BMI,@required this.A1c,@required this.carb);
   var id;
   var BMI;
   var A1c;
+  var carb;
   @override
   State createState() => _MainPageState();
 }
@@ -22,11 +23,11 @@ class _MainPageState extends State<MainPage> {
   int _selectedPage = 0;
    Widget pages(_selectedPage) {
     final List<Widget> _pages = [
-      new HomePage(widget.id,widget.BMI,widget.A1c),
-      new Meals(widget.id,widget.BMI,widget.A1c),
+      new HomePage(widget.id,widget.BMI,widget.A1c, widget.carb),
+      new Meals(widget.id,widget.BMI,widget.A1c, widget.carb),
       //new PhysicalActivity(),
-      new Instructions(widget.id,widget.BMI),
-      new Medications(widget.id,widget.BMI),
+      new Instructions(widget.id,widget.BMI,widget.A1c, widget.carb),
+      new Medications(widget.id,widget.BMI,widget.A1c, widget.carb),
     ];
     return _pages[_selectedPage];
   }
@@ -41,7 +42,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: pages(_selectedPage),
-      floatingActionButton: new FancyFab(widget.id,widget.A1c),
+      floatingActionButton: new FancyFab(widget.id,widget.BMI, widget.A1c, widget.carb),
       bottomNavigationBar: new BottomNavigationBar(
         currentIndex: _selectedPage,
         onTap: (int index) {

@@ -66,11 +66,14 @@ class _LoginPageState extends State<LoginPage> {
       print('here is login id : ${id}');
 var BMI;
 var A1c;
+var carb=0.0;
     //  setState(() async{
           BMI=(await helper.getWight(id[0]['email']));
-        
+         if(
+          ((await helper.getA1C(id[0]['email']))).isNotEmpty
+         ){
          A1c=(await helper.getA1C(id[0]['email']))[0]['a1C'];
-        // if(A1C){
+          }else{ A1c=0.0;}
       // print("A1c list: null");
 
         // }
@@ -79,7 +82,7 @@ var A1c;
       print("BMI list: $BMI");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c)),
+        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c,carb)),
       );
       //Navigator.of(context).pushNamed('/MainPage',arguments: _email);
       _formKey.currentState.reset();

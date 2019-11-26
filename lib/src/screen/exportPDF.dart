@@ -12,8 +12,11 @@ import 'package:pdf/pdf.dart';
 import 'package:charts_flutter/flutter.dart';
 
 class ExportPDF extends StatelessWidget {
-     ExportPDF(this.id);
-     var id;
+     ExportPDF(this.id, this.BMI, this.A1c,this.carb);
+  var id;
+  var BMI;
+  var A1c;
+  var carb;
   //final SqliteBaseballService _databaseService =
     //  Ioc.get<SqliteBaseballService>();
 

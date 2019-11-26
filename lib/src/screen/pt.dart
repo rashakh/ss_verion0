@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
 class PeriodicTest extends StatelessWidget {
-  PeriodicTest(this.id);
+  PeriodicTest(this.id, this.BMI, this.A1c,this.carb);
   var id;
+  var BMI;
+  var A1c;
+  var carb;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -22,14 +25,17 @@ class PeriodicTest extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id)),
+          body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id);
+  Body(this.id, this.BMI, this.A1c,this.carb);
   var id;
+  var BMI;
+  var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }
@@ -180,7 +186,7 @@ class _Bodystate extends State<Body> {
                        print(result);
                      // Navigator.pop(context);
                        //Navigator.of(context).popAndPushNamed(routeName)
-                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
+                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id,widget.BMI,widget.A1c, widget.carb)));
                       //
                        },)
 
@@ -279,21 +285,21 @@ class _Bodystate extends State<Body> {
                                       value: _pt,
                                       items: [
                                         DropdownMenuItem<String>(
-                                          value: 'التراكمي',
+                                          value: 'فحص التراكمي',
                                           child: Text(
-                                            'التراكمي',
+                                            'فحص التراكمي',
                                           ),
                                         ),
                                         DropdownMenuItem<String>(
-                                          value: 'الكلى',
+                                          value: 'فحص الكلى',
                                           child: Text(
-                                            'الكلى',
+                                            'فحص الكلى',
                                           ),
                                         ),
                                         DropdownMenuItem<String>(
-                                          value: 'العين',
+                                          value: 'فحص العين',
                                           child: Text(
-                                            'العين',
+                                            'فحص العين',
                                           ),
                                         ),
                                       ],
@@ -348,10 +354,10 @@ class _Bodystate extends State<Body> {
                                           final date2= DateTime.now();
                                          final difference = _ptDate.difference(date2).inDays;
                                            int id;
-                                            if(_pt=="العين"){
+                                            if(_pt=="فحص العين"){
                                                 id=3;
                                             }
-                                            else if(_pt=="التراكمي"){
+                                            else if(_pt=="فحص التراكمي"){
                                                 id=1;
                                             }
                                             else{
@@ -360,7 +366,7 @@ class _Bodystate extends State<Body> {
                                         Exam pts= new Exam.withId(id,_pt,widget.id[0]['email'],_ptDate.toIso8601String().substring(0,10),difference);
                                         print("exam: $_pt,${widget.id[0]['email']},${_ptDate.toIso8601String().substring(0,10)},$difference");
                                         var he= await helper.insertExam(pts);
-                                       Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
+                                       Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id,widget.BMI,widget.A1c, widget.carb)));
                                       // Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
 
                                       },
@@ -482,7 +488,7 @@ class _Bodystate extends State<Body> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'فحص العين',
+                      'فحص فحص العين',
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.black,
@@ -523,7 +529,7 @@ class _Bodystate extends State<Body> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'فحص الكلى',
+                      'فحص فحص الكلى',
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.black,

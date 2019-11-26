@@ -13,9 +13,11 @@ import 'exportPDF.dart';
 import 'medalert.dart'; // perform http request on API to get the into
 
 class Instructions extends StatelessWidget {
-  Instructions(this.id,this.BMI);
+  Instructions(this.id, this.BMI, this.A1c,this.carb);
   var id;
   var BMI;
+  var A1c;
+  var carb;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -40,7 +42,7 @@ class Instructions extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id)),
+                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -49,7 +51,7 @@ class Instructions extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PeriodicTest(id)),
+                  MaterialPageRoute(builder: (context) => PeriodicTest(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -58,7 +60,7 @@ class Instructions extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ExportPDF(id)),
+                  MaterialPageRoute(builder: (context) => ExportPDF(id,BMI,A1c,carb)),
                 );
               },
             ),
@@ -67,7 +69,7 @@ class Instructions extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id,BMI)),
+                  MaterialPageRoute(builder: (context) => Profile(id, BMI,A1c,carb)),
                 );
               },
             ),
@@ -80,15 +82,17 @@ class Instructions extends StatelessWidget {
           ],
         ),
       ),
-      body: Container(
-        alignment: Alignment.topCenter,
-        child: new SingleChildScrollView(child: new Body()),
-      ),
+      body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
     );
   }
 }
 
 class Body extends StatefulWidget {
+  Body(this.id,this.BMI,this.carb,this.A1c);
+  var id;
+  var BMI;
+  var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }
