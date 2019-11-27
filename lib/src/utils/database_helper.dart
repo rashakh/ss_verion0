@@ -292,15 +292,18 @@ class DatabaseHelper {
     return result;
   }
 
-//get meals //not complite
-  Future<List<Map<String, dynamic>>> getMeal(String email) async {
+//get meals
+  Future  getMeal(String email) async {
     Database db = await this.database;
     var result =
-        await db.rawQuery('SELECT * as r FROM $mealTable  WHERE  $colEmail=\"$email\" ORDER BY $colAototId DESC LIMIT 1 ');
-    if (result.length > 0) {
-      return result;
-    }
-    return null;
+        await db.rawQuery('SELECT * FROM $mealTable  WHERE  $colEmail=\"$email\" ORDER BY $colId DESC LIMIT 1 ');
+   print("meal: ${result.toList()}");
+if(result.isEmpty){
+  return [];
+}
+
+  print("hi list");
+ return result;
   }
   
 //-------------------------------Variety Table--------------------------------------------
@@ -319,9 +322,9 @@ class DatabaseHelper {
   }
 
  //delete one variety
-  Future<int> deleteVariety(int id, int mealid) async {
+  Future<int> deleteVariety(int id, int mealid,String email) async {
   	var db = await this.database;
-  	int result = await db.rawDelete('DELETE FROM $varietyTable WHERE $colid = $id AND $colId=$mealid');
+  	int result = await db.rawDelete('DELETE FROM $varietyTable WHERE $colid = $id AND $colId=$mealid AND $colEmail=\"$email\"');
   	return result;
   }
 

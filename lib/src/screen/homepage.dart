@@ -284,15 +284,27 @@ class _Bodystate extends State<Body> {
                             ),
                           ),
 
-                          FutureBuilder(
+
+
+
+
+                          FutureBuilder (
                               future: helper.getMeal(widget.id[0]['email']),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.done) {
+                print("snap: ${snapshot.data}");
+                      if (snapshot.connectionState == ConnectionState.none || snapshot.hasData == null) {
+                  
+                  //print('project snapshot data is: ${projectSnap.data}');
+                  return Container();
+                } else {
+                                // if (snapshot.connectionState ==
+                                //     ConnectionState.done) {
+                  print("hi list view 1");
+                  hi();
                                   final Pt = snapshot.data;
                                   var l = 65.0 *
                                       Pt.length; //lenght of the view for carunt record (to be flixable)
-                                      print("$Pt");
+                                      print("fun: $Pt");
                                   return new Row(
                                     children: <Widget>[
                                       Expanded(
@@ -352,82 +364,33 @@ class _Bodystate extends State<Body> {
                                                     icon: Icon(Icons.delete,
                                                         size: 30.0,
                                                         color: Colors.red),
-                                                    onPressed: () {},
+                                                    onPressed: () async {
+
+                                                var result =
+                                                    await helper.deletExam(
+                                                        Pt[index]['id'],
+                                                        Pt[index]['email']
+                                                            .toString());
+                                                print(result);
+
+                                                    },
                                                   ),
                                                 ],
                                               ),
                                             );
-                                            // new Divider(
-                                            //   color: Color(0xFFBDD22A),
-                                            //   height: 0.0,
-                                            // );
-                                            // new Padding(
-                                            //   padding: const EdgeInsets.only(
-                                            //     right: 20.0,
-                                            //   ),
-                                            //   child: new Row(
-                                            //     children: <Widget>[
-                                            //       new Text(
-                                            //         m,
-                                            //         style: TextStyle(
-                                            //           fontSize: 18.0,
-                                            //           fontWeight:
-                                            //               FontWeight.w800,
-                                            //         ),
-                                            //       ),
-                                            //       new Container(
-                                            //           margin:
-                                            //               new EdgeInsets.only(
-                                            //                   top: 10.0,
-                                            //                   left: 5.0,
-                                            //                   right: 5.0),
-                                            //           height: 2.0,
-                                            //           width: 10.0,
-                                            //           color: Colors.blueGrey),
-                                            //       new Text(
-                                            //         'الكاربوهيدرات: ',
-                                            //         style: TextStyle(
-                                            //           fontSize: 15.0,
-                                            //           fontWeight:
-                                            //               FontWeight.w500,
-                                            //         ),
-                                            //       ),
-                                            //       new Text(
-                                            //         carb.toString(),
-                                            //         style: TextStyle(
-                                            //           fontSize: 15.0,
-                                            //           fontWeight:
-                                            //               FontWeight.w500,
-                                            //         ),
-                                            //       ),
-                                            //       SizedBox(
-                                            //         width: 80.0,
-                                            //       ),
-                                            //       IconButton(
-                                            //         icon: Icon(Icons.delete,
-                                            //             size: 30.0,
-                                            //             color: Colors.red),
-                                            //         onPressed: () {
-                                            //           setState(() {
-                                            //             m = 'تم الحذف';
-                                            //             carb = 0.0;
-                                            //           });
-                                            //         },
-                                            //       ),
-                                            //     ],
-                                            //   ),
-                                            // );
-                                            // new Divider(
-                                            //   color: Color(0xFFBDD22A),
-                                            //   height: 0.0,
-                                            // );
+                                            
                                           },
                                         ),
                                       ))
                                     ],
                                   );
                                 }
-                              }),
+                                // else{
+                                //   return Card();
+                                // }
+                              }
+                              
+                              ),
                           // new Container(
                           //     width: 380.0,
                           //     height: 114.0,
@@ -565,6 +528,96 @@ class _Bodystate extends State<Body> {
 
 // _getA1c();
 
-// }
+// 
+
+void hi()async{
+var hi= await helper.getMeal(widget.id[0]['email']);
+
+print("get hi: $hi");
 
 }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+////
+///
+///
+///
+///
+// new Divider(
+                                            //   color: Color(0xFFBDD22A),
+                                            //   height: 0.0,
+                                            // );
+                                            // new Padding(
+                                            //   padding: const EdgeInsets.only(
+                                            //     right: 20.0,
+                                            //   ),
+                                            //   child: new Row(
+                                            //     children: <Widget>[
+                                            //       new Text(
+                                            //         m,
+                                            //         style: TextStyle(
+                                            //           fontSize: 18.0,
+                                            //           fontWeight:
+                                            //               FontWeight.w800,
+                                            //         ),
+                                            //       ),
+                                            //       new Container(
+                                            //           margin:
+                                            //               new EdgeInsets.only(
+                                            //                   top: 10.0,
+                                            //                   left: 5.0,
+                                            //                   right: 5.0),
+                                            //           height: 2.0,
+                                            //           width: 10.0,
+                                            //           color: Colors.blueGrey),
+                                            //       new Text(
+                                            //         'الكاربوهيدرات: ',
+                                            //         style: TextStyle(
+                                            //           fontSize: 15.0,
+                                            //           fontWeight:
+                                            //               FontWeight.w500,
+                                            //         ),
+                                            //       ),
+                                            //       new Text(
+                                            //         carb.toString(),
+                                            //         style: TextStyle(
+                                            //           fontSize: 15.0,
+                                            //           fontWeight:
+                                            //               FontWeight.w500,
+                                            //         ),
+                                            //       ),
+                                            //       SizedBox(
+                                            //         width: 80.0,
+                                            //       ),
+                                            //       IconButton(
+                                            //         icon: Icon(Icons.delete,
+                                            //             size: 30.0,
+                                            //             color: Colors.red),
+                                            //         onPressed: () {
+                                            //           setState(() {
+                                            //             m = 'تم الحذف';
+                                            //             carb = 0.0;
+                                            //           });
+                                            //         },
+                                            //       ),
+                                            //     ],
+                                            //   ),
+                                            // );
+                                            // new Divider(
+                                            //   color: Color(0xFFBDD22A),
+                                            //   height: 0.0,
+                                            // );
+
+

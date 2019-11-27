@@ -141,13 +141,17 @@ class _Bodystate extends State<Body> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text(
+                                       Padding(
+                                         padding: EdgeInsets.only(),
+                                       
+                                         child: new Text(
                                           '${Pt[index]['Name']}',
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.black,
                                           ),
                                           textAlign: TextAlign.center,
+                                        ),
                                         ),
                                         SizedBox(
                                           width: 40.0, // height:20 ,
@@ -213,12 +217,14 @@ class _Bodystate extends State<Body> {
                             )
 //--
                             ))
-                  ]);
-                } else {
+                  ]
+                  );
+                } 
+                else {
                   return Card();
                   //C]enter(child: CircularProgressIndicator());
                 }
-              },
+              }
 
               //future: getProjectDetails(),
             ),

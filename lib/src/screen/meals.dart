@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:dtfbl/src/models/meal.dart';
 import 'package:dtfbl/src/models/variety.dart';
+import 'package:dtfbl/src/models/variety.dart' as prefix0;
 import 'package:dtfbl/src/screen/profile.dart';
 import 'package:dtfbl/src/screen/pt.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
@@ -27,8 +28,10 @@ String dbemail, dbslot, dbnote, dbdm, dbeat;
 int dbvarId;
 int dbamount = 1;
 int coun = 0;
-var varty = new List();
+// List<Map<int, Varty>> varty ;
+var varty =<Map>[];
 
+//int sr;
 class Meals extends StatelessWidget {
   Meals(this.id, this.BMI, this.A1c,this.carb);
   var id;
@@ -501,7 +504,7 @@ class _Bodystate extends State<Body> {
                       onPressed: () {
                         setState(() {
 
-                          _inter = 1;
+                          _inter = 0;
                         });
                       }),
                 )
@@ -679,7 +682,7 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
-                            _inter = 1;
+                            _inter = 4;
                           });
                         },
                         child: new Container(
@@ -719,7 +722,7 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
-                            _inter = 1;
+                            _inter = 2;
                           });
                         },
                         child: new Container(
@@ -754,7 +757,7 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
-                            _inter = 1;
+                            _inter = 3;
                           });
                         },
                         child: new Container(
@@ -794,26 +797,26 @@ class _Bodystate extends State<Body> {
     );
   }
 
-  List<Widget> _wid({int sr}) {
+  List<Widget> _wid() {
     // print(
     //     "click 20: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard(name, carbs, Amunt, parent)");
      
-     if(sr==0){
-     return [_grouping(), _insidercarb()];
+   //  if(sr==0){
+     return [_grouping(), _insidercarb(), _insiderfat(), _insiderproten(), _insiderfiber()];
 
-     }
-     else if(sr==1){
-     return [_grouping(), _insiderfat()];
+    //  }
+    //  else if(sr==1){
+    //  return [_grouping(), _insiderfat()];
 
-     }
-     else if(sr==2){
-     return [_grouping(), _insiderproten()];
+    //  }
+    //  else if(sr==2){
+    //  return [_grouping(), _insiderproten()];
 
-     }
-     else{
-     return [_grouping(), _insiderfiber()];
+    //  }
+    //  else{
+    //  return [_grouping(), _insiderfiber()];
 
-     }
+    //  }
   }
 
   var check = false;
@@ -828,7 +831,24 @@ class _Bodystate extends State<Body> {
             //print("click 21: inter:$_inter");
             //print("click 21: inter:$_wid()[_inter]");
             child: 
-            _insidercarb(),
+      _wid()[_inter],
+    //  if(sr==0){
+    //  return [_grouping(), _insidercarb()];
+
+    //  }
+    //  else if(sr==1){
+    //  return [_grouping(), _insiderfat()];
+
+    //  }
+    //  else if(sr==2){
+    //  return [_grouping(), _insiderproten()];
+
+    //  }
+    //  else{
+    //  return [_grouping(), _insiderfiber()];
+
+    //  }
+
           ),
           new Card(
             child: new Column(
@@ -857,6 +877,16 @@ class _Bodystate extends State<Body> {
                       // print('this result id : ${varyw}');
                       print(
                           "click 28: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
+                      var meali = await helper.getMeal(dbemail);
+                      print('last meal result id : ${meali}'); 
+                      
+                       for(int i=0;i<=varty.length;i++){
+                         var l=varty[i];
+                         print("l= $l");
+                      //   print("l= ${l}");
+                       // Variety vat=Variety(varty[i][0],meali, dbemail,varty[i][1], varty[i][2], varty[i][3]);
+ //                       print("vat [$i]:$vat");
+                       }
 
                       setState(() {
                         _carbs = [];
@@ -907,6 +937,13 @@ class _Bodystate extends State<Body> {
   }
 }
 
+class Varty {
+    var id;
+    var name;
+    var carb;
+    var amount;
+    Varty(this.id,this.name,this.amount,this.carb);
+}
 class MealCard extends StatefulWidget {
   String name;
   double carbs;
@@ -1018,12 +1055,18 @@ class MealCardState extends State<MealCard> {
                 if (check == true) {
                   print(
                       "click 24: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
-
+                 // Variety vary= new Variety(_id, _mealId, _email, _eat, _carb, _amount)
                   _carbs.add({widget.name: widget.carbs});
                   print(
                       "click 25: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
 
-                  //varty.add(widget.id,widget.name, widget.carbs,dbamount);
+                  var index = _carbs
+                      .indexWhere((item) => item.containsKey(widget.name));
+                  _carbs.removeAt(index);
+                 varty.add({'id':widget.id,'name':widget.name,'carb':widget.carbs,'amunt':widget.Amunt});
+                 // Varty varr= Varty(widget.id,widget.name,widget.carbs, widget.Amunt)
+                  // varty[index][0] =varr;
+                  print("befor add: ${varty[index]}");
                   _sum += widget.carbs;
                 }
                 if (check == false) {
@@ -1037,6 +1080,11 @@ class MealCardState extends State<MealCard> {
                   var index = _carbs
                       .indexWhere((item) => item.containsKey(widget.name));
                   _carbs.removeAt(index);
+                  print("befor delet: ${varty[index]}");
+                  varty.removeAt(index);
+
+                //  ({widget.id,widget.name, widget.carbs,widget.Amunt});
+
                   _sum -= widget.carbs;
                 }
               });
@@ -1047,6 +1095,9 @@ class MealCardState extends State<MealCard> {
       ],
     );
   }
+
+
+
 }
 
 
