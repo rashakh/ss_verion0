@@ -6,6 +6,7 @@ import './medalert.dart';
 import './pt.dart';
 import './profile.dart';
 import 'exportPDF.dart';
+import 'mainpage.dart';
 //import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
@@ -33,6 +34,7 @@ class HomePage extends StatelessWidget {
               accountName: Text(id[0]['fname'].toString()),
               accountEmail: Text(id[0]['email'].toString()),
             ),
+            
             new ListTile(
               title: Text('الادوية'),
               onTap: () {
@@ -49,7 +51,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => PeriodicTest(id, BMI, A1c, carb)),
+                      builder: (context) => PeriodicTest(id, BMI, A1c.toString(), carb)),
                 );
               },
             ),
@@ -59,7 +61,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ExportPDF(id, BMI, A1c, carb)),
+                      builder: (context) => ExportPDF(id, BMI, A1c.toString(), carb)),
                 );
               },
             ),
@@ -69,7 +71,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Profile(id, BMI, A1c, carb)),
+                      builder: (context) => Profile(id, BMI, A1c.toString(), carb)),
                 );
               },
             ),
@@ -82,7 +84,10 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb)),
+      body: new SingleChildScrollView(child: new Body(id,
+       BMI,
+        A1c,
+         carb)),
     );
   }
 }
@@ -97,9 +102,9 @@ class Body extends StatefulWidget {
   State createState() => new _Bodystate();
 }
 
-// double _a1c = 0;
+double a1c = 0;
 // double a1c = 0;
-
+int i=0;
 class _Bodystate extends State<Body> {
   DatabaseHelper helper = DatabaseHelper();
   var _sum = 0;
@@ -117,7 +122,11 @@ class _Bodystate extends State<Body> {
 
   double _a1c() {
     // _getA1c();
-    var n = double.parse(widget.A1c) / 14;
+setState(() {
+  print("a1c: $a1c");
+  a1c=widget.A1c;
+});
+    var n = a1c / 14;
     print('n: $n');
     _bgratio();
     return n;
@@ -125,62 +134,62 @@ class _Bodystate extends State<Body> {
 
   double _carb() {
     // _getA1c();
-    var n = widget.carb / 100;
+    var n = 40 / 100;
     print('n: $n');
-    _bgratiocarb();
+  //  _bgratiocarb();
     return n;
   }
 
   Future _bgratio() {
-    if (double.parse(widget.A1c) <= 6.0) {
+    if (widget.A1c[0]['a1C'] <= 6.0) {
       icon = Icon(
         Icons.mood,
         color: Colors.green,
         size: 40.0,
       );
       colorA1c = Colors.green;
-    } else if (double.parse(widget.A1c) > 6.0 &&
-        double.parse(widget.A1c) <= 8.0) {
-      icon = Icon(
-        Icons.mood,
-        color: Colors.orangeAccent,
-        size: 40.0,
-      );
-      colorA1c = Colors.orangeAccent;
-    } else {
-      icon = Icon(
-        Icons.mood_bad,
-        color: Colors.redAccent,
-        size: 40.0,
-      );
-      colorA1c = Colors.redAccent;
-    }
+    }// else if (double.parse(widget.A1c) > 6.0 &&
+    //     double.parse(widget.A1c) <= 8.0) {
+    //   icon = Icon(
+    //     Icons.mood,
+    //     color: Colors.orangeAccent,
+    //     size: 40.0,
+    //   );
+    //   colorA1c = Colors.orangeAccent;
+    // } else {
+    //   icon = Icon(
+    //     Icons.mood_bad,
+    //     color: Colors.redAccent,
+    //     size: 40.0,
+    //   );
+    //   colorA1c = Colors.redAccent;
+    // }
   }
 
-  Future _bgratiocarb() {
-    if (double.parse(widget.A1c) <= 6.0) {
-      icon = Icon(
-        Icons.mood,
-        color: Colors.green,
-        size: 40.0,
-      );
-      colorcarb = Colors.green;
-    } else if (widget.A1c > 6.0 && widget.A1c <= 8.0) {
-      icon = Icon(
-        Icons.mood,
-        color: Colors.orangeAccent,
-        size: 40.0,
-      );
-      colorcarb = Colors.orangeAccent;
-    } else {
-      icon = Icon(
-        Icons.mood_bad,
-        color: Colors.redAccent,
-        size: 40.0,
-      );
-      colorcarb = Colors.redAccent;
-    }
-  }
+  // Future _bgratiocarb() {
+  //   if (widget.A1c[0]['a1C'] <= 6.0) {
+  //     icon = Icon(
+  //       Icons.mood,
+  //       color: Colors.green,
+  //       size: 40.0,
+  //     );
+  //   //   colorcarb = Colors.green;
+  //   // } else if (widget.A1c > 6.0 && widget.A1c <= 8.0) {
+  //   //   icon = Icon(
+  //   //     Icons.mood,
+  //   //     color: Colors.orangeAccent,
+  //   //     size: 40.0,
+  //   //   );
+  //   //   colorcarb = Colors.orangeAccent;
+  //   // } else {
+  //   //   icon = Icon(
+  //   //     Icons.mood_bad,
+  //   //     color: Colors.redAccent,
+  //   //     size: 40.0,
+  //   //   );
+  //   //   colorcarb = Colors.redAccent;
+  //   // }
+  // }
 
   // void initState() {
   //  super.initState();
@@ -189,7 +198,7 @@ class _Bodystate extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    print(double.parse(widget.A1c.toString()));
+    print(widget.A1c);
     String m = 'موز';
     double carb = 13.41;
     return Directionality(
@@ -207,12 +216,12 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent:
-                      _a1c(), //double.parse( widget.A1c.toString()) / 14, //  _a1c/14, /
-                  center: Text('${widget.A1c} التراكمي',
+                  percent: 0.4,
+                   //   _a1c(), //double.parse( widget.A1c.toString()) / 14, //  _a1c/14, /
+                  center: Text('7.2 :التراكمي',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: colorA1c,
+                  progressColor: Colors.yellow //colorA1c,
                 ),
               ),
               Padding(
@@ -222,8 +231,8 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: _carb(),
-                  center: Text('${widget.carb}الكابرو هيدرات',
+                  percent: 0.35,// _carb(),
+                  center: Text('75 / 220 :الكاربوهيدرات',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: colorcarb,
@@ -236,11 +245,11 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  //   percent: _a1c(),
-                  center: Text('الانسولين',
+                     percent:0.5,  //_a1c(),
+                  center: Text('الانسولين: 20/40 وحدة',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: colorA1c,
+                  progressColor:   Colors.green,  //colorA1c,
                 ),
               ),
               Padding(
@@ -250,11 +259,11 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  //  percent: _a1c(),
-                  center: Text('النشاط البدني',
+                    percent: 0.33, //_a1c(),
+                  center: Text('النشاط البدني: 40/135 دقيقة',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: colorA1c,
+                  progressColor: Colors.redAccent, //colorA1c,
                 ),
               ),
               Container(
@@ -288,109 +297,61 @@ class _Bodystate extends State<Body> {
 
 
 
-                          FutureBuilder (
-                              future: helper.getMeal(widget.id[0]['email']),
-                              builder: (context, snapshot) {
-                print("snap: ${snapshot.data}");
-                      if (snapshot.connectionState == ConnectionState.none || snapshot.hasData == null) {
+//                           FutureBuilder (
+//                             //  future: helper.getMeal(widget.id[0]['email']),
+//                               builder: (context, snapshot) {
+//                 print("snap: ${snapshot.data}");
+//             ///  if (snapshot.connectionState == ConnectionState.none || snapshot.hasData == null) {
                   
-                  //print('project snapshot data is: ${projectSnap.data}');
-                  return Container();
-                } else {
-                                // if (snapshot.connectionState ==
-                                //     ConnectionState.done) {
-                  print("hi list view 1");
-                  hi();
-                                  final Pt = snapshot.data;
-                                  var l = 65.0 *
-                                      Pt.length; //lenght of the view for carunt record (to be flixable)
-                                      print("fun: $Pt");
-                                  return new Row(
-                                    children: <Widget>[
-                                      Expanded(
-                                          child: SizedBox(
-                                        height: l as double,
-                                        child: ListView.builder(
-                                          itemCount: Pt.length,
-                                          itemBuilder: (context, index) {
-                                            return
-                                                // new Divider(
-                                                //   color: Color(0xFFBDD22A),
-                                                //   height: 0.0,
-                                                // );
-                                                new Padding(
-                                              padding: const EdgeInsets.only(
-                                                right: 20.0,
-                                              ),
-                                              child: new Row(
-                                                children: <Widget>[
-                                                  new Text(
-                                                    'تفاح',
-                                                    style: TextStyle(
-                                                      fontSize: 18.0,
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                    ),
-                                                  ),
-                                                  new Container(
-                                                      margin:
-                                                          new EdgeInsets.only(
-                                                              top: 10.0,
-                                                              left: 5.0,
-                                                              right: 5.0),
-                                                      height: 2.0,
-                                                      width: 10.0,
-                                                      color: Colors.blueGrey),
-                                                  new Text(
-                                                    'الكاربوهيدرات: ',
-                                                    style: TextStyle(
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                  new Text(
-                                                    '25.13',
-                                                    style: TextStyle(
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 80.0,
-                                                  ),
-                                                  IconButton(
-                                                    icon: Icon(Icons.delete,
-                                                        size: 30.0,
-                                                        color: Colors.red),
-                                                    onPressed: () async {
+//                   //print('project snapshot data is: ${projectSnap.data}');
+//                //   return Container();
+//                 //} else {
+//                   //hi();
+//                                 // if (snapshot.connectionState ==
+//                                 //     ConnectionState.done) {
 
-                                                var result =
-                                                    await helper.deletExam(
-                                                        Pt[index]['id'],
-                                                        Pt[index]['email']
-                                                            .toString());
-                                                print(result);
-
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            );
-                                            
-                                          },
-                                        ),
-                                      ))
-                                    ],
-                                  );
-                                }
-                                // else{
-                                //   return Card();
-                                // }
-                              }
+//                                 //  final Pt = snapshot.data;
+//                                   // var l = 65.0 *
+//                                   //     Pt.length; //lenght of the view for carunt record (to be flixable)
+//                                   //     print("fun: $Pt");
+//                                   return new Row(
+//                                     children: <Widget>[
+//                                       Expanded(
+//                                           child: SizedBox(
+//                                         height: 100,
+//                                         child: ListView.builder(
+//                                           itemCount: 2,
+//                                           itemBuilder: (context, index) {
+//                                             return
+//                                                 // new Divider(
+//                                                 //   color: Color(0xFFBDD22A),
+//                                                 //   height: 0.0,
+//                                                 // );
+//                                                 new Column(
+//                                                   children: <Widget>[
+//                                                     _fun(),
+//                                                     _fun2(),
+//                                                   ],
+//                                                 );
+//  //------------------------------------       
+                                  
+//                                             // new Divider(
+//                                             //   color: Color(0xFFBDD22A),
+//                                             //   height: 0.0,
+//                                             // );
+     
+//                                           },
+//                                         ),
+//                                       ))
+//                                     ],
+//                                   );
+//                            //     }
+//                                 // else{
+//                                 //   return Card();
+//                                 // }
+//                               }
                               
-                              ),
+                              // ),
                           // new Container(
                           //     width: 380.0,
                           //     height: 114.0,
@@ -505,7 +466,141 @@ class _Bodystate extends State<Body> {
       ),
     );
   }
+Widget _fun(){
+  if (i == 0){
+    return new Padding(
+                                              padding: const EdgeInsets.only(
+                                                right: 20.0,
+                                              ),
+                                              child: new Row(
+                                                children: <Widget>[
+                                                  new Text(
+                                                    'موز',
+                                                    style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                    ),
+                                                  ),
+                                                  new Container(
+                                                      margin:
+                                                          new EdgeInsets.only(
+                                                              top: 10.0,
+                                                              left: 5.0,
+                                                              right: 5.0),
+                                                      height: 2.0,
+                                                      width: 10.0,
+                                                      color: Colors.blueGrey),
+                                                  new Text(
+                                                    'الكاربوهيدرات: ',
+                                                    style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  new Text(
+                                                    ' 13.41',
+                                                    style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 80.0,
+                                                  ),
+                                                  IconButton(
+                                                    icon: Icon(Icons.delete,
+                                                        size: 30.0,
+                                                        color: Colors.red),
+                                                    onPressed: () async {
+                                                      i = 1;
 
+                                                      Navigator.pushReplacement(context, MaterialPageRoute(
+                              builder: (context) =>  HomePage(widget.id,widget.BMI,widget.A1c, widget.carb)));
+                                                // var result =
+                                                //     await helper.deletExam(
+                                                //         Pt[index]['id'],
+                                                //         Pt[index]['email']
+                                                //             .toString());
+                                                // print(result);
+
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                              
+                                            );
+  }
+  return Container();
+}
+Widget _fun2(){
+  if(i==0){
+    return new Padding(
+                                              padding: const EdgeInsets.only(
+                                                right: 20.0,
+                                              ),
+                                              child: new Row(
+                                                children: <Widget>[
+                                                  new Text(
+                                                    'تفاح',
+                                                    style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                    ),
+                                                  ),
+                                                  new Container(
+                                                      margin:
+                                                          new EdgeInsets.only(
+                                                              top: 10.0,
+                                                              left: 5.0,
+                                                              right: 5.0),
+                                                      height: 2.0,
+                                                      width: 10.0,
+                                                      color: Colors.blueGrey),
+                                                  new Text(
+                                                    'الكاربوهيدرات: ',
+                                                    style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  new Text(
+                                                    '25.13',
+                                                    style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 80.0,
+                                                  ),
+                                                  IconButton(
+                                                    icon: Icon(Icons.delete,
+                                                        size: 30.0,
+                                                        color: Colors.red),
+                                                    onPressed: () async {
+                                                      i = 1;
+                                                // var result =
+                                                //     await helper.deletExam(
+                                                //         Pt[index]['id'],
+                                                //         Pt[index]['email']
+                                                //             .toString());
+                                                // print(result);
+
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                              
+                                            );
+  }
+  return Container();
+}
 // void _BGTotal() async{
 //   var total = (await helper.BGTotal())[0]['Total'];
 //     print("num3: $total");
@@ -539,6 +634,12 @@ print("get hi: $hi");
 
 }
 
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return null;
+  }
+
 
 
 
@@ -555,69 +656,5 @@ print("get hi: $hi");
 ///
 ///
 ///
-// new Divider(
-                                            //   color: Color(0xFFBDD22A),
-                                            //   height: 0.0,
-                                            // );
-                                            // new Padding(
-                                            //   padding: const EdgeInsets.only(
-                                            //     right: 20.0,
-                                            //   ),
-                                            //   child: new Row(
-                                            //     children: <Widget>[
-                                            //       new Text(
-                                            //         m,
-                                            //         style: TextStyle(
-                                            //           fontSize: 18.0,
-                                            //           fontWeight:
-                                            //               FontWeight.w800,
-                                            //         ),
-                                            //       ),
-                                            //       new Container(
-                                            //           margin:
-                                            //               new EdgeInsets.only(
-                                            //                   top: 10.0,
-                                            //                   left: 5.0,
-                                            //                   right: 5.0),
-                                            //           height: 2.0,
-                                            //           width: 10.0,
-                                            //           color: Colors.blueGrey),
-                                            //       new Text(
-                                            //         'الكاربوهيدرات: ',
-                                            //         style: TextStyle(
-                                            //           fontSize: 15.0,
-                                            //           fontWeight:
-                                            //               FontWeight.w500,
-                                            //         ),
-                                            //       ),
-                                            //       new Text(
-                                            //         carb.toString(),
-                                            //         style: TextStyle(
-                                            //           fontSize: 15.0,
-                                            //           fontWeight:
-                                            //               FontWeight.w500,
-                                            //         ),
-                                            //       ),
-                                            //       SizedBox(
-                                            //         width: 80.0,
-                                            //       ),
-                                            //       IconButton(
-                                            //         icon: Icon(Icons.delete,
-                                            //             size: 30.0,
-                                            //             color: Colors.red),
-                                            //         onPressed: () {
-                                            //           setState(() {
-                                            //             m = 'تم الحذف';
-                                            //             carb = 0.0;
-                                            //           });
-                                            //         },
-                                            //       ),
-                                            //     ],
-                                            //   ),
-                                            // );
-                                            // new Divider(
-                                            //   color: Color(0xFFBDD22A),
-                                            //   height: 0.0,
-                                            // );
-
+// 
 

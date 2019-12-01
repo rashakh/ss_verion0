@@ -6,10 +6,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import '../widgets/styles.dart';
 import 'package:intl/intl.dart' as intl;
-import 'dart:async';
-import 'dart:convert'; // convert json into data
-import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+
 import 'mainpage.dart';
 class Weightinput extends StatelessWidget {
   Weightinput(this.id, this.BMI, this.A1c,this.carb);
@@ -75,6 +72,7 @@ class _Bodystate extends State<Body> {
   // }
 
   Widget _weight() {
+    print("check wighgt ${widget.A1c}");
     return Card(
         child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 90.0, vertical: 5.0),
@@ -261,7 +259,7 @@ class _Bodystate extends State<Body> {
           _buildDateAndTimePicker(context),
           Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 68.0, horizontal: 10.0),
+                const EdgeInsets.symmetric(vertical: 38.0, horizontal: 10.0),
             child: _buildNoteField(),
           ),
           SizedBox(height: 20.0),
@@ -274,16 +272,30 @@ class _Bodystate extends State<Body> {
                   //     style: TextStyle(
                   //       fontSize: 20.0,
                   //     )),
-                  onPressed: () => setState(() async {
-                          print("click 1 BG bg=BG(${widget.id[0]['email'].toString()}, $weight, ${(((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000)}, $note,${dateTime.toIso8601String()}");
+                  onPressed: ()  async {
+                          print("click 1 wb wb=BG(${widget.id[0]['email'].toString()}, $weight, ${(((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000)}, $note,${dateTime.toIso8601String()}");
                     BW bw=BW(widget.id[0]['email'].toString(), weight, (((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000), note,dateTime.toIso8601String());
                       var mealw = await helper.insertBW(bw);
                     print("click 2: $mealw");
+                    print("A1c:${widget.A1c}");
+                    // if(widget.A1c==null){
+                    //   var A1cr=await helper.getA1C(widget.id[0]['email'].toString()).toString();
+                    //   print("new A1c: $A1cr");
+                    // }
+                    var f=await helper.getWight(widget.id[0]['email'].toString());
+                    var d= await helper.getA1C(widget.id[0]['email'].toString());
+                    var bmii=(((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000);
+                    setState(()  {
+                      widget.BMI=f;
+                      widget.BMI=[{'wit':weight},{'bmi':bmii}];
+                      //widget.BMI[0]['wit'];
+                      widget.A1c= d;
+                      print("hi: ${widget.BMI},${widget.A1c}");});
                     Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c, widget.carb)),
+                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c,widget.carb)),
                         );
-                  }),
+                  }
                 ),
                 SizedBox(width: 160.0),
                 new FlatButton(
@@ -300,4 +312,55 @@ class _Bodystate extends State<Body> {
       ),
     );
   }
+
+
+
+
+
+// // new BMI:
+//   Future a11c() {
+//     double wBMI;
+//     print("$_sum  : $_num");
+//     if (_num == 0 && _sum == 0) {
+//       double average = 0;
+//       print("average0: $average");
+//       wA1c = (46.7 + average) / 28.7;
+//     } else {
+//       double average = _sum / _num;
+//       print("average1: $average");
+//       wA1c = (46.7 + average) / 28.7;
+//     }
+//     print("wA1c: $wA1c");
+
+//     double mod = pow(10.0, 1); 
+//     var nwe =((wA1c * mod).round().toDouble() / mod);
+//     print("wA1c After: $nwe");
+//     widget.A1c=nwe;
+//     if(_rec==0){ //if new user 
+//     DateTime newdate = dateTime.add(new Duration(days: 90));
+//     A1C ss = A1C(nwe,widget.id[0]['email'].toString() ,dateTime.toIso8601String(), newdate.toIso8601String());
+//     print("ss: ${ss.dS}, : ${ss.dE} :${ss.a1C}");
+//     _A1CIn(ss);
+//       print("insert");
+//     }
+//     else{  //else update the number:
+//     _A1CUP(nwe);
+//     print("update");
+
+//     }
+//   }
+  
+//   //insert A1C:
+//   void _A1CIn(A1C a) async {
+//     var ree = await helper.insertA1C(a);
+//     print("insert: $ree");
+//   }
+
+// //Update A1C:
+//  void _A1CUP(double a) async {
+//     var ree = await helper.UpdatetA1C(a,widget.id[0]['email'].toString());
+// print("update: $ree");
+//   }
+
+
 }

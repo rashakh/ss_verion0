@@ -140,7 +140,7 @@ class _Bodystate extends State<Body> {
       gm = e;
       if (gm < 70 || gm > 180) {
         slider = Colors.redAccent[400];
-        evaluation = 'هذا ليس جيد، يجب عليك الانتباه';
+        evaluation = 'هذا ليس جيد، سكرك مرتفع';
       } else {
         slider = Colors.greenAccent[400];
         evaluation = 'هذا رائع انت تبلي جيدا';
@@ -554,13 +554,14 @@ class _Bodystate extends State<Body> {
                   //       fontSize: 20.0,
                   //     )),
                   onPressed: () => setState(() async {
+                  
                     if (slot == 8) {
-                      PA padb = new PA(widget.id[0]['email'].toString(),
-                          pas[pa], 0, dateTime.toIso8601String());
-                      var palw = await helper.insertPA(padb);
-                      BG bg = BG(widget.id[0]['email'].toString(), slots[slot],
-                          gm, note, dateTime.toIso8601String());
-                      var mealw = await helper.insertBG(bg);
+                    //   PA padb = new PA(widget.id[0]['email'].toString(),
+                    //       pas[pa], 0, dateTime.toIso8601String());
+                    //   var palw = await helper.insertPA(padb);
+                    //   BG bg = BG(widget.id[0]['email'].toString(), slots[slot],
+                    //       gm, note, dateTime.toIso8601String());
+                    //   var mealw = await helper.insertBG(bg);
                       setState(() {
                       a11c();
                      });
@@ -568,10 +569,11 @@ class _Bodystate extends State<Body> {
                       int padu = dur.inMinutes;
                       print("click 9:$padu, ");
                       var palw = await helper.UpdatetPA(padu);
-                      //     print("click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
-                      // BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
-                      // var mealw = await helper.insertBG(bg);
+                          print("click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
+                      BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
+                      var mealw = await helper.insertBG(bg);
                       print("click 9.1:$palw, ");
+                      print("click 9.1:$mealw, ");
                        setState(() {
                       a11c();
                                               print("hi set stet");

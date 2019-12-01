@@ -106,6 +106,8 @@ class _Bodystate extends State<Body> {
   }
 
   Widget _pressure() {
+   print("check in pressuer ${widget.BMI}, ${widget.A1c}");
+
     return Card(
         child: Padding(
       padding: const EdgeInsets.only(right: 50.0, top: 15.0, bottom: 15.0),
@@ -290,7 +292,7 @@ class _Bodystate extends State<Body> {
           _buildDateAndTimePicker(context),
           Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 68.0, horizontal: 10.0),
+                const EdgeInsets.symmetric(vertical: 38.0, horizontal: 10.0),
             child: _buildNoteField(),
           ),
           SizedBox(height: 20.0),
@@ -309,9 +311,10 @@ class _Bodystate extends State<Body> {
                     BP bp=BP(widget.id[0]['email'].toString(), pressureSys, pressureDia, note,dateTime.toIso8601String());
                       var mealw = await helper.insertBP(bp);
                     print("click 2: $mealw");
+                       print("sent A1c: ${widget.A1c}");
                     Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c, widget.carb)),
+                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c.toString(), widget.carb)),
                         );
                   }),
                 ),

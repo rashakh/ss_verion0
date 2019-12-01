@@ -72,7 +72,7 @@ var carb=0.0;
          if(
           ((await helper.getA1C(id[0]['email']))).isNotEmpty
          ){
-         A1c=(await helper.getA1C(id[0]['email']))[0]['a1C'];
+         A1c=(await helper.getA1C(id[0]['email']));
           }else{ A1c=0.0;}
 
           if(
@@ -88,7 +88,7 @@ var carb=0.0;
       print("BMI list: $BMI");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c.toString(),carb)),
+        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c,carb)),
       );
       //Navigator.of(context).pushNamed('/MainPage',arguments: _email);
       _formKey.currentState.reset();

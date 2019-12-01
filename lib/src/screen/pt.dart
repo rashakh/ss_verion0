@@ -98,7 +98,7 @@ class _Bodystate extends State<Body> {
                   style: new TextStyle(fontSize: 17.0),
                 ),
                 SizedBox(
-                  width: 40.0,
+                  width: 50.0,
                 ),
                 new Text(
                   'يتبقى على الموعد',
@@ -165,10 +165,10 @@ class _Bodystate extends State<Body> {
                                           textAlign: TextAlign.center,
                                         ),
                                         SizedBox(
-                                          width: 80.0, //height: 20,
+                                          width: 60.0, //height: 20,
                                         ),
-                                        Text(
-                                          '${Pt[index]['dur']}',
+                                          Text(
+                                          '${Pt[index]['dur']}يوم',
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.black,
@@ -202,7 +202,7 @@ class _Bodystate extends State<Body> {
                                                             PeriodicTest(
                                                                 widget.id,
                                                                 widget.BMI,
-                                                                widget.A1c,
+                                                                widget.A1c.toString(),
                                                                 widget.carb)));
                                                 //
                                               },
@@ -396,10 +396,10 @@ class _Bodystate extends State<Body> {
                                                   PeriodicTest(
                                                       widget.id,
                                                       widget.BMI,
-                                                      widget.A1c,
+                                                      widget.A1c.toString(),
                                                       widget.carb)),
                                         );
-                                        //     Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id,widget.BMI,widget.A1c, widget.carb)));
+                                        //     Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id,widget.BMI,widget.A1c.toString(), widget.carb)));
                                         // Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
                                       },
                                       child: new Container(

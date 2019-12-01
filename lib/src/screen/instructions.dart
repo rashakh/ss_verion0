@@ -2,13 +2,7 @@ import 'package:dtfbl/src/screen/profile.dart';
 import 'package:dtfbl/src/screen/pt.dart';
 import 'package:flutter/material.dart'; // flutter main package
 //import 'package:dtfbl/src/widgets/styles.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:math';
-import 'dart:async';
-import 'dart:convert'; // convert json into data
-import 'package:http/http.dart'
-    as http;
-
 import 'exportPDF.dart';
 import 'medalert.dart'; // perform http request on API to get the into
 
@@ -42,7 +36,7 @@ class Instructions extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -51,7 +45,7 @@ class Instructions extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PeriodicTest(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => PeriodicTest(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -60,7 +54,7 @@ class Instructions extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ExportPDF(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => ExportPDF(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -69,7 +63,7 @@ class Instructions extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id, BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => Profile(id, BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -82,7 +76,7 @@ class Instructions extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
+      body: new SingleChildScrollView(child: new Body(id,BMI,A1c.toString(),carb)),
     );
   }
 }
@@ -98,26 +92,11 @@ class Body extends StatefulWidget {
 }
 
 class _Bodystate extends State<Body> {
-  final String url =
-      'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+  // final String url =
+  //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   var insts;
   bool _visible = true;
-  // function make the http request
-  Future<String> getData() async {
-    var response = await http // .get(url)
-        .get(Uri.encodeFull(url), headers: {
-      'Accept': 'application/json' // 'key': 'ur key'
-    }); // .get(encode the response data as json) with headers which tell the code should be json
 
-    // after response back, setup the state for the application
-    setState(() {
-      var responseBoddy = json.decode(response.body);
-      insts = responseBoddy;
-      _visible = !_visible;
-      //['name of area in the database or in the json data']; // user for example
-    });
-    return 'Success!'; // tell whether|not get the json
-  }
 
   Widget _instrTxt(String title, String info) {
     return new Stack(
@@ -212,13 +191,13 @@ class _Bodystate extends State<Body> {
             new ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: insts == null ? 0 : 1,
+                itemCount: 1,//insts == null ? 0 : 1,
                 //itemCount: insts == null ? 0 : insts.length,
                 itemBuilder: (BuildContext context, int index) {
                   return new Container(
                     child: Column(
                       children: <Widget>[
-_instrTxt('الكربوهيدرات',
+                  _instrTxt('الكربوهيدرات',
                         'الكربوهيدرات البسيطة تتحلل بسرعة الى جلوكوز لترفع مستوى السكر في الدم.\n\nمثال: الاطعمة المصنعة و المكررة، الارز الابيض\n\n\nالكربوهيدرات المعقدة تتحل بشكل ابطئ مما يساعد على الشعور بالشبع ويبطئ ارتفاع مستوى السكر في الدم.\n\nمثال: الارز الاسمر، الدقيق الاسمر، الشوفان'),
                   _instrTxt('تحليل السكر التراكمي A1C',
                         'هو تحليل يظهر مدى تحكم الفرد بمستوى السكر في الدم على مدار ثلاث اشهر.\n\nتتراوح قيمته بين ٤ و ١٤\n\nمن الجيد ان تكون قيمته بين ٥ و ٧، وكلما زاد عن ذلك كل ما كان الشخص معرض للمخاطر.\n\nاذا كان تحليل السكر التراكمي مرتفع عن ٨، يكون الشخص عرضه لامراض خطيرة مثل امراض الكلى و العين'),
@@ -235,18 +214,18 @@ _instrTxt('الكربوهيدرات',
                     
                   );
                 }),
-            AnimatedOpacity(
-              opacity: _visible ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 600),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 250.0),
-                child: new SpinKitThreeBounce(
-                  color: Color((Random().nextDouble() * 0xFFFFFF).toInt() << 3)
-                      .withOpacity(0.2),
-                  size: 100.0,
-                ),
-              ),
-            ),
+            // AnimatedOpacity(
+            //   opacity: _visible ? 1.0 : 0.0,
+            //   duration: Duration(milliseconds: 600),
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(top: 250.0),
+            //     child: new SpinKitThreeBounce(
+            //       color: Color((Random().nextDouble() * 0xFFFFFF).toInt() << 3)
+            //           .withOpacity(0.2),
+            //       size: 100.0,
+            //     ),
+            //   ),
+            // ),
           ],
         ));
   }
@@ -254,6 +233,5 @@ _instrTxt('الكربوهيدرات',
   @override
   void initState() {
     super.initState();
-    this.getData();
   }
 }

@@ -274,8 +274,7 @@ class DatabaseHelper {
     Database db = await this.database;
     var result = await db.insert(mealTable, meal.toMap());
   //  print(result);
-    return result;
-  }
+    return result;}
 
  //delete
   Future<int> deleteUser(int id) async {
@@ -324,7 +323,7 @@ if(result.isEmpty){
  //delete one variety
   Future<int> deleteVariety(int id, int mealid,String email) async {
   	var db = await this.database;
-  	int result = await db.rawDelete('DELETE FROM $varietyTable WHERE $colid = $id AND $colId=$mealid AND $colEmail=\"$email\"');
+  	int result = await db.rawDelete('DELETE FROM $varietyTable WHERE $colid = $id AND $colId=$mealid, $colEmail=\"$email\"');
   	return result;
   }
 
@@ -344,8 +343,8 @@ if(result.isEmpty){
 
 //get total BG
 Future BGTotal(String email) async {
-  var dbClient = await this.database;
-  var result = await dbClient.rawQuery("SELECT SUM($colBg) as Total FROM $bGTable  WHERE $colEmail=\"$email\"");
+  var db = await this.database;
+  var result = await db.rawQuery("SELECT SUM($colBg) as Total FROM $bGTable  WHERE $colEmail=\"$email\"");
   //print(result.toList());
   return result.toList();
 }
@@ -388,8 +387,9 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $bGTable  WHERE  $colE
  Future<List<Map<String, dynamic>>> getWight(String email) async {
     Database db = await this.database;
    var result = await db.rawQuery('SELECT $colwieght as wit,$colBmi as bmi FROM $bWTable  WHERE  $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');  
-print(result.toList());
-    
+//print(result.toList());
+    //   var result = await db.query(userTable, where: '$colEmail = ?', whereArgs: [email],orderBy: '$colAototId DESC',limit: 1 );  
+
     return result.toList();
   }
 //----------------------------------Instruction Table--------------------------------------------------- 
@@ -463,7 +463,7 @@ print('updated 1: $result1');
 //GET last value of A1C:
 Future<List<Map<String, dynamic>>> getA1C(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT $colA1C as a1C FROM $a1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
+var result = await db.rawQuery('SELECT $colA1C FROM $a1CTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
  print("getA1C: ${result.isEmpty}");
 result.toList();
 

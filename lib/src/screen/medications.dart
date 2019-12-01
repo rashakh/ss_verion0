@@ -42,7 +42,7 @@ class Medications extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -51,7 +51,7 @@ class Medications extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PeriodicTest(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => PeriodicTest(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -60,7 +60,7 @@ class Medications extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ExportPDF(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => ExportPDF(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -69,7 +69,7 @@ class Medications extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => Profile(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -82,7 +82,7 @@ class Medications extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
+      body: new SingleChildScrollView(child: new Body(id,BMI,A1c.toString(),carb)),
     );
   }
 }
@@ -98,26 +98,26 @@ class Body extends StatefulWidget {
 }
 
 class _Bodystate extends State<Body> {
-  final String url =
-      'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+  // final String url =
+  //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   var meds;
   bool _visible = true;
   // function make the http request
-  Future<String> getData() async {
-    var response = await http // .get(url)
-        .get(Uri.encodeFull(url), headers: {
-      'Accept': 'application/json' // 'key': 'ur key'
-    }); // .get(encode the response data as json) with headers which tell the code should be json
-    // after response back, setup the state for the application
-    setState(() {
-      var responseBoddy = json.decode(response.body);
-      print(responseBoddy);
-      meds = responseBoddy;
-      _visible = !_visible;
-      //['name of area in the database or in the json data']; // user for example
-    });
-    return 'Success!'; // tell whether|not get the json
-  }
+  // Future<String> getData() async {
+  //   var response = await http // .get(url)
+  //       .get(Uri.encodeFull(url), headers: {
+  //     'Accept': 'application/json' // 'key': 'ur key'
+  //   }); // .get(encode the response data as json) with headers which tell the code should be json
+  //   // after response back, setup the state for the application
+  // //   setState(() async {
+  //     var responseBoddy = json.decode(response.body);
+  //     print(responseBoddy);
+  //     meds = responseBoddy;
+  //     _visible = !_visible;
+  //     //['name of area in the database or in the json data']; // user for example
+  //   });
+  //   return 'Success!'; // tell whether|not get the json
+  // }
 
   Widget _medicTxt(String title, String info, AssetImage image) {
     return Column(
@@ -217,13 +217,13 @@ class _Bodystate extends State<Body> {
             new ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: meds == null ? 0 : 1,
+                itemCount:1, //meds == null ? 0 : 1,
                 // itemCount: meds == null ? 0 : meds.length,
                 itemBuilder: (BuildContext context, int index) {
                   return new Container(
                     child: Column(
                       children: <Widget>[
-_medicTxt('اكاربوز (جلوكوباي)',
+                  _medicTxt('اكاربوز (جلوكوباي)',
                         'يستخدم للنوع الثاني من مرض السكري.\nيقلل من متسوى السكر في الدم.\n\nاذا شعرت بهذه الاعراض اخبر الطبيب:\n-ارتفاع في درجه الحرارة.\n-غثيان ومغص وفقدان شهية.\n-اصفرار الجلد.',new AssetImage('assets/acarbose.png')),
                    
                    _medicTxt('ريباجلينايد (نوفونورم)',
@@ -241,18 +241,18 @@ _medicTxt('اكاربوز (جلوكوباي)',
                     //_medicTxt(meds[index]["Medicine"], meds[index]["info"]),
                   );
                 }),
-            AnimatedOpacity(
-              opacity: _visible ? 1.0 : 0.0,
-              duration: Duration(milliseconds: 600),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 250.0),
-                child: new SpinKitThreeBounce(
-                  color: Color((Random().nextDouble() * 0xFFFFFF).toInt() << 3)
-                      .withOpacity(0.2),
-                  size: 100.0,
-                ),
-              ),
-            ),
+            // AnimatedOpacity(
+            //   opacity: _visible ? 1.0 : 0.0,
+            //   duration: Duration(milliseconds: 600),
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(top: 250.0),
+            //     child: new SpinKitThreeBounce(
+            //       color: Color((Random().nextDouble() * 0xFFFFFF).toInt() << 3)
+            //           .withOpacity(0.2),
+            //       size: 100.0,
+            //     ),
+            //   ),
+            // ),
           ],
         ));
   }
@@ -260,6 +260,6 @@ _medicTxt('اكاربوز (جلوكوباي)',
   @override
   void initState() {
     super.initState();
-    this.getData();
+   // this.getData();
   }
 }

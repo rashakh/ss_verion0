@@ -1,7 +1,11 @@
 // Home file which contains the Home page, and its properties
 // this file allows enter and navigate into the App features
 
-import 'package:dtfbl/my_flutter_app_icons.dart';
+import 'dart:async';
+
+import 'package:dtfbl/diabetes_icons_icons.dart';
+import 'package:dtfbl/src/models/A1C.dart';
+import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'homepage.dart'; //import homepage file
 import 'meals.dart'; //import meals file
@@ -9,10 +13,11 @@ import 'meals.dart'; //import meals file
 import 'instructions.dart'; //import instructions file
 import 'medications.dart'; //import medications file
 import '../widgets/fancy_fab.dart';
+  DatabaseHelper helper = DatabaseHelper();
 
 class MainPage extends StatefulWidget {
   MainPage(@required this.id,@required this.BMI,@required this.A1c,@required this.carb);
-  var id;
+  var id ;
   var BMI;
   var A1c;
   var carb;
@@ -22,13 +27,16 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedPage = 0;
+  // if(A1c){
+
+  // }
    Widget pages(_selectedPage) {
     final List<Widget> _pages = [
-      new HomePage(widget.id,widget.BMI,widget.A1c, widget.carb),
-      new Meals(widget.id,widget.BMI,widget.A1c, widget.carb),
+      new HomePage(widget.id,widget.BMI,widget.A1c.toString(), widget.carb),
+      new Meals(widget.id,widget.BMI,widget.A1c.toString(), widget.carb),
       //new PhysicalActivity(),
-      new Instructions(widget.id,widget.BMI,widget.A1c, widget.carb),
-      new Medications(widget.id,widget.BMI,widget.A1c, widget.carb),
+      new Instructions(widget.id,widget.BMI,widget.A1c.toString(), widget.carb),
+      new Medications(widget.id,widget.BMI,widget.A1c.toString(), widget.carb),
     ];
     return _pages[_selectedPage];
   }
@@ -41,9 +49,11 @@ class _MainPageState extends State<MainPage> {
   // ];
   @override
   Widget build(BuildContext context) {
+
+   print("check in mainpage ${widget.A1c.toString()}, ${widget.BMI}, ${widget.carb},");
     return new Scaffold(
       body: pages(_selectedPage),
-      floatingActionButton: new FancyFab(widget.id,widget.BMI, widget.A1c, widget.carb),
+      floatingActionButton: new FancyFab(widget.id,widget.BMI, widget.A1c.toString(), widget.carb),
       bottomNavigationBar: new BottomNavigationBar(
         currentIndex: _selectedPage,
         onTap: (int index) {
@@ -64,7 +74,7 @@ class _MainPageState extends State<MainPage> {
           ),
           BottomNavigationBarItem(
             icon: new Icon(// MyFlutterApp.meal,
-            Icons.local_dining,
+            DiabetesIcons.dinner__4_,size: 35.0,
               color: Colors.black,
             ),
             title: new Text(
@@ -84,7 +94,7 @@ class _MainPageState extends State<MainPage> {
           // ),
           BottomNavigationBarItem(
             icon: new Icon(
-              Icons.library_books,
+              DiabetesIcons.instruction__1_,size: 30.0,
               color: Colors.black,
             ),
             title: new Text(
@@ -94,7 +104,7 @@ class _MainPageState extends State<MainPage> {
           ),
           BottomNavigationBarItem(
             icon: new Icon(
-              Icons.add_circle_outline,
+              DiabetesIcons.pharmacy__2_,size: 30.0,
               color: Colors.black,
             ),
             title: new Text(

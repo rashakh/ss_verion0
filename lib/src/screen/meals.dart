@@ -19,6 +19,7 @@ import 'package:http/http.dart'
 import 'exportPDF.dart';
 import 'mainpage.dart';
 import 'medalert.dart';
+  DatabaseHelper helper = DatabaseHelper();
 
 List<Map<String, double>> _carbs = [];
 double _sum = 0.0;
@@ -28,9 +29,11 @@ String dbemail, dbslot, dbnote, dbdm, dbeat;
 int dbvarId;
 int dbamount = 1;
 int coun = 0;
-// List<Map<int, Varty>> varty ;
-var varty =<Map>[];
+List<List> varty = [];
 
+
+// var varty =<Map>[];
+// varty['id'];
 //int sr;
 class Meals extends StatelessWidget {
   Meals(this.id, this.BMI, this.A1c,this.carb);
@@ -63,7 +66,7 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -72,7 +75,7 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PeriodicTest(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => PeriodicTest(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -81,7 +84,7 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ExportPDF(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => ExportPDF(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -90,7 +93,7 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id,BMI,A1c,carb)),
+                  MaterialPageRoute(builder: (context) => Profile(id,BMI,A1c.toString(),carb)),
                 );
               },
             ),
@@ -523,10 +526,10 @@ class _Bodystate extends State<Body> {
                      MealCard(1, 'البطاطا الحلوة',23.61,1,this),
                       MealCard(2, 'الذرة', 25,1,this),
                       MealCard(3, 'الموز',  13.41 ,1,this),
+                      MealCard(7, 'التفاح', 25.13,1,this),
                       MealCard(4, ' أرز البني', 36,1,this),
                       MealCard(5, 'أرز ابيض', 44.5,1,this),
                       MealCard(6, 'سلطة سيزر', 50,1,this),
-                      MealCard(7, 'التفاح', 25.13,1,this)
                     ],
                   );
                 }),
@@ -880,13 +883,14 @@ class _Bodystate extends State<Body> {
                       var meali = await helper.getMeal(dbemail);
                       print('last meal result id : ${meali}'); 
                       
-                       for(int i=0;i<=varty.length;i++){
-                         var l=varty[i];
-                         print("l= $l");
-                      //   print("l= ${l}");
-                       // Variety vat=Variety(varty[i][0],meali, dbemail,varty[i][1], varty[i][2], varty[i][3]);
- //                       print("vat [$i]:$vat");
-                       }
+                      //  for(int i=0;i<varty.length;i++){
+
+                      //    var l=varty;
+                      //    print("l= $l");
+                      // // print("l= ${l[0]}");
+                      //  Variety vat=Variety(varty[i][0],int.parse(meali['mealId']), dbemail,varty[i][1], varty[i][2], varty[i][3]);
+                      //   print("vat [$i]:$vat");
+                      //  }
 
                       setState(() {
                         _carbs = [];
@@ -895,7 +899,7 @@ class _Bodystate extends State<Body> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c, widget.carb)),
+                              builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c.toString(), widget.carb)),
                         );
                       });
                     },
@@ -1048,7 +1052,7 @@ class MealCardState extends State<MealCard> {
             checkColor: Colors.black,
             value: check,
             onChanged: (bool e) {
-              setState(() {
+              setState(()  {
                 print(
                     "click 28: chech: $check , widget: ${widget.name}, ${widget.carbs},");
                 check = e;
@@ -1060,13 +1064,21 @@ class MealCardState extends State<MealCard> {
                   print(
                       "click 25: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
 
-                  var index = _carbs
-                      .indexWhere((item) => item.containsKey(widget.name));
-                  _carbs.removeAt(index);
-                 varty.add({'id':widget.id,'name':widget.name,'carb':widget.carbs,'amunt':widget.Amunt});
-                 // Varty varr= Varty(widget.id,widget.name,widget.carbs, widget.Amunt)
-                  // varty[index][0] =varr;
-                  print("befor add: ${varty[index]}");
+                //   var index = _carbs
+                //       .indexWhere((item) => item.containsKey(widget.name));
+              
+              // Variety f= Variety(widget.id,1,dbemail ,widget.name,widget.carbs, widget.Amunt);
+              //  var rt= await helper.insertVariety(f);
+              //  print("vary has insert: $rt");
+                // /  varty.add({
+                // 'id':widget.id,
+                //  'name':widget.name,
+                //  'carb':widget.carbs,
+                //  'amunt':widget.Amunt});
+                // List varr=[widget.id,widget.name,widget.carbs, widget.Amunt];
+
+                 //varty[index]=varr;
+                  //print("befor add: ${varty[index]}");
                   _sum += widget.carbs;
                 }
                 if (check == false) {
@@ -1082,6 +1094,9 @@ class MealCardState extends State<MealCard> {
                   _carbs.removeAt(index);
                   print("befor delet: ${varty[index]}");
                   varty.removeAt(index);
+            // //  Variety f= Variety(widget.id,1,dbemail ,widget.name,widget.carbs, widget.Amunt);
+            //    var rt= await helper.deleteVariety(widget.id,1,dbemail);
+            //    print("vary has deleted: $rt");
 
                 //  ({widget.id,widget.name, widget.carbs,widget.Amunt});
 
