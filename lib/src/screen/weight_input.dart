@@ -1,3 +1,4 @@
+import 'package:dtfbl/diabetes_icons_icons.dart';
 import 'package:dtfbl/src/models/wieght.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart';
@@ -154,9 +155,9 @@ class _Bodystate extends State<Body> {
           ),
         ),
         Icon(
-          Icons.arrow_drop_up,
+          DiabetesIcons.swipe,
           color: slider,
-          size: 40,
+          size: 35,
         ),
       ],
     );

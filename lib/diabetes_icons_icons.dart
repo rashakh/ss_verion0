@@ -41,7 +41,6 @@ class DiabetesIcons {
   static const IconData blood_pressure__1_ = const IconData(0xe812, fontFamily: _kFontFam);
   static const IconData blood_pressure__2_ = const IconData(0xe813, fontFamily: _kFontFam);
   static const IconData dinner__4_ = const IconData(0xe814, fontFamily: _kFontFam);
-  static const IconData dinner__3_ = const IconData(0xe815, fontFamily: _kFontFam);
   static const IconData dinner__2_ = const IconData(0xe816, fontFamily: _kFontFam);
   static const IconData dinner__1_ = const IconData(0xe817, fontFamily: _kFontFam);
   static const IconData dinner = const IconData(0xe818, fontFamily: _kFontFam);
@@ -53,15 +52,22 @@ class DiabetesIcons {
   static const IconData breakfast = const IconData(0xe81e, fontFamily: _kFontFam);
   static const IconData instruction__4_ = const IconData(0xe81f, fontFamily: _kFontFam);
   static const IconData instruction__3_ = const IconData(0xe820, fontFamily: _kFontFam);
-  static const IconData instruction__2_ = const IconData(0xe821, fontFamily: _kFontFam);
   static const IconData instruction__1_ = const IconData(0xe822, fontFamily: _kFontFam);
-  static const IconData instruction = const IconData(0xe823, fontFamily: _kFontFam);
   static const IconData pouring__2_ = const IconData(0xe824, fontFamily: _kFontFam);
   static const IconData pouring__1_ = const IconData(0xe825, fontFamily: _kFontFam);
   static const IconData pouring = const IconData(0xe826, fontFamily: _kFontFam);
   static const IconData planning__3_ = const IconData(0xe827, fontFamily: _kFontFam);
-  static const IconData planning__2_ = const IconData(0xe828, fontFamily: _kFontFam);
-  static const IconData planning__1_ = const IconData(0xe829, fontFamily: _kFontFam);
-  static const IconData planning = const IconData(0xe82a, fontFamily: _kFontFam);
   static const IconData dinner__5_ = const IconData(0xe82b, fontFamily: _kFontFam);
+  static const IconData swipe = const IconData(0xe82c, fontFamily: _kFontFam);
+  static const IconData swipe_up = const IconData(0xe82d, fontFamily: _kFontFam);
+  static const IconData play = const IconData(0xe82e, fontFamily: _kFontFam);
+  static const IconData blood_test = const IconData(0xe82f, fontFamily: _kFontFam);
+  static const IconData left_arrow__1_ = const IconData(0xe830, fontFamily: _kFontFam);
+  static const IconData left_arrow = const IconData(0xe831, fontFamily: _kFontFam);
+  static const IconData play_button = const IconData(0xe832, fontFamily: _kFontFam);
+  static const IconData right_arrow__1_ = const IconData(0xe833, fontFamily: _kFontFam);
+  static const IconData right_arrow = const IconData(0xe834, fontFamily: _kFontFam);
+  static const IconData swipe__1_ = const IconData(0xe835, fontFamily: _kFontFam);
+  static const IconData swipe__2_ = const IconData(0xe836, fontFamily: _kFontFam);
+  static const IconData swipe__3_ = const IconData(0xe837, fontFamily: _kFontFam);
 }

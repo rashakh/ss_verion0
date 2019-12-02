@@ -101,9 +101,9 @@ class _FancyFabState extends State<FancyFab>
         tooltip: 'اضافة قراءة السكر في الدم',
         child: new Stack(
   children: <Widget>[ new Positioned(
-       left: 5.0,
-       top: 4.0,
-        child:    Icon(DiabetesIcons.blood_count_test__1_,size: 220.0,color: Colors.black,
+       left: -0.0,
+       top: 5.0,
+        child:    Icon(DiabetesIcons.blood_test,size: 36.0,color: Colors.white,
         ))]
   ),
       ),
@@ -123,7 +123,7 @@ class _FancyFabState extends State<FancyFab>
           //Navigator.of(context).pushNamed('/Weightinput');
         },
         tooltip: 'اضافة الوزن',
-        child: Icon(DiabetesIcons.scaler,color: Colors.black,),
+        child: Icon(DiabetesIcons.scaler,size: 25.0,color:Colors.white,),
       ),
     );
   }
@@ -143,7 +143,7 @@ class _FancyFabState extends State<FancyFab>
         },
         tooltip: 'اضافة ضغط الدم',
         child: 
-        Icon(DiabetesIcons.blood_pressure,color: Colors.black
+        Icon(DiabetesIcons.blood_pressure__1_,size: 30.0,color: Colors.white
           //MyFlutterApp.pro 
         ,//color: Color.fromRGBO(0, 1, 0,1
        // ),
