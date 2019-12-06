@@ -40,7 +40,6 @@ class DatabaseHelper {
 // meal table:
   String mealTable = 'meal_table';
   String colId = 'mealId'; //auto
-  //String _email;
   String colMealSlot = 'slot';
   String colCarb = 'totalCarb';
   String colnote = 'note';
@@ -48,37 +47,28 @@ class DatabaseHelper {
 
 // variety table:
   String varietyTable = 'variety_table';
-  String colid = 'varId';
-  //int _mealId;
-  //String _email;
+  String colid = 'id';
   String coleat = 'eat';
   String colvarcarb = 'varcarb';
   String colamount = 'amount';
   
   // BG table:
   String bGTable= 'BG_table';
-  //colEmail
   String colBGSlot = 'slot';
   String colBg='BG';
- // colnote
-// String colDg='dg';
 
-   // BP table:
+
+// BP table:
   String bPTable= 'BP_table';
-  //colEmail
   String colDiastolic = 'Diastolic';
   String colSystolic='Systolic';
- // colnote
-// String colDp='dp';
+
 
 
 //BW table:
   String bWTable= 'BW_table';
- // String _email;
   String colwieght='wieght';
- // double _bmi;
- // String _note;
- // String _dw;
+
 
 //Instruction table:
   String instrTable= 'Instr_table';
@@ -88,59 +78,36 @@ class DatabaseHelper {
 
 //PA table:
   String pATable= 'PA_table';
-    // this._email = map['email'];
   String colName = 'Name';
-  //String colPAid='id'; //auto
   String coldur = 'dur';
-  //  this._dg = map['date'];
 
 //PT table:
   String PTTable= 'PT_table';
-//  String colName = 'Name';
-  //String colPTid='id'; //auto
 
 //A1C table:
   String a1CTable= 'A1C_table';
-//  String colName = 'Name';
- // String colid='id'; //auto
   String colA1C='a1C';
   String coldS='dateS';
   String coldE='dateE';
 
 //CARB table:
   String carbTable= 'Carb_table';
-  //String colName = 'Name';
-  //String colA1Cid='id'; //auto
   String colcurnt='curnt';
   String colmin='min';
   String colmax='max';
-  //String _Dc;
 
 //Exams table:
   String ExamsTable= 'Exams_table';
-  //String _id;//auto
   String colPTId='PTId';
-  //String _email;
-  //String _name;
-  //String _dur;
-  //String _date;
   String colresult='result';
   String colRDate='RDate';
 
 //ExamA1C table:
   String ExamA1CTable= 'ExamA1C_table';
-  //String _id;//auto
-  //String _PTId='PTId';
-  //String _email;
-  //String _name;
-  //String _dur;
-  //String _date;
-  //String _result='result';
-  //String _RDate='RDate';
+
 
 //med table:
-  //int _id; //auto
-  //String _Name;
+
   String MedTable= 'med_table';
   String colconf='conf';
   String colwork='work';
@@ -149,10 +116,7 @@ class DatabaseHelper {
 
 //dug table:
   String DugTable= 'Dug_table';
-  //int _id; //auto
-  //String _email;
-  //String _Name;
-  //String _type;
+
   String coldug='dug';
 
 
@@ -171,7 +135,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user9.db';
+    String path = directory.path + 'user11.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
@@ -191,7 +155,7 @@ class DatabaseHelper {
 
     await db.execute('CREATE TABLE $varietyTable ('
         '$colid INT,$colId INT,$coleat TEXT,'
-        'colEmail TEXT, $colvarcarb REAL,'
+        '$colEmail TEXT, $colvarcarb REAL,'
         '$colamount REAL,PRIMARY KEY ($colid,$colId))');
 
     await db.execute('CREATE TABLE $bGTable ('
@@ -276,6 +240,17 @@ class DatabaseHelper {
   //  print(result);
     return result;}
 
+// get meal id :
+  Future<List<Map<String, dynamic>>> getNoteList( String email) async {
+  Database db = await this.database;
+    var result =await db.query(mealTable,where:"$colEmail =\"$email\"",orderBy:"$colId DESC",limit: 1);
+    if (result == null) {
+     return null;
+    }
+    print("result from meal :$result");
+    return result;
+  }
+
  //delete
   Future<int> deleteUser(int id) async {
   	var db = await this.database;
@@ -297,6 +272,7 @@ class DatabaseHelper {
     var result =
         await db.rawQuery('SELECT * FROM $mealTable  WHERE  $colEmail=\"$email\" ORDER BY $colId DESC LIMIT 1 ');
    print("meal: ${result.toList()}");
+
 if(result.isEmpty){
   return [];
 }
@@ -326,6 +302,16 @@ if(result.isEmpty){
   	int result = await db.rawDelete('DELETE FROM $varietyTable WHERE $colid = $id AND $colId=$mealid, $colEmail=\"$email\"');
   	return result;
   }
+
+//get last vart:
+Future getvr(int meal) async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT * FROM $varietyTable WHERE $colId= $meal');
+ print("getvart: ${result.toList()}");
+
+  print("hi varty list");
+ return result;
+}
 
  //delete All varietise meal
   Future<int> deleteAllVarieteis(int id, int mealid) async {
@@ -358,14 +344,14 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $bGTable  WHERE  $colE
 }
 
 // GET BG LIST FOR ONE USER:
-  Future<List<Map<String, dynamic>>> getNoteList( String email) async {
-  Database db = await this.database;
-    var result =await db.query(bGTable,where:"$colEmail =\"$email\"",orderBy:"$coldate DESC"  );
-    if (result == null) {
-     return null;
-    }
-    return result;
-  }
+  // Future<List<Map<String, dynamic>>> getNoteList( String email) async {
+  // Database db = await this.database;
+  //   var result =await db.query(bGTable,where:"$colEmail =\"$email\"",orderBy:"$coldate DESC"  );
+  //   if (result == null) {
+  //    return null;
+  //   }
+  //   return result;
+  // }
 
 //----------------------------------Prusser Table--------------------------------------------------- 
 //add
@@ -530,12 +516,12 @@ if(result.isEmpty){ //result.add({'a1C':0.0});
     return result;
   }
 //UPDATE
+
 //GET
 Future getPT(String email) async {
  Database db = await this.database;
 var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$email\" ORDER BY $coldur  DESC  ');
  print("getA1C: ${result.toList()}");
-
   print("hi list");
  return result;
 }
