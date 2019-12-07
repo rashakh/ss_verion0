@@ -564,6 +564,8 @@ class _Bodystate extends State<Body> {
                           gm, note, dateTime.toIso8601String());
                       var mealw = await helper.insertBG(bg);
                       setState(() {
+                            _BGRe();
+                      _BGTotal();
                       a11c();
                      });
                     } else if (slot == 9) {
@@ -576,6 +578,8 @@ class _Bodystate extends State<Body> {
                       print("click 9.1:$palw, ");
                       print("click 9.1:$mealw, ");
                        setState(() {
+                             _BGRe();
+                      _BGTotal();
                       a11c();
                                               print("hi set stet");
 
