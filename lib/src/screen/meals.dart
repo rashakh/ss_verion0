@@ -841,7 +841,9 @@ class _Bodystate extends State<Body> {
                       left: 5.0, right: 180.0, top: 5.0, bottom: 5.0),
                   child: new GestureDetector(
                     onTap: () async {
-                      dbcarb = _sum;
+                      double mod = pow(10.0, 1); 
+                 double nwe =((_sum * mod).round().toDouble() / mod);
+                      dbcarb = nwe;
                       //widget.carb=_sum;
                       dbslot = slots[slot];
                       dbdm = dateTime.toIso8601String();
@@ -872,6 +874,7 @@ class _Bodystate extends State<Body> {
                       print("carb date: ${carb.isNotEmpty}");
                       if(carb.isNotEmpty){
                       if((await helper.getCarb(dbemail))[0]['date']==date){
+                        
                          var update=await helper.updataCarb(dbemail, dbcarb,date);
                         print("update carb: $update");
 

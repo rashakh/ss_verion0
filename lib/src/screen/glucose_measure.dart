@@ -671,10 +671,10 @@ _BGRe();
     print("wA1c: $wA1c");
 
     double mod = pow(10.0, 1); 
-    var nwe =((wA1c * mod).round().toDouble() / mod);
+    double nwe =((wA1c * mod).round().toDouble() / mod);
     print("wA1c After: $nwe");
    setState(() {
-      widget.A1c=nwe;
+      widget.A1c=nwe ;
    });
    
     if(_rec==0){ //if new user 
