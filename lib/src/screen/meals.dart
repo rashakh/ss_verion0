@@ -20,11 +20,11 @@ import 'package:http/http.dart'
 import 'exportPDF.dart';
 import 'mainpage.dart';
 import 'medalert.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 DatabaseHelper helper = DatabaseHelper();
 
-List<Map<String, double>> 
-_carbs = [];
+List<Map<String, double>> _carbs = [];
 double _sum = 0.0;
 int _inter = 0;
 double dbcarb, dbvarycarb;
@@ -33,7 +33,7 @@ int dbvarId;
 int dbamount = 1;
 int coun = 0;
 List<List> varty = [];
-List<Map<int,dynamic>> food=[];
+List<Map<int, dynamic>> food = [];
 
 // var varty =<Map>[];
 // varty['id'];
@@ -70,8 +70,7 @@ class Meals extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          MedAlert(id, BMI, A1c, carb)),
+                      builder: (context) => MedAlert(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -81,8 +80,7 @@ class Meals extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          PeriodicTest(id, BMI, A1c, carb)),
+                      builder: (context) => PeriodicTest(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -92,8 +90,7 @@ class Meals extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ExportPDF(id, BMI, A1c, carb)),
+                      builder: (context) => ExportPDF(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -145,7 +142,8 @@ class _Bodystate extends State<Body> {
 
   String note;
   int slot = _slot();
-
+  AlertType alerttype = AlertType.success;
+  String decision = '';
   List<String> slots = const <String>[
     'الفطور',
     'الغداء',
@@ -166,7 +164,189 @@ class _Bodystate extends State<Body> {
       slot = 0;
     return slot;
   }
+
   //dbslot= slots[slot];
+  void decisionFun() {
+    setState(() {
+      if (widget.id[0]['gender'] == 0) {
+        if (widget.BMI[0]['bmi'] <= 29) {
+          // this should be the total carb, and needed to decrease each time
+          double neededcarb = 230; // it should be in database
+          // insulin
+          double insulin = 0.0;
+          String insu = '\nعدد جرعات الانسولين هي $insulin وحدة';
+          if (slot == 0 || slot == 1) {
+            double mealCarb = neededcarb * 0.2;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          } else if (slot == 2) {
+            double mealCarb = neededcarb * 0.3;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          } else if (slot == 3) {
+            double mealCarb = neededcarb * 0.1;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          }
+        } else if (widget.BMI[0]['bmi'] > 29) {
+          // this should be the total carb, and needed to decrease each time
+          double neededcarb = 180; // it should be in database
+          // insulin
+          double insulin = 0.0;
+          String insu = '\nعدد جرعات الانسولين هي $insulin وحدة';
+          if (slot == 0 || slot == 1) {
+            double mealCarb = neededcarb * 0.2;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          } else if (slot == 2) {
+            double mealCarb = neededcarb * 0.3;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          } else if (slot == 3) {
+            double mealCarb = neededcarb * 0.1;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          }
+        }
+      } else if (widget.id[0]['gender'] == 1) {
+        if (widget.BMI[0]['bmi'] <= 29) {
+          // this should be the total carb, and needed to decrease each time
+          double neededcarb = 330; // it should be in database
+          // insulin
+          double insulin = 0.0;
+          String insu = '\nعدد جرعات الانسولين هي $insulin وحدة';
+          if (slot == 0 || slot == 1) {
+            double mealCarb = neededcarb * 0.2;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          } else if (slot == 2) {
+            double mealCarb = neededcarb * 0.3;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          } else if (slot == 3) {
+            double mealCarb = neededcarb * 0.1;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          }
+        } else if (widget.BMI[0]['bmi'] > 29) {
+          // this should be the total carb, and needed to decrease each time
+          double neededcarb = 220; // it should be in database
+          // insulin
+          double insulin = 0.0;
+          String insu = '\nعدد جرعات الانسولين هي $insulin وحدة';
+          if (slot == 0 || slot == 1) {
+            double mealCarb = neededcarb * 0.2;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          } else if (slot == 2) {
+            double mealCarb = neededcarb * 0.3;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          } else if (slot == 3) {
+            double mealCarb = neededcarb * 0.1;
+            if (mealCarb == _sum) {
+              alerttype = AlertType.success;
+              decision = insu;
+            } else if (mealCarb < _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تقلل من الكربوهيدرات في الوجبة التالية' + insu;
+            } else if (mealCarb > _sum) {
+              alerttype = AlertType.warning;
+              decision = 'تزود من الكربوهيدرات في الوجبة التالية' + insu;
+            }
+          }
+        }
+      }
+    });
+  }
 
   Widget _buildSlotPicker(BuildContext context) {
     return Row(
@@ -841,8 +1021,8 @@ class _Bodystate extends State<Body> {
                       left: 5.0, right: 180.0, top: 5.0, bottom: 5.0),
                   child: new GestureDetector(
                     onTap: () async {
-                      double mod = pow(10.0, 1); 
-                 double nwe =((_sum * mod).round().toDouble() / mod);
+                      double mod = pow(10.0, 1);
+                      double nwe = ((_sum * mod).round().toDouble() / mod);
                       dbcarb = nwe;
                       //widget.carb=_sum;
                       dbslot = slots[slot];
@@ -852,65 +1032,81 @@ class _Bodystate extends State<Body> {
                       var mealw = await helper.insertMeal(meal);
                       var meali = await helper.getMeal(dbemail);
                       print('last meal result id : ${meali}');
-                      var mealid= meali[0]["mealId"];
+                      var mealid = meali[0]["mealId"];
                       print('meal result id : $mealid');
 
 // ------------------------------------------------------------------------------------------------------------
-                     for (int i = 0; i < food.length; i++) {
-                          var f=food.elementAt(i);
-                        Variety vat =new Variety(f[0],meali[0]['mealId'],f[1],dbemail,f[2],f[3]);
-                          var vary = await helper.insertVariety(vat);
-                          print(" FOOD ARE SAVE : vary");
+                      for (int i = 0; i < food.length; i++) {
+                        var f = food.elementAt(i);
+                        Variety vat = new Variety(f[0], meali[0]['mealId'],
+                            f[1], dbemail, f[2], f[3]);
+                        var vary = await helper.insertVariety(vat);
+                        print(" FOOD ARE SAVE : vary");
                       }
                       // //get
                       // var vartget=await helper.getfood(dbemail);
                       // print("vart get: $vartget");
-                      
 
-                     String date =dbdm.substring(0, 10);
-                    var carb=await helper.getCarb(dbemail);
+                      String date = dbdm.substring(0, 10);
+                      var carb = await helper.getCarb(dbemail);
                       print("carb date: ${carb}");
                       //CARB:
                       print("carb date: ${carb.isNotEmpty}");
-                      if(carb.isNotEmpty){
-                      if((await helper.getCarb(dbemail))[0]['date']==date){
-                        
-                         var update=await helper.updataCarb(dbemail, dbcarb,date);
-                        print("update carb: $update");
-
-                      }
-                      else{
-                        Carb carba= new Carb(dbcarb,dbemail,date);
-                        //insert
-                        var inser=await helper.insertCARB(carba);
-                        print("inser carb: $inser");
-                      }
-                      }
-                      else{
-                        Carb carba= new Carb(dbcarb,dbemail,date);
-                        //insert
-                        var inser=await helper.insertCARB(carba);
-                        print("inser carb: $inser");
-
+                      if (carb.isNotEmpty) {
+                        if ((await helper.getCarb(dbemail))[0]['date'] ==
+                            date) {
+                          var update =
+                              await helper.updataCarb(dbemail, dbcarb, date);
+                          print("update carb: $update");
+                        } else {
+                          Carb carba = new Carb(dbcarb, dbemail, date);
+                          //insert
+                          var inser = await helper.insertCARB(carba);
+                          print("inser carb: $inser");
                         }
-                        var cget= (await helper.getCarb(dbemail))[0]['curnt'];
-                        double newcarb= cget as double;
+                      } else {
+                        Carb carba = new Carb(dbcarb, dbemail, date);
+                        //insert
+                        var inser = await helper.insertCARB(carba);
+                        print("inser carb: $inser");
+                      }
+                      var cget = (await helper.getCarb(dbemail))[0]['curnt'];
+                      double newcarb = cget as double;
 //-----------------------------------------------------------------------------------------------------------------------------
                       setState(() {
-                        food=[];
-                        _carbs = [];
-                        _sum = 0.0;
-                        _inter = 0;
-                        widget.carb=newcarb;
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MainPage(
-                                  widget.id,
-                                  widget.BMI,
-                                  widget.A1c,
-                                  widget.carb)),
-                        );
+                        decisionFun();
+                        Alert(
+                          style: AlertStyle(
+                            isCloseButton: false,
+                          ),
+                          context: context,
+                          type: alerttype,
+                          title: ' : نقترح عليك ان',
+                          desc: decision,
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                'حسنا',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () {
+                                food = [];
+                                _carbs = [];
+                                _sum = 0.0;
+                                _inter = 0;
+                                widget.carb = newcarb;
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MainPage(widget.id,
+                                          widget.BMI, widget.A1c, widget.carb)),
+                                );
+                              },
+                              width: 120,
+                            )
+                          ],
+                        ).show();
                       });
                     },
                     child: new Container(
@@ -1029,19 +1225,20 @@ class MealCardState extends State<MealCard> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(width: 50.0),
-                  new Text(
-                    'الكالوري: ',
-                    style: TextStyle(
-                      fontSize: 17.0,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  new Text(
-                    widget.Amunt.toString(),
-                    style: TextStyle(
-                      fontSize: 17.0,
-                      fontWeight: FontWeight.w500,
+                  SizedBox(width: 40.0),
+                  new Expanded(
+                    child: new Padding(
+                      padding: const EdgeInsets.only(
+                        left: 60.0,
+                      ),
+                      child: new TextFormField(
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 0.0),
+                          hintText: 'الكمية: 1',
+                        ),
+                        keyboardType: TextInputType.number,
+                        onSaved: (value) {},
+                      ),
                     ),
                   ),
                 ],
@@ -1060,11 +1257,13 @@ class MealCardState extends State<MealCard> {
                 print("click 28: check: $check ");
                 check = e;
                 if (check == true) {
-                  print("click 24: check: $check , carb list lenght: ${_carbs.length}");
+                  print(
+                      "click 24: check: $check , carb list lenght: ${_carbs.length}");
                   _carbs.add({widget.name: widget.carbs});
                   print("_carbs: $_carbs");
-                  print("click 25: check: $check , carb list lenght: ${_carbs.length}");
-             //     var index = _carbs.indexWhere((item) => item.containsKey(widget.name));
+                  print(
+                      "click 25: check: $check , carb list lenght: ${_carbs.length}");
+                  //     var index = _carbs.indexWhere((item) => item.containsKey(widget.name));
 
                   // Variety vary = new Variety(_id, _mealId, _email, _eat, _carb, _amount)
                   //   Variety f  = Variety(widget.id,1,dbemail ,widget.name,widget.carbs, widget.Amunt);
@@ -1076,11 +1275,11 @@ class MealCardState extends State<MealCard> {
                   //   'carb':widget.carbs,
                   //   'amunt':widget.Amunt});
                   print("befor add: $food");
-                  Map<int,dynamic> varr = {
-                   0: widget.id,
-                   1: widget.name,
-                   2: widget.carbs,
-                   3: widget.Amunt
+                  Map<int, dynamic> varr = {
+                    0: widget.id,
+                    1: widget.name,
+                    2: widget.carbs,
+                    3: widget.Amunt
                   };
                   print("Afer varr: ${varr}");
                   // food.add({widget.id,
@@ -1089,8 +1288,6 @@ class MealCardState extends State<MealCard> {
                   //   widget.Amunt});
 
                   food.add(varr);
-                   
-
 
                   print("Afer add: ${food}");
                   // print("hi index $index");
@@ -1105,7 +1302,8 @@ class MealCardState extends State<MealCard> {
                       "click 26: chech: $check , carb list: $_carbs, widget: $widget.name, $widget.carbs,");
                   //varty.remove;
 
-                  print("click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+                  print(
+                      "click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
 
                   var index = _carbs
                       .indexWhere((item) => item.containsKey(widget.name));
@@ -1114,7 +1312,8 @@ class MealCardState extends State<MealCard> {
                   // //  Variety f= Variety(widget.id,1,dbemail ,widget.name,widget.carbs, widget.Amunt);
                   //    var rt= await helper.deleteVariety(widget.id,1,dbemail);
                   //    print("vary has deleted: $rt");
-                  print("click 30: chech: $check , food list: ${food.length}, $food");
+                  print(
+                      "click 30: chech: $check , food list: ${food.length}, $food");
                   //  ({widget.id,widget.name, widget.carbs,widget.Amunt});
 
                   _sum -= widget.carbs;

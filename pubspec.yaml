@@ -34,7 +34,8 @@ dependencies:
   path_provider: any
   pdf: any
   flutter_full_pdf_viewer: any
-  flutter_sms: any
+  #flutter_sms: any
+  rflutter_alert: ^1.0.2
   charts_flutter: ^0.8.1
   flutter_launcher_icons: ^0.7.4
 

@@ -66,7 +66,7 @@ class _MainPageState extends State<MainPage> {
               color: Colors.black,
             ),
             title: new Text(
-              'الرئيسية',
+              'التقدم',
               style: new TextStyle(fontSize: 20.0, color: Colors.black87),
             ),
           ),

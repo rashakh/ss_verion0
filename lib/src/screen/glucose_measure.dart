@@ -16,9 +16,10 @@ import 'package:intl/intl.dart' as intl; // flutter main package
 // import 'package:http/http.dart'
 //     as http; // perform http request on API to get the into
 import 'mainpage.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class GlucoseMeasure extends StatelessWidget {
-  GlucoseMeasure(this.id, this.BMI, this.A1c,this.carb);
+  GlucoseMeasure(this.id, this.BMI, this.A1c, this.carb);
   var id;
   var BMI;
   var A1c;
@@ -37,14 +38,14 @@ class GlucoseMeasure extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
+          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb)),
           // Padding(padding: const EdgeInsets.only(top: 100), child: Body()),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c,this.carb);
+  Body(this.id, this.BMI, this.A1c, this.carb);
   var id;
   var BMI;
   var A1c;
@@ -59,9 +60,11 @@ class _Bodystate extends State<Body> {
   DatabaseHelper helper = DatabaseHelper();
   var _sum = 0;
   var _num = 0;
-  var _rec=0;
+  var _rec = 0;
   //bool _result;
   int gm = 110;
+  AlertType alerttype = AlertType.success;
+  String decision = '';
   DateTime dateTime = DateTime.now();
   String evaluation = '';
   Color slider = Colors.greenAccent[400];
@@ -115,6 +118,814 @@ class _Bodystate extends State<Body> {
     return slot;
   }
 
+  void decisionFun() {
+    setState(() {
+      if (widget.id[0]['gender'] == 0) {
+        //here female
+        if (widget.BMI[0]['bmi'] <= 29) {
+          // this should be the total carb, and needed to decrease each time
+          double neededcarb = 230; // it should be in database
+          // insulin
+          double insulin = 0.0;
+          if (slot == 1 || slot == 2 || slot == 4) {
+            double mealCarb = neededcarb * 0.2;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 6) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 10) {
+            double mealCarb = neededcarb * 0.1;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 8) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm <= 100) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'لا تقوم بنشاط بدني الان, لانه سيؤدي الى انخفاض السكر في الدم\n' +
+                      'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (100 < gm && gm <= 240) {
+              if (widget.carb == 0.0) {
+                // last carb from database
+                alerttype = AlertType.success;
+                decision = 'تمارس النشاط البدني لمده 45 دقيقه';
+              } else {
+                alerttype = AlertType.warning;
+                decision =
+                    'تنتظر لمدة 1 ساعه بعد الاكل, قبل ان تمارس النشاط البدني';
+              }
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 0) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm <= 120) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'لا تنام الان, لانه سيكون هناك انخفاض في السكر اثناء نومك\n' +
+                      'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (120 < gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision = 'نوما هنيئا';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 3 || slot == 5 || slot == 7 || slot == 11) {
+            if (gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision = 'لقد احسنت ادارة مستوى السكر لديك';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  ',ان تمارس الرياضه\n او ان تاخذ عدد $insulin جرعة من الانسولين';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 9) {
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          }
+        } else if (widget.BMI[0]['bmi'] > 29) {
+          // this should be the total carb, and needed to decrease each time
+          double neededcarb = 180; // it should be in database
+          // insulin
+          double insulin = 0.0;
+          if (slot == 1 || slot == 2 || slot == 4) {
+            double mealCarb = neededcarb * 0.2;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 6) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 10) {
+            double mealCarb = neededcarb * 0.1;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 8) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm <= 100) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'لا تقوم بنشاط بدني الان, لانه سيؤدي الى انخفاض السكر في الدم\n' +
+                      'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (100 < gm && gm <= 240) {
+              if (widget.carb == 0.0) {
+                // last carb from database
+                alerttype = AlertType.success;
+                decision = 'تمارس النشاط البدني لمده 30 دقيقه';
+              } else {
+                alerttype = AlertType.warning;
+                decision =
+                    'تنتظر لمدة 1 ساعه بعد الاكل, قبل ان تمارس النشاط البدني';
+              }
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 0) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm <= 120) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'لا تنام الان, لانه سيكون هناك انخفاض في السكر اثناء نومك\n' +
+                      'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (120 < gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision = 'نوما هنيئا';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 3 || slot == 5 || slot == 7 || slot == 11) {
+            if (gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision = 'لقد احسنت ادارة مستوى السكر لديك';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  ',ان تمارس الرياضه\n او ان تاخذ عدد $insulin جرعة من الانسولين';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 9) {
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          }
+        }
+      } else if (widget.id[0]['gender'] == 1) {
+        //here male
+        if (widget.BMI[0]['bmi'] <= 29) {
+          // this should be the total carb, and needed to decrease each time
+          double neededcarb = 330; // it should be in database
+          // insulin
+          double insulin = 0.0;
+          if (slot == 1 || slot == 2 || slot == 4) {
+            double mealCarb = neededcarb * 0.2;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 6) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 10) {
+            double mealCarb = neededcarb * 0.1;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 8) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm <= 100) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'لا تقوم بنشاط بدني الان, لانه سيؤدي الى انخفاض السكر في الدم\n' +
+                      'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (100 < gm && gm <= 240) {
+              if (widget.carb == 0.0) {
+                // last carb from database
+                alerttype = AlertType.success;
+                decision = 'تمارس النشاط البدني لمده 45 دقيقه';
+              } else {
+                alerttype = AlertType.warning;
+                decision =
+                    'تنتظر لمدة 1 ساعه بعد الاكل, قبل ان تمارس النشاط البدني';
+              }
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 0) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm <= 120) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'لا تنام الان, لانه سيكون هناك انخفاض في السكر اثناء نومك\n' +
+                      'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (120 < gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision = 'نوما هنيئا';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 3 || slot == 5 || slot == 7 || slot == 11) {
+            if (gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision = 'لقد احسنت ادارة مستوى السكر لديك';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  ',ان تمارس الرياضه\n او ان تاخذ عدد $insulin جرعة من الانسولين';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 9) {
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          }
+        } else if (widget.BMI[0]['bmi'] > 29) {
+          // this should be the total carb, and needed to decrease each time
+          double neededcarb = 220; // it should be in database
+          // insulin
+          double insulin = 0.0;
+          if (slot == 1 || slot == 2 || slot == 4) {
+            double mealCarb = neededcarb * 0.2;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 6) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 10) {
+            double mealCarb = neededcarb * 0.1;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 130) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (130 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'تاكل $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 8) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm <= 100) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'لا تقوم بنشاط بدني الان, لانه سيؤدي الى انخفاض السكر في الدم\n' +
+                      'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (100 < gm && gm <= 240) {
+              if (widget.carb == 0.0) {
+                // last carb from database
+                alerttype = AlertType.success;
+                decision = 'تمارس النشاط البدني لمده 45 دقيقه';
+              } else {
+                alerttype = AlertType.warning;
+                decision =
+                    'تنتظر لمدة 1 ساعه بعد الاكل, قبل ان تمارس النشاط البدني';
+              }
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 0) {
+            double mealCarb = neededcarb * 0.3;
+            neededcarb -= mealCarb; // to show the concept
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm <= 120) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'لا تنام الان, لانه سيكون هناك انخفاض في السكر اثناء نومك\n' +
+                      'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (120 < gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision = 'ن��ما هنيئا';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 3 || slot == 5 || slot == 7 || slot == 11) {
+            if (gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision = 'لقد احسنت ادارة مستوى السكر لديك';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision =
+                  ',ان تمارس الرياضه\n او ان تاخذ عدد $insulin جرعة من الانسولين';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          } else if (slot == 9) {
+            if (gm < 54) {
+              alerttype = AlertType.warning;
+              decision =
+                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+            } else if (54 <= gm && gm < 70) {
+              alerttype = AlertType.warning;
+              // 15 X 15
+              decision =
+                  'تناول ملعقة من العسل (او 15 غرام من الكربوهيدرات البسيط) لزيادة مستوى السكر \nلاتنسى القياس مجددا بعد 15 دقيقة';
+            } else if (70 <= gm && gm <= 180) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
+            } else if (180 < gm && gm <= 240) {
+              alerttype = AlertType.success;
+              decision =
+                  'تاكل من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
+            } else if (gm > 240) {
+              alerttype = AlertType.warning;
+              double insulinCorrection = 0.0;
+              insulin += insulinCorrection; // insulin + correction dosage
+              decision = 'ترتاح وتشرب الماء \n' +
+                  'عدد جرعات الانسولين هي $insulin وحدة';
+            }
+          }
+        }
+      }
+    });
+  }
+
   // Future<bool> _postData() async {
   //   // map data to converted to json data
   //   final Map<String, dynamic> userData = {
@@ -137,6 +948,7 @@ class _Bodystate extends State<Body> {
 
   void _changed(e) {
     setState(() {
+      print(widget.carb);
       // print('this is glucose ${widget.id[0]['email']}');
       gm = e;
       if (gm < 70 || gm > 180) {
@@ -546,72 +1358,89 @@ class _Bodystate extends State<Body> {
             child: new ButtonBar(
               children: <Widget>[
                 new FlatButton(
-                  child: Icon(
-                    Icons.check,
-                    size: 30.0,
-                  ),
-                  // Text('تمام',
-                  //     style: TextStyle(
-                  //       fontSize: 20.0,
-                  //     )),
-                  onPressed: () async{
-                  
-                    if (slot == 8) {
-                      PA padb = new PA(widget.id[0]['email'].toString(),
-                          pas[pa], 0, dateTime.toIso8601String());
-                      var palw = await helper.insertPA(padb);
-                      BG bg = BG(widget.id[0]['email'].toString(), slots[slot],
-                          gm, note, dateTime.toIso8601String());
-                      var mealw = await helper.insertBG(bg);
+                    child: Icon(
+                      Icons.check,
+                      size: 30.0,
+                    ),
+                    // Text('تمام',
+                    //     style: TextStyle(
+                    //       fontSize: 20.0,
+                    //     )),
+                    onPressed: () async {
+                      if (slot == 8) {
+                        PA padb = new PA(widget.id[0]['email'].toString(),
+                            pas[pa], 0, dateTime.toIso8601String());
+                        var palw = await helper.insertPA(padb);
+                        BG bg = BG(widget.id[0]['email'].toString(),
+                            slots[slot], gm, note, dateTime.toIso8601String());
+                        var mealw = await helper.insertBG(bg);
+                        setState(() {
+                          _BGRe();
+                          _BGTotal();
+                          a11c();
+                        });
+                      } else if (slot == 9) {
+                        int padu = dur.inMinutes;
+                        print("click 9:$padu, ");
+                        var palw = await helper.UpdatetPA(padu);
+                        print(
+                            "click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
+                        BG bg = BG(widget.id[0]['email'].toString(),
+                            slots[slot], gm, note, dateTime.toIso8601String());
+                        var mealw = await helper.insertBG(bg);
+                        print("click 9.1:$palw, ");
+                        print("click 9.1:$mealw, ");
+                        setState(() {
+                          _BGRe();
+                          _BGTotal();
+                          a11c();
+                          print("hi set stet");
+                        });
+                      } else {
+                        BG bg = BG(widget.id[0]['email'].toString(),
+                            slots[slot], gm, note, dateTime.toIso8601String());
+                        var mealw = await helper.insertBG(bg);
+                        print("click 4:$mealw, ");
+                        setState(() {
+                          _BGRe();
+                          _BGTotal();
+                          print("hi set stet");
+                          a11c();
+                        });
+                      }
+                      widget.A1c = (await helper
+                          .getA1C(widget.id[0]['email']))[0]['a1C'];
+                      print("reples to home:${widget.A1c}");
+                      print(widget.A1c);
                       setState(() {
-                            _BGRe();
-                      _BGTotal();
-                      a11c();
-                     });
-                    } else if (slot == 9) {
-                      int padu = dur.inMinutes;
-                      print("click 9:$padu, ");
-                      var palw = await helper.UpdatetPA(padu);
-                          print("click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
-                      BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
-                      var mealw = await helper.insertBG(bg);
-                      print("click 9.1:$palw, ");
-                      print("click 9.1:$mealw, ");
-                       setState(() {
-                             _BGRe();
-                      _BGTotal();
-                      a11c();
-                                              print("hi set stet");
-
-                     }); 
-                    } else {
-                      BG bg = BG(widget.id[0]['email'].toString(), slots[slot],
-                          gm, note, dateTime.toIso8601String());
-                      var mealw = await helper.insertBG(bg);
-                      print("click 4:$mealw, ");
-                     setState(() {
-
-                       _BGRe();
-                      _BGTotal();
-                                              print("hi set stet");
-                      a11c();
-                     }); 
-                    }
-                    widget.A1c=(await helper.getA1C(widget.id[0]['email']))[0]['a1C'];
-                    print("reples to home:${widget.A1c}");
-                    print(widget.A1c);
-                     setState(()  {
-
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MainPage(widget.id,
-                          widget.BMI,
-                          widget.A1c,
-                          widget.carb)),
-                    );
-                  });}
-                ),
+                        decisionFun();
+                        Alert(
+                          style: AlertStyle(
+                            isCloseButton: false,
+                          ),
+                          context: context,
+                          type: alerttype,
+                          title: ' : نقترح عليك ان',
+                          desc: decision,
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                'حسنا',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage(widget.id,
+                                        widget.BMI, widget.A1c, widget.carb)),
+                              ),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
+                      });
+                    }),
                 SizedBox(width: 160.0),
                 new FlatButton(
                   child: Icon(Icons.close, size: 30.0, color: Colors.red),
@@ -628,13 +1457,13 @@ class _Bodystate extends State<Body> {
     );
   }
 
- //get total BG:
+  //get total BG:
   void _BGTotal() async {
     var total = (await helper.BGTotal(widget.id[0]['email']))[0]['Total'];
     print("num9: $total");
     _sum = total;
-_BGRe();
-   // setState(() => _sum = total);
+    _BGRe();
+    // setState(() => _sum = total);
   }
 
 //get total record in BG table:
@@ -644,19 +1473,20 @@ _BGRe();
 
     _num = num;
     print("_num7: $_num");
-  _A1CRe();  
-   // setState(() => {});
+    _A1CRe();
+    // setState(() => {});
   }
 
 //get total record in A1C table:
   void _A1CRe() async {
-    var num = (await helper.A1CRecord(widget.id[0]['email'].toString()))[0]['r'];
+    var num =
+        (await helper.A1CRecord(widget.id[0]['email'].toString()))[0]['r'];
     print("num6: $num");
 
     _rec = num;
     print("_rec1: $_rec");
-  a11c();  
-   // setState(() => {});
+    a11c();
+    // setState(() => {});
   }
 
 // new A1C:
@@ -674,27 +1504,28 @@ _BGRe();
     }
     print("wA1c: $wA1c");
 
-    double mod = pow(10.0, 1); 
-    double nwe =((wA1c * mod).round().toDouble() / mod);
+    double mod = pow(10.0, 1);
+    double nwe = ((wA1c * mod).round().toDouble() / mod);
     print("wA1c After: $nwe");
-   setState(() {
-      widget.A1c=nwe ;
-   });
-   
-    if(_rec==0){ //if new user 
-    DateTime newdate = dateTime.add(new Duration(days: 90));
-    A1C ss = A1C(nwe,widget.id[0]['email'].toString() ,dateTime.toIso8601String(), newdate.toIso8601String());
-    print("ss: ${ss.dS}, : ${ss.dE} :${ss.a1C}");
-    _A1CIn(ss);
-      print("insert");
-    }
-    else{  //else update the number:
-    _A1CUP(nwe);
-    print("update");
+    setState(() {
+      widget.A1c = nwe;
+    });
 
+    if (_rec == 0) {
+      //if new user
+      DateTime newdate = dateTime.add(new Duration(days: 90));
+      A1C ss = A1C(nwe, widget.id[0]['email'].toString(),
+          dateTime.toIso8601String(), newdate.toIso8601String());
+      print("ss: ${ss.dS}, : ${ss.dE} :${ss.a1C}");
+      _A1CIn(ss);
+      print("insert");
+    } else {
+      //else update the number:
+      _A1CUP(nwe);
+      print("update");
     }
   }
-  
+
   //insert A1C:
   void _A1CIn(A1C a) async {
     var ree = await helper.insertA1C(a);
@@ -702,10 +1533,8 @@ _BGRe();
   }
 
 //Update A1C:
- void _A1CUP(double a) async {
-    var ree = await helper.UpdatetA1C(a,widget.id[0]['email'].toString());
-print("update: $ree");
+  void _A1CUP(double a) async {
+    var ree = await helper.UpdatetA1C(a, widget.id[0]['email'].toString());
+    print("update: $ree");
   }
-
-  
 }

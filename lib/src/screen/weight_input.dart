@@ -7,12 +7,13 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import '../widgets/styles.dart';
 import 'package:intl/intl.dart' as intl;
-
 import 'mainpage.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 class Weightinput extends StatelessWidget {
-  Weightinput(this.id, this.BMI, this.A1c,this.carb);
+  Weightinput(this.id, this.BMI, this.A1c, this.carb);
   var id;
-  List<Map<String,dynamic>> BMI;
+  List<Map<String, dynamic>> BMI;
   var A1c;
   var carb;
   @override
@@ -29,15 +30,15 @@ class Weightinput extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
+          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c,this.carb);
+  Body(this.id, this.BMI, this.A1c, this.carb);
   var id;
-  List<Map<String,dynamic>> BMI;
+  List<Map<String, dynamic>> BMI;
   var A1c;
   var carb;
   @override
@@ -45,7 +46,7 @@ class Body extends StatefulWidget {
 }
 
 class _Bodystate extends State<Body> {
-    DatabaseHelper helper = DatabaseHelper();
+  DatabaseHelper helper = DatabaseHelper();
   // final String url =
   //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   // bool _result;
@@ -54,7 +55,34 @@ class _Bodystate extends State<Body> {
   Color slider = Colors.greenAccent[400];
   DateTime dateTime = DateTime.now();
   String note = '';
+  AlertType alerttype = AlertType.success;
+  String decision = '';
 
+  void decisionFun() {
+    setState(() {
+      double bmi =
+          (((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000);
+      print('this is the bmi = $bmi');
+      print('this bmi = $bmi');
+      if (bmi < 18) {
+        alerttype = AlertType.warning;
+        decision =
+            'تاكل اكثر بانتظام، لتزيد قليلا من وزنك، و تمارس النشاط البدني لمدة 45 دقيقة ثلاث مرات في الاسبوع';
+      } else if (bmi >= 18 && bmi < 25) {
+        alerttype = AlertType.success;
+        decision =
+            'تستمر في الحفاظ على وزنك بهذا المعدل، ولا تنسى ان تمارس الرياضه لمدة 45 دقيقة ثلاث مرات في الاسبوع';
+      } else if (bmi >= 25 && bmi <= 29) {
+        alerttype = AlertType.success;
+        decision =
+            'ان تمارس الرياضه لمدة 45 دقيقة ثلاث مرات في الاسبوع، ولا تكثر من الاكل لانك اكتسبت المزيد من الوزن';
+      } else if (bmi > 29) {
+        alerttype = AlertType.warning;
+        decision =
+            'تمارس النشاط البدني لمدة 30 دقيقه يوميا، لانك اكتسبت الكثير من الوزن';
+      }
+    });
+  }
   // Future<bool> _postData() async {
   //   // map data to converted to json data
   //   final Map<String, dynamic> userData = {
@@ -268,50 +296,81 @@ class _Bodystate extends State<Body> {
             child: new ButtonBar(
               children: <Widget>[
                 new FlatButton(
-                  child: Icon(Icons.check,size: 30.0,),
-                  // Text('تمام',
-                  //     style: TextStyle(
-                  //       fontSize: 20.0,
-                  //     )),
-                  onPressed: ()  async {
-                          print("click 1 wb wb=BG(${widget.id[0]['email'].toString()}, $weight, ${(((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000)}, $note,${dateTime.toIso8601String()}");
-                    BW bw=BW(widget.id[0]['email'].toString(), weight, (((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000), note,dateTime.toIso8601String());
+                    child: Icon(
+                      Icons.check,
+                      size: 30.0,
+                    ),
+                    // Text('تمام',
+                    //     style: TextStyle(
+                    //       fontSize: 20.0,
+                    //     )),
+                    onPressed: () async {
+                      print(
+                          "click 1 wb wb=BG(${widget.id[0]['email'].toString()}, $weight, ${(((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000)}, $note,${dateTime.toIso8601String()}");
+                      BW bw = BW(
+                          widget.id[0]['email'].toString(),
+                          weight,
+                          (((weight / widget.id[0]['hight']) /
+                                  widget.id[0]['hight']) *
+                              10000),
+                          note,
+                          dateTime.toIso8601String());
                       var mealw = await helper.insertBW(bw);
-                    print("click 2: $mealw");
-                    print("A1c:${widget.A1c}");
-                    // if(widget.A1c==null){
-                    //   var A1cr=await helper.getA1C(widget.id[0]['email'].toString()).toString();
-                    //   print("new A1c: $A1cr");
-                    // }
-                    var f=await helper.getWight(widget.id[0]['email'].toString());
-                    //var d= await helper.getA1C(widget.id[0]['email'].toString());
-                    var bmii=(((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000);
-                   Map<String,dynamic> h= {'wit':weight ,'bmi':bmii};
-                    setState(()  {
-                     // widget.BMI[0]['wit']=weight;
-                     // var widget.BMI[0]['bmi'].add(bmii);
+                      print("click 2: $mealw");
+                      print("A1c:${widget.A1c}");
+                      // if(widget.A1c==null){
+                      //   var A1cr=await helper.getA1C(widget.id[0]['email'].toString()).toString();
+                      //   print("new A1c: $A1cr");
+                      // }
+                      var f = await helper
+                          .getWight(widget.id[0]['email'].toString());
+                      //var d= await helper.getA1C(widget.id[0]['email'].toString());
+                      var bmii = (((weight / widget.id[0]['hight']) /
+                              widget.id[0]['hight']) *
+                          10000);
+                      Map<String, dynamic> h = {'wit': weight, 'bmi': bmii};
+                      setState(() {
+                        // widget.BMI[0]['wit']=weight;
+                        // var widget.BMI[0]['bmi'].add(bmii);
 
-                      print("${widget.BMI}");
-                      
-                      widget.BMI.clear();
-                      widget.BMI.add(h);
-                      //widget.BMI[0]['wit'];
-                      //widget.A1c= d;
-                      print("hi: ${widget.BMI},${widget.A1c}");
-                    }
-                    );
-                    Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => MainPage(widget.id,
-                           widget.BMI ,
-                          widget.A1c,
-                          widget.carb)),
-                        );
-                  }
-                ),
+                        print("${widget.BMI}");
+
+                        widget.BMI.clear();
+                        widget.BMI.add(h);
+                        //widget.BMI[0]['wit'];
+                        //widget.A1c= d;
+                        print("hi: ${widget.BMI},${widget.A1c}");
+                        decisionFun();
+                        Alert(
+                          style: AlertStyle(
+                            isCloseButton: false,
+                          ),
+                          context: context,
+                          type: alerttype,
+                          title: ' : نقترح عليك ان',
+                          desc: decision,
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                'حسنا',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage(widget.id,
+                                        widget.BMI, widget.A1c, widget.carb)),
+                              ),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
+                      });
+                    }),
                 SizedBox(width: 160.0),
                 new FlatButton(
-                  child: Icon(Icons.close,size: 30.0,color: Colors.red),
+                  child: Icon(Icons.close, size: 30.0, color: Colors.red),
                   // Text('الغاء',
                   //     style: TextStyle(fontSize: 20.0, color: Colors.red)),
                   onPressed: () => Navigator.pop(context),
@@ -324,10 +383,6 @@ class _Bodystate extends State<Body> {
       ),
     );
   }
-
-
-
-
 
 // // new BMI:
 //   Future a11c() {
@@ -344,11 +399,11 @@ class _Bodystate extends State<Body> {
 //     }
 //     print("wA1c: $wA1c");
 
-//     double mod = pow(10.0, 1); 
+//     double mod = pow(10.0, 1);
 //     var nwe =((wA1c * mod).round().toDouble() / mod);
 //     print("wA1c After: $nwe");
 //     widget.A1c=nwe;
-//     if(_rec==0){ //if new user 
+//     if(_rec==0){ //if new user
 //     DateTime newdate = dateTime.add(new Duration(days: 90));
 //     A1C ss = A1C(nwe,widget.id[0]['email'].toString() ,dateTime.toIso8601String(), newdate.toIso8601String());
 //     print("ss: ${ss.dS}, : ${ss.dE} :${ss.a1C}");
@@ -361,7 +416,7 @@ class _Bodystate extends State<Body> {
 
 //     }
 //   }
-  
+
 //   //insert A1C:
 //   void _A1CIn(A1C a) async {
 //     var ree = await helper.insertA1C(a);
@@ -373,6 +428,5 @@ class _Bodystate extends State<Body> {
 //     var ree = await helper.UpdatetA1C(a,widget.id[0]['email'].toString());
 // print("update: $ree");
 //   }
-
 
 }
