@@ -1,18 +1,20 @@
+import 'package:dtfbl/diabetes_icons_icons.dart';
 import 'package:flutter/material.dart';
 import '../screen/glucose_measure.dart';
 import '../screen/weight_input.dart';
 import '../screen/pressure_input.dart';
-
+//import 'package:dtfbl/my_flutter_app_icons.dart';
 class FancyFab extends StatefulWidget {
   final Function() onPressed;
   final String tooltip;
   IconData icon;
   List<Map<String, dynamic>> id;
   List<Map<String, dynamic>> BMI;
-  var A1c;
-
+  double A1c;
+  double carb;
+//var bMI;
   FancyFab(
-    this.id, this.A1c, {
+    this.id,this.BMI,this.A1c,this.carb, {
     this.onPressed,
     this.tooltip,
     this.icon,
@@ -92,12 +94,18 @@ class _FancyFabState extends State<FancyFab>
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => GlucoseMeasure(widget.id,widget.A1c)),
+                builder: (context) => GlucoseMeasure(widget.id,widget.BMI,widget.A1c, widget.carb)),
           );
           //Navigator.of(context).pushNamed('/GlucoseMeasure');
         },
         tooltip: 'اضافة قراءة السكر في الدم',
-        child: Icon(Icons.add),
+        child: new Stack(
+  children: <Widget>[ new Positioned(
+       left: -0.0,
+       top: 5.0,
+        child:    Icon(DiabetesIcons.blood_test,size: 36.0,color: Colors.white,
+        ))]
+  ),
       ),
     );
   }
@@ -110,12 +118,12 @@ class _FancyFabState extends State<FancyFab>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Weightinput(widget.id,widget.A1c)),
+            MaterialPageRoute(builder: (context) => Weightinput(widget.id,widget.BMI,widget.A1c, widget.carb)),
           );
           //Navigator.of(context).pushNamed('/Weightinput');
         },
         tooltip: 'اضافة الوزن',
-        child: Icon(Icons.add),
+        child: Icon(DiabetesIcons.scaler,size: 25.0,color:Colors.white,),
       ),
     );
   }
@@ -129,12 +137,17 @@ class _FancyFabState extends State<FancyFab>
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Pressureinput(widget.id)),
+                builder: (context) => Pressureinput(widget.id,widget.BMI,widget.A1c, widget.carb)),
           );
           //Navigator.of(context).pushNamed('/Pressureinput');
         },
         tooltip: 'اضافة ضغط الدم',
-        child: Icon(Icons.add),
+        child: 
+        Icon(DiabetesIcons.blood_pressure__1_,size: 30.0,color: Colors.white
+          //MyFlutterApp.pro 
+        ,//color: Color.fromRGBO(0, 1, 0,1
+       // ),
+        ),
       ),
     );
   }

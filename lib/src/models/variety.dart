@@ -9,7 +9,7 @@
 
 
  // Meal(this._email, this._mealId, this._eat,this._amount);
-  Variety(this._id,this._mealId, this._email, this._eat,this._carb,this._amount);
+  Variety(this._id,this._mealId, this._eat, this._email,this._carb,this._amount);
 
   int get id => _id;
   int get mealId => _mealId;
@@ -42,7 +42,6 @@
     this._id = map['id'];   
     this._mealId = map['mealId'];   
     this._email = map['email'];
-   // this._id = map['id'];   
     this._eat = map['eat'];
     this._carb = map['varcarb'];
     this._amount = map['amount'];

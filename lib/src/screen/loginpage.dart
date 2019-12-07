@@ -64,13 +64,29 @@ class _LoginPageState extends State<LoginPage> {
           'form invalid, Email: ${emailController.text}, Passwoer: ${passwordController.text}');
     } else if (_validateAndSave(id)) {
       print('here is login id : ${id}');
-var BMI;
-var A1c;
+List<Map<String,dynamic>> BMI;
+double  A1c;
+double carb;
     //  setState(() async{
           BMI=(await helper.getWight(id[0]['email']));
-        
-         A1c=(await helper.getA1C(id[0]['email']))[0]['a1C'];
-        // if(A1C){
+         
+         if(((await helper.getA1C(id[0]['email']))).isNotEmpty)
+         {
+         var a1ca= (await helper.getA1C(id[0]['email']))[0]['a1C'];
+         print("A1c now : $a1ca");
+         A1c=double.parse( a1ca);
+         print("A1c now : $A1c");
+          }
+          else{ A1c=0.0;}
+
+          if(((await helper.getCarb(id[0]['email']))).isNotEmpty)
+          {
+         var carba=(await helper.getCarb(id[0]['email']))[0]['curnt'];
+         print("carb now : $carba");
+          carb=carba as double;
+         print("carb now : $carb");
+          }
+          else{ carb=0.0;} 
       // print("A1c list: null");
 
         // }
@@ -79,7 +95,7 @@ var A1c;
       print("BMI list: $BMI");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c)),
+        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c,carb)),
       );
       //Navigator.of(context).pushNamed('/MainPage',arguments: _email);
       _formKey.currentState.reset();

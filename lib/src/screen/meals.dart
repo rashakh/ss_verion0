@@ -1,7 +1,9 @@
 import 'dart:ffi';
 
+import 'package:dtfbl/src/models/carb.dart';
 import 'package:dtfbl/src/models/meal.dart';
 import 'package:dtfbl/src/models/variety.dart';
+import 'package:dtfbl/src/models/variety.dart' as prefix0;
 import 'package:dtfbl/src/screen/profile.dart';
 import 'package:dtfbl/src/screen/pt.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
@@ -19,7 +21,10 @@ import 'exportPDF.dart';
 import 'mainpage.dart';
 import 'medalert.dart';
 
-List<Map<String, double>> _carbs = [];
+DatabaseHelper helper = DatabaseHelper();
+
+List<Map<String, double>> 
+_carbs = [];
 double _sum = 0.0;
 int _inter = 0;
 double dbcarb, dbvarycarb;
@@ -27,13 +32,18 @@ String dbemail, dbslot, dbnote, dbdm, dbeat;
 int dbvarId;
 int dbamount = 1;
 int coun = 0;
-var varty = new List();
+List<List> varty = [];
+List<Map<int,dynamic>> food=[];
 
+// var varty =<Map>[];
+// varty['id'];
+//int sr;
 class Meals extends StatelessWidget {
-  Meals(this.id,this.BMI,this.A1c);
-  var BMI;
+  Meals(this.id, this.BMI, this.A1c, this.carb);
   var id;
+  var BMI;
   var A1c;
+  var carb;
   @override
   Widget build(BuildContext context) {
     dbemail = id[0]['email'].toString();
@@ -59,7 +69,9 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MedAlert(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -68,7 +80,9 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PeriodicTest(id)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          PeriodicTest(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -77,7 +91,9 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ExportPDF(id)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ExportPDF(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -86,7 +102,9 @@ class Meals extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id,BMI)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          Profile(id, BMI, A1c.toString(), carb)),
                 );
               },
             ),
@@ -99,16 +117,17 @@ class Meals extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
+      body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id,this.BMI,this.A1c);
+  Body(this.id, this.BMI, this.A1c, this.carb);
   var id;
-var BMI;
-var A1c;
+  var BMI;
+  var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }
@@ -120,7 +139,7 @@ class _Bodystate extends State<Body> {
   //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   // Db db = new Db("mongodb://localhost:27017/mongo_dart-blog");
   // await db.open();
-  var meals;
+  //var meals;
   bool _visible = true;
   DateTime dateTime = DateTime.now();
 
@@ -220,41 +239,6 @@ class _Bodystate extends State<Body> {
             });
   }
 
-  // function make the http request
-  // Future<String> getData() async {
-  //   _sum = 0.0;
-  //   _carbs = [];
-  //   _inter = 0;
-
-  //   //print("click 3: sum= $_sum and inter= $_inter");
-  //   // var response = await http // .get(url)
-  //   //     .get(Uri.encodeFull(url), headers: {
-  //   //   'Accept': 'application/json' // 'key': 'ur key'
-  //   // }
-  //   //         //    print("sum= $_sum and inter= $_inter");
-  //           // ); // .get(encode the response data as json) with headers which tell the code should be json
-
-  //   // after response back, setup the state for the application
-  //   setState(() {
-  //     //print("click 4: sum= $_sum and inter= $_inter and meals= $meals");
-  //     var responseBoddy = json.decode(response.body);
-  //     meals = responseBoddy;
-  //     print(responseBoddy);
-  //     _visible = !_visible;
-  //     //print("click 5: sum= $_sum and inter= $_inter and meals= $meals");
-
-  //     //['name of area in the database or in the json data']; // user for example
-  //   });
-
-  //   return 'Success!'; // tell whether|not get the json
-  // }
-
-  // @override
-  // void dispose() {
-  //   _ischange();
-  //   super.dispose();
-  // }
-
   Widget _carbsCalculator() {
     return new CupertinoTextField(
       readOnly: true,
@@ -308,8 +292,8 @@ class _Bodystate extends State<Body> {
                 size: 28,
               ),
               onPressed: () async {
-                print(
-                    "click 6: sum= $_sum and inter= $_inter and meals= $meals  and $_cupDate");
+                // print(
+                //     "click 6: sum= $_sum and inter= $_inter and meals= $meals  and $_cupDate");
 
                 await showModalBottomSheet(
                   context: context,
@@ -379,7 +363,8 @@ class _Bodystate extends State<Body> {
     );
   }
 
-  Widget _insider() {
+  /// ----------------------fayber list
+  Widget _insiderfiber() {
     return new Stack(children: [
       Column(
         children: <Widget>[
@@ -389,44 +374,7 @@ class _Bodystate extends State<Body> {
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                // new Container(
-                //   alignment: Alignment.centerRight,
-                //   decoration: BoxDecoration(
-                //     color: Colors.white,
-                //     borderRadius: new BorderRadius.circular(80.0),
-                //     boxShadow: <BoxShadow>[
-                //       new BoxShadow(
-                //         color: Colors.black12,
-                //         blurRadius: 50.0,
-                //         offset: new Offset(0.0, 5.0),
-                //       ),
-                //     ],
-                //   ),
-                //   height: 40.0,
-                //   width: 290.0,
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(right: 12.0, left: 12.0),
-                //     child: new CupertinoTextField(
-                //       prefix: Icon(
-                //         Icons.search,
-                //         color: CupertinoColors.activeBlue,
-                //       ),
-                //       placeholder: 'بـحـث',
-                //       padding: const EdgeInsets.symmetric(
-                //           horizontal: 10.0, vertical: 5.0),
-                //       decoration: BoxDecoration(
-                //         border: Border(
-                //           bottom: BorderSide(
-                //             width: 0,
-                //             color: CupertinoColors.activeBlue,
-                //           ),
-                //         ),
-                //       ),
-                //       onChanged: (e) {
-                //       },
-                //     ),
-                //   ),
-                // ),
+                //her was countenar of search
                 Padding(
                   padding: const EdgeInsets.only(
                     right: 15.0,
@@ -436,10 +384,7 @@ class _Bodystate extends State<Body> {
                       color: Color(0xFF2A79D2),
                       onPressed: () {
                         setState(() {
-                          print("click 10: _inter = $_inter");
-
                           _inter = 0;
-                          print("click 11: _inter = $_inter");
                         });
                       }),
                 )
@@ -450,19 +395,18 @@ class _Bodystate extends State<Body> {
             child: new ListView.builder(
                 shrinkWrap: true,
                 //physics: NeverScrollableScrollPhysics(),
-                itemCount: meals == null ? 0 : meals.length,
+                itemCount: 7,
                 itemBuilder: (BuildContext context, int index) {
-                  var meal = MealCard(9, 'تفاح', 30, 50, this);
+                  // var meal = MealCard(9, 'تفاح', 30, 50,1,this);
                   return Column(
                     children: <Widget>[
-                      MealCard(1, 'تفاح', 25.1, 95, this),
-                      MealCard(2, 'القهوة', 0, 2, this),
-                      MealCard(3, 'الموز', 34.3, 134, this),
-                      MealCard(4, 'البيض', 0.7, 134, this),
-                      MealCard(5, 'حليب', 10.9, 149, this),
-                      MealCard(6, 'رز ابيض', 44.5, 205, this),
-                      MealCard(7, 'الدجاج', 0, 114, this),
-                      MealCard(8, 'تفاح', 30, 50, this)
+                      MealCard(1, 'القرنبيط', 25.1, 1, this),
+                      MealCard(2, 'الكرفس', 63.7, 1, this),
+                      MealCard(3, 'عصير برتقال', 13.41, 1, this),
+                      MealCard(4, 'سبانخ مطبوخة', 7, 1, this),
+                      MealCard(5, 'فلفل رومي', 6, 1, this),
+                      MealCard(6, 'افوكادو', 17, 1, this),
+                      MealCard(7, 'باذنجان مطبوخ', 9, 1, this)
                     ],
                   );
                 }),
@@ -470,7 +414,201 @@ class _Bodystate extends State<Body> {
         ],
       ),
       new AnimatedOpacity(
-        opacity: _visible ? 1.0 : 0.0,
+        opacity: 0.0, // _visible ? 1.0 :0.0
+        duration: Duration(milliseconds: 600),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 70.0),
+          child: new SpinKitThreeBounce(
+            color: Color((Random().nextDouble() * 0xFFFFFF).toInt() << 3)
+                .withOpacity(0.2),
+            size: 100.0,
+          ),
+        ),
+      ),
+    ]);
+  }
+
+//--------------- fat list
+  Widget _insiderfat() {
+    return new Stack(children: [
+      Column(
+        children: <Widget>[
+          new Container(
+            height: 35.0,
+            color: Colors.grey[200],
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 15.0,
+                  ),
+                  child: new IconButton(
+                      icon: Icon(Icons.arrow_forward_ios),
+                      color: Color(0xFF2A79D2),
+                      onPressed: () {
+                        setState(() {
+                          _inter = 0;
+                        });
+                      }),
+                )
+              ],
+            ),
+          ),
+          new Expanded(
+            child: new ListView.builder(
+                shrinkWrap: true,
+                //physics: NeverScrollableScrollPhysics(),
+                itemCount: 4,
+                itemBuilder: (BuildContext context, int index) {
+                  //              var meal = MealCard(9, 'تفاح', 30, 50,1,this);
+                  return Column(
+                    children: <Widget>[
+                      MealCard(1, 'زيت الزيتون', 0, 1, this),
+                      MealCard(2, 'مايونيز', 3.51, 1, this),
+                      MealCard(3, 'زبدة المارجرين ( بدون ملح )', 0.02, 1, this),
+                      MealCard(4, 'زبدة المارجرين (  مملحة )', 0.04, 1, this)
+                    ],
+                  );
+                }),
+          ),
+        ],
+      ),
+      new AnimatedOpacity(
+        opacity: 0.0, // _visible ? 1.0 :0.0
+
+        duration: Duration(milliseconds: 600),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 70.0),
+          child: new SpinKitThreeBounce(
+            color: Color((Random().nextDouble() * 0xFFFFFF).toInt() << 3)
+                .withOpacity(0.2),
+            size: 100.0,
+          ),
+        ),
+      ),
+    ]);
+  }
+
+//------------- carb list
+  Widget _insidercarb() {
+    return new Stack(children: [
+      Column(
+        children: <Widget>[
+          new Container(
+            height: 35.0,
+            color: Colors.grey[200],
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                //search
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 15.0,
+                  ),
+                  child: new IconButton(
+                      icon: Icon(Icons.arrow_forward_ios),
+                      color: Color(0xFF2A79D2),
+                      onPressed: () {
+                        setState(() {
+                          _inter = 0;
+                        });
+                      }),
+                )
+              ],
+            ),
+          ),
+          new Expanded(
+            child: new ListView.builder(
+                shrinkWrap: true,
+                //physics: NeverScrollableScrollPhysics(),
+                itemCount: 7,
+                itemBuilder: (BuildContext context, int index) {
+                  // var meal = MealCard(9, 'تفاح', 30, 50,1,this);
+                  return Column(
+                    children: <Widget>[
+                      MealCard(1, 'البطاطا الحلوة', 23.61, 1, this),
+                      MealCard(2, 'الذرة', 25, 1, this),
+                      MealCard(3, 'الموز', 13.41, 1, this),
+                      MealCard(7, 'التفاح', 25.13, 1, this),
+                      MealCard(4, ' أرز البني', 36, 1, this),
+                      MealCard(5, 'أرز ابيض', 44.5, 1, this),
+                      MealCard(6, 'سلطة سيزر', 50, 1, this),
+                    ],
+                  );
+                }),
+          ),
+        ],
+      ),
+      new AnimatedOpacity(
+        opacity: 0.0, // _visible ? 1.0 :0.0
+
+        duration: Duration(milliseconds: 600),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 70.0),
+          child: new SpinKitThreeBounce(
+            color: Color((Random().nextDouble() * 0xFFFFFF).toInt() << 3)
+                .withOpacity(0.2),
+            size: 100.0,
+          ),
+        ),
+      ),
+    ]);
+  }
+
+//----------- proten list
+
+  Widget _insiderproten() {
+    return new Stack(children: [
+      Column(
+        children: <Widget>[
+          new Container(
+            height: 35.0,
+            color: Colors.grey[200],
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                //search
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 15.0,
+                  ),
+                  child: new IconButton(
+                      icon: Icon(Icons.arrow_forward_ios),
+                      color: Color(0xFF2A79D2),
+                      onPressed: () {
+                        setState(() {
+                          _inter = 0;
+                        });
+                      }),
+                )
+              ],
+            ),
+          ),
+          new Expanded(
+            child: new ListView.builder(
+                shrinkWrap: true,
+                //physics: NeverScrollableScrollPhysics(),
+                itemCount: 6,
+                itemBuilder: (BuildContext context, int index) {
+                  // var meal = MealCard(9, 'تفاح', 30, 50,1,this);
+                  return Column(
+                    children: <Widget>[
+                      MealCard(1, 'حليب', 25.1, 1, this),
+                      MealCard(2, 'جبنة', 63.7, 1, this),
+                      MealCard(3, 'لبنة', 13.41, 1, this),
+                      MealCard(4, 'لبن', 7, 1, this),
+                      MealCard(5, 'لحم دجاج مطبوخ', 40, 1, this),
+                      MealCard(6, 'لحم بقر مطبوخ ', 34, 1, this)
+                    ],
+                  );
+                }),
+          ),
+        ],
+      ),
+      new AnimatedOpacity(
+        opacity: 0.0, // _visible ? 1.0 :0.0
+
         duration: Duration(milliseconds: 600),
         child: Padding(
           padding: const EdgeInsets.only(top: 70.0),
@@ -495,7 +633,18 @@ class _Bodystate extends State<Body> {
               return new Column(
                 children: <Widget>[
                   new SizedBox(
-                    height: 3.0,
+                    height: 5.0,
+                  ),
+                  Text(
+                    'اختر صنف الطعام :',
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  new SizedBox(
+                    height: 10.0,
                   ),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -503,9 +652,7 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
-                            print("click 12: _inter = $_inter");
                             _inter = 1;
-                            print("click 13: _inter = $_inter");
                           });
                         },
                         child: new Container(
@@ -540,9 +687,7 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
-                            print("click 14: _inter = $_inter");
-                            _inter = 1;
-                            print("click 15: _inter = $_inter");
+                            _inter = 4;
                           });
                         },
                         child: new Container(
@@ -582,9 +727,7 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
-                            print("click 16: _inter = $_inter, ");
-                            _inter = 1;
-                            print("click 17: _inter = $_inter");
+                            _inter = 2;
                           });
                         },
                         child: new Container(
@@ -619,9 +762,7 @@ class _Bodystate extends State<Body> {
                       new GestureDetector(
                         onTap: () {
                           setState(() {
-                            print("click 18: _inter = $_inter");
-                            _inter = 1;
-                            print("click 19: _inter = $_inter");
+                            _inter = 3;
                           });
                         },
                         child: new Container(
@@ -662,9 +803,17 @@ class _Bodystate extends State<Body> {
   }
 
   List<Widget> _wid() {
-    print(
-        "click 20: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard(name, carbs, caloris, parent)");
-    return [_grouping(), _insider()];
+    // print(
+    //     "click 20: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard(name, carbs, Amunt, parent)");
+
+    //  if(sr==0){
+    return [
+      _grouping(),
+      _insidercarb(),
+      _insiderfat(),
+      _insiderproten(),
+      _insiderfiber()
+    ];
   }
 
   var check = false;
@@ -675,7 +824,7 @@ class _Bodystate extends State<Body> {
       child: new Column(
         children: <Widget>[
           new SizedBox(
-            height: 282,
+            height: 330,
             //print("click 21: inter:$_inter");
             //print("click 21: inter:$_wid()[_inter]");
             child: _wid()[_inter],
@@ -693,34 +842,77 @@ class _Bodystate extends State<Body> {
                   child: new GestureDetector(
                     onTap: () async {
                       dbcarb = _sum;
+                      //widget.carb=_sum;
                       dbslot = slots[slot];
                       dbdm = dateTime.toIso8601String();
-                      print(
-                          "click 27: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
+
                       Meal meal = Meal(dbemail, dbslot, dbcarb, dbnote, dbdm);
                       var mealw = await helper.insertMeal(meal);
-                      print('this result id : ${mealw}');
+                      var meali = await helper.getMeal(dbemail);
+                      print('last meal result id : ${meali}');
+                      var mealid= meali[0]["mealId"];
+                      print('meal result id : $mealid');
 
-                      // Variety variety= Variety(dbvarId,mealw,dbemail,dbeat,dbvarycarb,dbamount);
-                      // var varyw = await helper.insertVariety(variety);
-                      // print('this result id : ${varyw}');
-                      print(
-                          "click 28: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
+// ------------------------------------------------------------------------------------------------------------
+                     for (int i = 0; i < food.length; i++) {
+                          var f=food.elementAt(i);
+                        Variety vat =new Variety(f[0],meali[0]['mealId'],f[1],dbemail,f[2],f[3]);
+                          var vary = await helper.insertVariety(vat);
+                          print(" FOOD ARE SAVE : vary");
+                      }
+                      // //get
+                      // var vartget=await helper.getfood(dbemail);
+                      // print("vart get: $vartget");
+                      
 
+                     String date =dbdm.substring(0, 10);
+                    var carb=await helper.getCarb(dbemail);
+                      print("carb date: ${carb}");
+                      //CARB:
+                      print("carb date: ${carb.isNotEmpty}");
+                      if(carb.isNotEmpty){
+                      if((await helper.getCarb(dbemail))[0]['date']==date){
+                         var update=await helper.updataCarb(dbemail, dbcarb,date);
+                        print("update carb: $update");
+
+                      }
+                      else{
+                        Carb carba= new Carb(dbcarb,dbemail,date);
+                        //insert
+                        var inser=await helper.insertCARB(carba);
+                        print("inser carb: $inser");
+                      }
+                      }
+                      else{
+                        Carb carba= new Carb(dbcarb,dbemail,date);
+                        //insert
+                        var inser=await helper.insertCARB(carba);
+                        print("inser carb: $inser");
+
+                        }
+                        var cget= (await helper.getCarb(dbemail))[0]['curnt'];
+                        double newcarb= cget as double;
+//-----------------------------------------------------------------------------------------------------------------------------
                       setState(() {
+                        food=[];
                         _carbs = [];
                         _sum = 0.0;
                         _inter = 0;
+                        widget.carb=newcarb;
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c)),
+                              builder: (context) => MainPage(
+                                  widget.id,
+                                  widget.BMI,
+                                  widget.A1c,
+                                  widget.carb)),
                         );
                       });
                     },
                     child: new Container(
                         alignment: Alignment.center,
-                        height: 40.0,
+                        height: 47.0,
                         decoration: new BoxDecoration(
                             color: Color(0xFFBDD22A),
                             borderRadius: new BorderRadius.circular(7.0)),
@@ -734,13 +926,6 @@ class _Bodystate extends State<Body> {
               ],
             ),
           ),
-          // MealCard('تفاح', 25.1, 95),
-          // MealCard('القهوة', 0, 2),
-          // MealCard('الموز', 34.3, 134),
-          // MealCard('البيض', 0.7, 134),
-          // MealCard('حليب', 10.9, 149),
-          // MealCard('رز ابيض', 44.5, 205),
-          // MealCard('الدجاج', 0, 114),
         ],
       ),
     );
@@ -748,22 +933,30 @@ class _Bodystate extends State<Body> {
 
   @override
   void initState() {
-    print(
-        "click 23: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard($this.name, $this.carbs, $this.caloris, $this.parent)");
+    // print(
+    //     "click 23: grouping:$_grouping()  , insider: $_insider(), meal:$MealCard($this.name, $this.carbs, $this.Amunt, $this.parent)");
 
     super.initState();
-   // this.getData();
+    // this.getData();
   }
+}
+
+class Varty {
+  var id;
+  var name;
+  var carb;
+  var amount;
+  Varty(this.id, this.name, this.amount, this.carb);
 }
 
 class MealCard extends StatefulWidget {
   String name;
   double carbs;
   int id;
-  int caloris;
+  int Amunt;
   _Bodystate parent;
 
-  MealCard(this.id, this.name, this.carbs, this.caloris, this.parent);
+  MealCard(this.id, this.name, this.carbs, this.Amunt, this.parent);
   @override
   MealCardState createState() => MealCardState();
 }
@@ -773,8 +966,8 @@ class MealCardState extends State<MealCard> {
 
   @override
   Widget build(BuildContext context) {
-    //  print("click 21: check: $check, meal:$MealCard(name, carbs, caloris, parent)");
-    // print("click 22: chech: $check, meal: $MealCard(this.name, this.carbs, this.caloris, this.parent)");
+    //  print("click 21: check: $check, meal:$MealCard(name, carbs, Amunt, parent)");
+    // print("click 22: chech: $check, meal: $MealCard(this.name, this.carbs, this.Amunt, this.parent)");
 
     return new Stack(
       alignment: AlignmentDirectional.center,
@@ -842,7 +1035,7 @@ class MealCardState extends State<MealCard> {
                     ),
                   ),
                   new Text(
-                    widget.caloris.toString(),
+                    widget.Amunt.toString(),
                     style: TextStyle(
                       fontSize: 17.0,
                       fontWeight: FontWeight.w500,
@@ -861,18 +1054,47 @@ class MealCardState extends State<MealCard> {
             value: check,
             onChanged: (bool e) {
               setState(() {
-                print(
-                    "click 28: chech: $check , widget: ${widget.name}, ${widget.carbs},");
+                print("click 28: check: $check ");
                 check = e;
                 if (check == true) {
-                  print(
-                      "click 24: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
-
+                  print("click 24: check: $check , carb list lenght: ${_carbs.length}");
                   _carbs.add({widget.name: widget.carbs});
-                  print(
-                      "click 25: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+                  print("_carbs: $_carbs");
+                  print("click 25: check: $check , carb list lenght: ${_carbs.length}");
+             //     var index = _carbs.indexWhere((item) => item.containsKey(widget.name));
 
-                  //varty.add(widget.id,widget.name, widget.carbs,dbamount);
+                  // Variety vary = new Variety(_id, _mealId, _email, _eat, _carb, _amount)
+                  //   Variety f  = Variety(widget.id,1,dbemail ,widget.name,widget.carbs, widget.Amunt);
+                  //   var rt= await helper.insertVariety(f);
+                  //  print("vary has insert: $rt");
+                  //   varty.add({
+                  //  'id':widget.id,
+                  //   'name':widget.name,
+                  //   'carb':widget.carbs,
+                  //   'amunt':widget.Amunt});
+                  print("befor add: $food");
+                  Map<int,dynamic> varr = {
+                   0: widget.id,
+                   1: widget.name,
+                   2: widget.carbs,
+                   3: widget.Amunt
+                  };
+                  print("Afer varr: ${varr}");
+                  // food.add({widget.id,
+                  //   widget.name,
+                  //   widget.carbs,
+                  //   widget.Amunt});
+
+                  food.add(varr);
+                   
+
+
+                  print("Afer add: ${food}");
+                  // print("hi index $index");
+                  // print("befor add: ${varty}");
+                  // varty.insert(index, varr);
+                  // print("Afer add: ${varty[index]}");
+
                   _sum += widget.carbs;
                 }
                 if (check == false) {
@@ -880,12 +1102,18 @@ class MealCardState extends State<MealCard> {
                       "click 26: chech: $check , carb list: $_carbs, widget: $widget.name, $widget.carbs,");
                   //varty.remove;
 
-                  print(
-                      "click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
+                  print("click 27: chech: $check , carb list: $_carbs.length, widget: $widget.name, $widget.carbs,");
 
                   var index = _carbs
                       .indexWhere((item) => item.containsKey(widget.name));
                   _carbs.removeAt(index);
+                  food.removeAt(index);
+                  // //  Variety f= Variety(widget.id,1,dbemail ,widget.name,widget.carbs, widget.Amunt);
+                  //    var rt= await helper.deleteVariety(widget.id,1,dbemail);
+                  //    print("vary has deleted: $rt");
+                  print("click 30: chech: $check , food list: ${food.length}, $food");
+                  //  ({widget.id,widget.name, widget.carbs,widget.Amunt});
+
                   _sum -= widget.carbs;
                 }
               });
@@ -897,3 +1125,79 @@ class MealCardState extends State<MealCard> {
     );
   }
 }
+
+//----------------- counterar of search:
+
+// new Container(
+//   alignment: Alignment.centerRight,
+//   decoration: BoxDecoration(
+//     color: Colors.white,
+//     borderRadius: new BorderRadius.circular(80.0),
+//     boxShadow: <BoxShadow>[
+//       new BoxShadow(
+//         color: Colors.black12,
+//         blurRadius: 50.0,
+//         offset: new Offset(0.0, 5.0),
+//       ),
+//     ],
+//   ),
+//   height: 40.0,
+//   width: 290.0,
+//   child: Padding(
+//     padding: const EdgeInsets.only(right: 12.0, left: 12.0),
+//     child: new CupertinoTextField(
+//       prefix: Icon(
+//         Icons.search,
+//         color: CupertinoColors.activeBlue,
+//       ),
+//       placeholder: 'بـحـث',
+//       padding: const EdgeInsets.symmetric(
+//           horizontal: 10.0, vertical: 5.0),
+//       decoration: BoxDecoration(
+//         border: Border(
+//           bottom: BorderSide(
+//             width: 0,
+//             color: CupertinoColors.activeBlue,
+//           ),
+//         ),
+//       ),
+//       onChanged: (e) {
+//       },
+//     ),
+//   ),
+// ),
+
+// function make the http request
+// Future<String> getData() async {
+//   _sum = 0.0;
+//   _carbs = [];
+//   _inter = 0;
+
+// print("click 3: sum= $_sum and inter= $_inter");
+// var response = await http // .get(url)
+//     .get(Uri.encodeFull(url), headers: {
+//   'Accept': 'application/json' // 'key': 'ur key'
+// }
+//         //    print("sum= $_sum and inter= $_inter");
+//         ); // .get(encode the response data as json) with headers which tell the code should be json
+
+// after response back, setup the state for the application
+//   setState(() {
+//     //print("click 4: sum= $_sum and inter= $_inter and meals= $meals");
+//     var responseBoddy = json.decode(response.body);
+//     meals = responseBoddy;
+//     print("res: $responseBoddy");
+//     _visible = !_visible;
+//     //print("click 5: sum= $_sum and inter= $_inter and meals= $meals");
+
+//     //['name of area in the database or in the json data']; // user for example
+//   });
+
+//   return 'Success!'; // tell whether|not get the json
+// }
+
+// @override
+// void dispose() {
+//   _ischange();
+//   super.dispose();
+// }

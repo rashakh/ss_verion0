@@ -1,4 +1,6 @@
-import 'package:dtfbl/src/models/A1C.dart';
+import 'dart:developer';
+
+import 'package:dtfbl/src/screen/mainpage.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:percent_indicator/percent_indicator.dart';
@@ -9,12 +11,15 @@ import 'exportPDF.dart';
 //import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage(this.id, this.BMI, this.A1c);
-  var BMI;
+  HomePage(this.id, this.BMI, this.A1c, this.carb);
   var id;
-  var A1c;
+  List<Map<String,dynamic>>  BMI;
+  double A1c;
+  double carb;
+
   @override
   Widget build(BuildContext context) {
+    print("this is a1c ${this.A1c}");
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF2A79D2), //Color(0xFF7EAFE5),
@@ -32,12 +37,14 @@ class HomePage extends StatelessWidget {
               accountName: Text(id[0]['fname'].toString()),
               accountEmail: Text(id[0]['email'].toString()),
             ),
+            
             new ListTile(
               title: Text('الادوية'),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id)),
+                  MaterialPageRoute(
+                      builder: (context) => MedAlert(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -46,7 +53,8 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => PeriodicTest(id)),
+                  MaterialPageRoute(
+                      builder: (context) => PeriodicTest(id, BMI, A1c.toString(), carb)),
                 );
               },
             ),
@@ -55,7 +63,8 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ExportPDF(id)),
+                  MaterialPageRoute(
+                      builder: (context) => ExportPDF(id, BMI, A1c.toString(), carb)),
                 );
               },
             ),
@@ -64,7 +73,8 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Profile(id, BMI)),
+                  MaterialPageRoute(
+                      builder: (context) => Profile(id, BMI, A1c.toString(), carb)),
                 );
               },
             ),
@@ -77,68 +87,189 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id, BMI, A1c)),
+      body: new SingleChildScrollView(child: new Body(id,
+       BMI,
+        A1c,
+         carb)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c);
+  Body(this.id, this.BMI, this.A1c, this.carb);
   var id;
   var BMI;
   var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }
-
-double _a1c = 0;
-double a1c = 0;
-
+// double a1c = 0;
+int i=0;
 class _Bodystate extends State<Body> {
   DatabaseHelper helper = DatabaseHelper();
+  double a1c =0.0;
+  double carb=0.0;
+  double pa=60.55;
+  double maxPA=135.0;
+  double minPA=0.0;
+  double total=40;
+  double unit=20;
   var _sum = 0;
   var _num = 0;
   var dd = 45 * 0.55;
+  var minCarb=0.0;
+  var maxCarb=200;
   var bgratio;
   Widget icon = Icon(
     Icons.mood,
     color: Colors.green,
     size: 40.0,
   );
+  int mealid;
+  Color colorA1c = Colors.green;
+  Color colorcarb = Colors.green;
+  Color colorPA = Colors.green;
+   double _a1c() {
+setState(() {  a1c=widget.A1c;});
+    var n = a1c / 14;
+    print('A1c n: $n');
+    _bgratio();
+        mea();
 
-  Color color = Colors.green;
-  // double _a1c() {
-  //   _getA1c();
-  //   var n = a1c/ 14;
-  //   print('n: $n');
-  //   _bgratio();
-  //   return alc;
-  // }
+    return n;
+  }
 
-  // Future _bgratio() {
-  //   if (_a1c <= 6.0) {
-  //     icon = Icon(
-  //       Icons.mood,
-  //       color: Colors.green,
-  //       size: 40.0,
-  //     );
-  //     color = Colors.green;
-  //   } else if (_a1c > 6.0 && _a1c <= 8.0) {
-  //     icon = Icon(
-  //       Icons.mood,
-  //       color: Colors.orangeAccent,
-  //       size: 40.0,
-  //     );
-  //     color = Colors.orangeAccent;
-  //   } else {
-  //     icon = Icon(
-  //       Icons.mood_bad,
-  //       color: Colors.redAccent,
-  //       size: 40.0,
-  //     );
-  //     color = Colors.redAccent;
-  //   }
-  // }
+  double _carb() {
+setState(() {  carb=widget.carb;});
+    var n = carb / 300;
+    print('carb n: $n');
+    _bgratiocarb();
+    return n/10;
+  }
+
+
+double _PA(){
+//setState(() {  carb=widget.carb;});
+    var n = pa / maxPA;
+    print('PA n: $n');
+    _bgratioPA();
+    return n;  
+}
+
+double _IS(){
+//setState(() {  carb=widget.carb;});
+    var n = unit / total;
+    print('IS n: $n');
+    _bgratioIS();
+    return n;  
+}
+  Future _bgratio() {
+    if (widget.A1c <= 6.5) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorA1c = Colors.green;
+    }
+
+
+     else if (widget.A1c> 6.5 &&
+     widget.A1c <= 8.0) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorA1c = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
+        color: Colors.redAccent,
+        size: 40.0,
+      );
+      colorA1c = Colors.redAccent;
+    }
+  }
+
+  Future _bgratiocarb() {
+    if (widget.carb <= minCarb) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorcarb = Colors.green;
+    } else if (widget.carb > minCarb && widget.carb <= maxCarb) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorcarb = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
+        color: Colors.redAccent,
+        size: 40.0,
+      );
+      colorcarb = Colors.redAccent;
+    }
+  }
+
+  
+    Future _bgratioPA() {
+    if (pa <= (maxPA/2)) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorPA = Colors.green;
+    } else if (pa > (maxPA/2) && pa <= maxPA) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorPA = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
+        color: Colors.redAccent,
+        size: 40.0,
+      );
+      colorPA = Colors.redAccent;
+    }
+  }
+
+
+    Future _bgratioIS() {
+    if (pa <= (maxPA/3)) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorPA = Colors.green;
+    } else if (pa > (total/3) && pa <= total/2) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorPA = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
+        color: Colors.redAccent,
+        size: 40.0,
+      );
+      colorPA = Colors.redAccent;
+    }
+  }
+
 
   // void initState() {
   //  super.initState();
@@ -146,30 +277,11 @@ class _Bodystate extends State<Body> {
   //   this._bgratio();}
 
   @override
+
   Widget build(BuildContext context) {
-//  setState(() {
-//     //super.initState();
-//     _getA1c();
-//     _bgratio();
-//  });
-    // initState(){
-    //   _getA1c();
-    //  super.initState();
-    //   this._getA1c();
-    //   // this._bgratio();
-    //   }
-    _getA1c();
-    // setState(() {
-    //     _a1c = a1c ;
-    //      print('this $_a1c and this $a1c');
-    //   });
-    // somfun(){
-    //   setState(() {
-    //     _getA1c();
-    //     _a1c = a1c ;
-    //      print('this $_a1c and this $a1c');
-    //   });
-    // }
+
+    print("crunt widget.A1c in homepage :${ widget.A1c}");
+  
     return Directionality(
       textDirection: TextDirection.rtl,
       child: new Column(
@@ -185,11 +297,12 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: double.parse(widget.A1c) / 14, //  _a1c/14, //_a1c(),
-                  center: Text((widget.A1c).toString() + 'التراكمي',
+                  percent: 
+                      _a1c(), 
+                  center: Text('$a1c :التراكمي',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: color,
+                  progressColor: colorA1c,
                 ),
               ),
               Padding(
@@ -199,11 +312,11 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  // percent: _a1c(),
-                  center: Text('الكابرو هيدرات',
+                  percent:  _carb(),
+                  center: Text('$maxCarb / $carb :الكاربوهيدرات',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: color,
+                  progressColor: colorcarb,
                 ),
               ),
               Padding(
@@ -213,11 +326,11 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  //   percent: _a1c(),
-                  center: Text('الانسولين',
+                     percent:0.25,  //_a1c(),
+                  center: Text('الانسولين: 10/40 وحدة',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: color,
+                  progressColor:   Colors.green,  //colorA1c,
                 ),
               ),
               Padding(
@@ -227,11 +340,11 @@ class _Bodystate extends State<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  //  percent: _a1c(),
-                  center: Text('النشاط البدني',
+                    percent: _PA(),
+                  center: Text('النشاط البدني: ${maxPA} /$pa دقيقة',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: color,
+                  progressColor: colorPA, //colorA1c,
                 ),
               ),
               Container(
@@ -240,40 +353,57 @@ class _Bodystate extends State<Body> {
                 child: Column(
                   children: <Widget>[
                     new Card(
-                        elevation: 5.0,
-                        color: Colors.white,
-                        child: new Column(
-                          children: <Widget>[
-                            new Container(
-                              color: Colors.grey[200],
-                              padding: const EdgeInsets.only(
-                                  left: 234.0,
-                                  right: 30.0,
-                                  top: 10.0,
-                                  bottom: 10.0),
-                              child: new Text(
-                                'الوجبة الاخيرة : ',
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.grey[700],
-                                ),
+                      elevation: 5.0,
+                      color: Colors.white,
+                      child: new Column(
+                        children: <Widget>[
+                          new Container(
+                            color: Colors.grey[200],
+                            padding: const EdgeInsets.only(
+                                left: 234.0,
+                                right: 30.0,
+                                top: 10.0,
+                                bottom: 10.0),
+                            child: new Text(
+                              'الوجبة الاخيرة : ',
+                              style: TextStyle(
+                                fontSize: 19.0,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.grey[700],
                               ),
                             ),
-                            new Divider(
-                              color: Color(0xFFBDD22A),
-                              height: 0.0,
-                            ),
-                            new Padding(
+                          ),
+
+          FutureBuilder(
+            future: helper.getfood(widget.id[0]['email']),
+            builder: (context, snapshot) {
+            print("meal id of list : ${snapshot.data==null}");
+          if (snapshot.connectionState == ConnectionState.done && snapshot.data!=null ) {
+            print("hi list view");
+              final foods=snapshot.data;
+            print("meal id of list : ${foods.length}");
+              var i= ((foods.length==null)? 0:foods.length) *50.0 ;
+        return new Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: SizedBox(
+                                        height: i,
+                                        child:    
+               ListView.builder(
+                 
+                itemBuilder: (context, index){
+               print(foods[index]['varcarb']);
+                return  
+                new Padding(
                               padding: const EdgeInsets.only(
                                 right: 20.0,
                               ),
                               child: new Row(
                                 children: <Widget>[
                                   new Text(
-                                    'name',
+                                    '${foods[index]['eat']}',
                                     style: TextStyle(
-                                      fontSize: 18.0,
+                                      fontSize: 13.0,
                                       fontWeight: FontWeight.w800,
                                     ),
                                   ),
@@ -291,194 +421,168 @@ class _Bodystate extends State<Body> {
                                     ),
                                   ),
                                   new Text(
-                                    'carb',
+                                    '${foods[index]['varcarb']}',
                                     style: TextStyle(
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 80.0,
+                                    width: 8.0,
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.close,
+                                    icon: Icon(Icons.delete_forever,
                                         size: 30.0, color: Colors.red),
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      
+                                      var result =await helper.deleteVariety(
+                                        foods[index]['id'],foods[index]['email'].toString(),foods[index]['mealId']);
+                                                print(result);
+                                                // Navigator.pop(context);
+                                                //Navigator.of(context).popAndPushNamed(routeName)
+                                                Navigator.pushReplacement(
+                                                    context,MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            MainPage(widget.id,widget.BMI,widget.A1c,widget.carb)));
+                                    },
                                   ),
                                 ],
                               ),
-                            ),
-                            new Divider(
-                              color: Color(0xFFBDD22A),
-                              height: 0.0,
-                            ),
-                            new Padding(
-                              padding: const EdgeInsets.only(
-                                right: 20.0,
-                              ),
-                              child: new Row(
-                                children: <Widget>[
-                                  new Text(
-                                    'name',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                  new Container(
-                                      margin: new EdgeInsets.only(
-                                          top: 10.0, left: 5.0, right: 5.0),
-                                      height: 2.0,
-                                      width: 10.0,
-                                      color: Colors.blueGrey),
-                                  new Text(
-                                    'الكاربوهيدرات: ',
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  new Text(
-                                    'carb',
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 80.0,
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.close,
-                                        size: 30.0, color: Colors.red),
-                                    onPressed: () {},
-                                  ),
-                                ],
-                              ),
-                            ),
-                            new Divider(
-                              color: Color(0xFFBDD22A),
-                              height: 0.0,
-                            ),
-                          ],
-                        )),
+                            );
+                       
+                           
+                },
+                itemCount:foods.length ,
+              ),
+//--------------------------------------------------------
+                                      ),
+                                      ),
+                                    ],
+                                      );
+          }
+          else{
+            return new Container();
+          }
+         // return Center(child: CircularProgressIndicator());
+            },
+         )
+
+
+                  ],
+                      ),
+                    )
                   ],
                 ),
               ),
-            
-            
-            
-            
-            
-            
             ],
           ),
-          // new Container(
-          //     width: 380.0,
-          //     height: 114.0,
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(begin: Alignment.bottomLeft, colors: [
-          //         Colors.white70.withOpacity(0.3),
-          //         Colors.white10.withOpacity(0.3)
-          //       ]),
-          //       shape: BoxShape.rectangle,
-          //       borderRadius: new BorderRadius.circular(8.0),
-          //       boxShadow: <BoxShadow>[
-          //         new BoxShadow(
-          //           color: Colors.black12,
-          //           blurRadius: 50.0,
-          //           offset: new Offset(0.0, 5.0),
-          //         ),
-          //       ],
-          //     ),
-          //     child: new Column(
-          //       children: <Widget>[
-          //         new Row(
-          //           children: <Widget>[
-          //             Container(
-          //               padding: EdgeInsets.only(
-          //                   top: 15.0, bottom: 15.0, right: 20.0),
-          //               child: Text(
-          //                 'مجموع جرعات الانسولين اليومي: ',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w500,
-          //                 ),
-          //               ),
-          //             ),
-          //             new Container(
-          //               padding: EdgeInsets.only(
-          //                 bottom: 15.0,
-          //                 top: 15.0,
-          //               ),
-          //               child: Text(
-          //                 dd.toInt().toString() + ' وحدة',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w800,
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         new Row(
-          //           children: <Widget>[
-          //             new Container(
-          //               padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
-          //               child: Text(
-          //                 'مجموع جرعات الصافي: ',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w500,
-          //                 ),
-          //               ),
-          //             ),
-          //             new Container(
-          //               padding: EdgeInsets.only(
-          //                 bottom: 15.0,
-          //               ),
-          //               child: Text(
-          //                 (dd / 2).toInt().toString() + ' وحدة',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w800,
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //         new Row(
-          //           children: <Widget>[
-          //             new Container(
-          //               padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
-          //               child: Text(
-          //                 'مجموع جرعات العكر: ',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w500,
-          //                 ),
-          //               ),
-          //             ),
-          //             new Container(
-          //               padding: EdgeInsets.only(
-          //                 bottom: 15.0,
-          //               ),
-          //               child: Text(
-          //                 (dd / 2).toInt().toString() + ' وحدة',
-          //                 style: TextStyle(
-          //                   fontSize: 13.0,
-          //                   fontWeight: FontWeight.w800,
-          //                 ),
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ],
-          //     )),
         ],
       ),
     );
-  }
+  }                            
+                              // ),
+                          // new Container(
+                          //     width: 380.0,
+                          //     height: 114.0,
+                          //     decoration: BoxDecoration(
+                          //       gradient: LinearGradient(begin: Alignment.bottomLeft, colors: [
+                          //         Colors.white70.withOpacity(0.3),
+                          //         Colors.white10.withOpacity(0.3)
+                          //       ]),
+                          //       shape: BoxShape.rectangle,
+                          //       borderRadius: new BorderRadius.circular(8.0),
+                          //       boxShadow: <BoxShadow>[
+                          //         new BoxShadow(
+                          //           color: Colors.black12,
+                          //           blurRadius: 50.0,
+                          //           offset: new Offset(0.0, 5.0),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     child: new Column(
+                          //       children: <Widget>[
+                          //         new Row(
+                          //           children: <Widget>[
+                          //             Container(
+                          //               padding: EdgeInsets.only(
+                          //                   top: 15.0, bottom: 15.0, right: 20.0),
+                          //               child: Text(
+                          //                 'مجموع جرعات الانسولين اليومي: ',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w500,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //             new Container(
+                          //               padding: EdgeInsets.only(
+                          //                 bottom: 15.0,
+                          //                 top: 15.0,
+                          //               ),
+                          //               child: Text(
+                          //                 dd.toInt().toString() + ' وحدة',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w800,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //         new Row(
+                          //           children: <Widget>[
+                          //             new Container(
+                          //               padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
+                          //               child: Text(
+                          //                 'مجموع جرعات الصافي: ',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w500,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //             new Container(
+                          //               padding: EdgeInsets.only(
+                          //                 bottom: 15.0,
+                          //               ),
+                          //               child: Text(
+                          //                 (dd / 2).toInt().toString() + ' وحدة',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w800,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //         new Row(
+                          //           children: <Widget>[
+                          //             new Container(
+                          //               padding: EdgeInsets.only(bottom: 15.0, right: 20.0),
+                          //               child: Text(
+                          //                 'مجموع جرعات العكر: ',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w500,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //             new Container(
+                          //               padding: EdgeInsets.only(
+                          //                 bottom: 15.0,
+                          //               ),
+                          //               child: Text(
+                          //                 (dd / 2).toInt().toString() + ' وحدة',
+                          //                 style: TextStyle(
+                          //                   fontSize: 13.0,
+                          //                   fontWeight: FontWeight.w800,
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ],
+                          //         ),
+                          //       ],
+                          //     ))
 
 // void _BGTotal() async{
 //   var total = (await helper.BGTotal())[0]['Total'];
@@ -487,21 +591,49 @@ class _Bodystate extends State<Body> {
 //   setState(() => _sum = total);
 // }
 
-  Future _getA1c() async {
-    String re =
-        (await helper.getA1C(widget.id[0]['email'].toString()))[0]['a1C'];
-    print("_getA1c :$re");
+  // Future _getA1c() async {
+  //   String re =
+  //       (await helper.getA1C(widget.id[0]['email'].toString()))[0]['a1C'];
+  //   print("_getA1c :$re");
 
-    a1c = double.parse(re);
-    print("******************_getA1c :$_a1c");
+  //   a1c = double.parse(re);
+  //   print("******************_getA1c :$_a1c");
 // setState(() => a1c=double.parse(re));
 //   setState(() => _num=num);
-  }
+  // }
 
 //  a11c()  {
 
 // _getA1c();
 
+// 
+
+// void hi()async{
+// var hi= await helper.getMeal(widget.id[0]['email']);
+
+// print("get hi: $hi");
+
 // }
 
+//git heal id:
+void mea() async {
+                     var meali = await helper.getMeal(widget.id[0]['eamil']);
+                      print('last meal result id of homepage : $meali');
+                      if(!meali.isEmpty){
+                      var mealid= meali[0]["mealId"];
+                      print('meal result id : $mealid');
+
+//setState(() {
+  meali=mealid;
+  print("meali is :$meali");
+//});
 }
+else{
+//setState(() {
+  meali=0;
+  print("meali is :$meali");
+//});
+}
+}
+}
+

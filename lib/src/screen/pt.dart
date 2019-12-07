@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
 class PeriodicTest extends StatelessWidget {
-  PeriodicTest(this.id);
+  PeriodicTest(this.id, this.BMI, this.A1c, this.carb);
   var id;
+  var BMI;
+  var A1c;
+  var carb;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -22,20 +25,23 @@ class PeriodicTest extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id)),
+          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id);
+  Body(this.id, this.BMI, this.A1c, this.carb);
   var id;
+  var BMI;
+  var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }
 
 class _Bodystate extends State<Body> {
-   DatabaseHelper helper = DatabaseHelper();
+  DatabaseHelper helper = DatabaseHelper();
   final _formKey = GlobalKey<FormState>();
   String _pt;
   DateTime _ptDate = new DateTime.now();
@@ -92,7 +98,7 @@ class _Bodystate extends State<Body> {
                   style: new TextStyle(fontSize: 17.0),
                 ),
                 SizedBox(
-                  width: 80.0,
+                  width: 50.0,
                 ),
                 new Text(
                   'يتبقى على الموعد',
@@ -103,108 +109,125 @@ class _Bodystate extends State<Body> {
             SizedBox(
               height: 10.0,
             ),
-           FutureBuilder(
-             future: helper.getPT(widget.id[0]['email']),
-             builder: (context, snapshot){
-               print(snapshot.data);
-      // //        if (data.connectionState == ConnectionState.none && data.hasData == null) {
-      // //   //print('project snapshot data is: ${projectSnap.data}');
-      // //   return Container();
-      // // }
-        if (snapshot.connectionState == ConnectionState.done) {
-          print("hi list view 1");
-        final Pt=snapshot.data;
-        var l= 65.0*Pt.length; //lenght of the view for carunt record (to be flixable)
-       return 
-       new Row(
-       children: <Widget>[
-         Expanded(
-           child:SizedBox(
-             height: l as double,
-      child: ListView.builder(
-        
-      //   //   itemCount: data.data.length,
-                    itemCount: Pt.length,
-         itemBuilder: (context, index) {
-         // print("{Pt[index]['Name']}");
-
-         // var project = snapshot.data[index];
-           return Card(
-               child: Padding(
-               padding: EdgeInsets.only(right: 20.0, bottom: 6.0, top: 10.0),
-               child: new Row(
-                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                   children: <Widget>[
-                     Text(
-                       '${Pt[index]['Name']}',
-                       style: TextStyle(
-                         fontSize: 16.0,
-                         color: Colors.black,
-                       ),
-                                           textAlign:TextAlign.center ,
-
-                    ),
-                    SizedBox(
-                     width: 40.0,// height:20 ,
-                   ),
-                    Text(
-                      '${Pt[index]['date']}',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    textAlign:TextAlign.center ,
-
-                    ),
-                    SizedBox(
-                      width: 80.0,//height: 20,
-                    ),
-                    Text(
-                      '${Pt[index]['dur']}',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                                          textAlign:TextAlign.center ,
-
-                     ),
-                     new Padding( // but didn't make any  cheng!
-                      padding: EdgeInsets.only(left: 0),
-                   child: 
-                     IconButton(
-                       icon:Icon( Icons.delete, textDirection:TextDirection.ltr,size:20),
-
-                       onPressed:() async {
-                       var result= await helper.deletExam(Pt[index]['id'],Pt[index]['email'].toString());
-                       print(result);
-                     // Navigator.pop(context);
-                       //Navigator.of(context).popAndPushNamed(routeName)
-                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
-                      //
-                       },)
-
-                 )
-                  ],
-                ),
-               ),
-             );
-           },
-           
+            FutureBuilder(
+              future: helper.getPT(widget.id[0]['email']),
+              builder: (context, snapshot) {
+                print(snapshot.data);
+                // //        if (data.connectionState == ConnectionState.none && data.hasData == null) {
+                // //   //print('project snapshot data is: ${projectSnap.data}');
+                // //   return Container();
+                // // }
+                if (snapshot.connectionState == ConnectionState.done) {
+                  print("hi list view 1");
+                  final Pt = snapshot.data;
+                  var l = 65.0 * Pt.length; //lenght of the view for carunt record (to be flixable)
+                  return new Row(
+                    children: <Widget>[
+                    Expanded(
+                        child: SizedBox(
+                            height: l as double,
+                            child: ListView.builder(
+                              //   //   itemCount: data.data.length,
+                              itemCount: Pt.length,
+                              itemBuilder: (context, index) {
+                                // print("{Pt[index]['Name']}");
+                                return Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        right: 20.0, bottom: 6.0, top: 10.0),
+                                    child: new Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                       Padding(
+                                         padding: EdgeInsets.only(),
+                                       
+                                         child: new Text(
+                                          '${Pt[index]['Name']}',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        ),
+                                        SizedBox(
+                                          width: 40.0, // height:20 ,
+                                        ),
+                                        Text(
+                                          '${Pt[index]['date']}',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(
+                                          width: 60.0, //height: 20,
+                                        ),
+                                          Text(
+                                          '${Pt[index]['dur']}يوم',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        // new Padding(
+                                        //     // but didn't make any  cheng!
+                                        //     padding: EdgeInsets.only(
+                                        //         left: 0, bottom: 10.0),
+                                        //     child:
+                                        new IconButton(
+                                          padding: EdgeInsets.only( bottom:30.0,right: 43.0) ,
+                                              icon: Icon(Icons.delete,
+                                                  textDirection:
+                                                      TextDirection.ltr,
+                                                  size: 20),
+                                              onPressed: () async {
+                                                var result =
+                                                    await helper.deletExam(
+                                                        Pt[index]['id'],
+                                                        Pt[index]['email']
+                                                            .toString());
+                                                print(result);
+                                                // Navigator.pop(context);
+                                                //Navigator.of(context).popAndPushNamed(routeName)
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            PeriodicTest(
+                                                                widget.id,
+                                                                widget.BMI,
+                                                                widget.A1c.toString(),
+                                                                widget.carb)));
+                                                //
+                                              },
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
 
 //            itemCount: Pt.length,
-                  )
+                            )
 //--
-         )  )  ] );
-        }
-        else{
-          return Card();
-          //C]enter(child: CircularProgressIndicator());
-        }
-             },
+                            ))
+                  ]
+                  );
+                } 
+                else {
+                  return Card();
+                  //C]enter(child: CircularProgressIndicator());
+                }
+              }
 
-             //future: getProjectDetails(),
-             ),
+              //future: getProjectDetails(),
+            ),
             SizedBox(
               height: 1.0,
             ),
@@ -249,7 +272,7 @@ class _Bodystate extends State<Body> {
             SizedBox(
               height: 20.0,
             ),
-            
+
             new Padding(
               padding: const EdgeInsets.only(
                   left: 90.0, right: 90.0, top: 5.0, bottom: 5.0),
@@ -279,21 +302,21 @@ class _Bodystate extends State<Body> {
                                       value: _pt,
                                       items: [
                                         DropdownMenuItem<String>(
-                                          value: 'التراكمي',
+                                          value: 'فحص التراكمي',
                                           child: Text(
-                                            'التراكمي',
+                                            'فحص التراكمي',
                                           ),
                                         ),
                                         DropdownMenuItem<String>(
-                                          value: 'الكلى',
+                                          value: 'فحص الكلى',
                                           child: Text(
-                                            'الكلى',
+                                            'فحص الكلى',
                                           ),
                                         ),
                                         DropdownMenuItem<String>(
-                                          value: 'العين',
+                                          value: 'فحص العين',
                                           child: Text(
-                                            'العين',
+                                            'فحص العين',
                                           ),
                                         ),
                                       ],
@@ -344,25 +367,40 @@ class _Bodystate extends State<Body> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 50.0),
                                     child: new GestureDetector(
-                                      onTap: () async{
-                                          final date2= DateTime.now();
-                                         final difference = _ptDate.difference(date2).inDays;
-                                           int id;
-                                            if(_pt=="العين"){
-                                                id=3;
-                                            }
-                                            else if(_pt=="التراكمي"){
-                                                id=1;
-                                            }
-                                            else{
-                                              id=2;
-                                            }
-                                        Exam pts= new Exam.withId(id,_pt,widget.id[0]['email'],_ptDate.toIso8601String().substring(0,10),difference);
-                                        print("exam: $_pt,${widget.id[0]['email']},${_ptDate.toIso8601String().substring(0,10)},$difference");
-                                        var he= await helper.insertExam(pts);
-                                       Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
-                                      // Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
-
+                                      onTap: () async {
+                                        final date2 = DateTime.now();
+                                        final difference =
+                                            _ptDate.difference(date2).inDays;
+                                        int id;
+                                        if (_pt == "فحص العين") {
+                                          id = 3;
+                                        } else if (_pt == "فحص التراكمي") {
+                                          id = 1;
+                                        } else {
+                                          id = 2;
+                                        }
+                                        Exam pts = new Exam.withId(
+                                            id,
+                                            _pt,
+                                            widget.id[0]['email'],
+                                            _ptDate
+                                                .toIso8601String()
+                                                .substring(0, 10),
+                                            difference);
+                                        // print("exam: $_pt,${widget.id[0]['email']},${_ptDate.toIso8601String().substring(0,10)},$difference");
+                                        var he = await helper.insertExam(pts);
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PeriodicTest(
+                                                      widget.id,
+                                                      widget.BMI,
+                                                      widget.A1c,
+                                                      widget.carb)),
+                                        );
+                                        //     Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id,widget.BMI,widget.A1c.toString(), widget.carb)));
+                                        // Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id)));
                                       },
                                       child: new Container(
                                           alignment: Alignment.center,
@@ -400,8 +438,7 @@ class _Bodystate extends State<Body> {
                             fontWeight: FontWeight.bold))),
               ),
             ),
-          
-          
+
             SizedBox(
               height: 30.0,
             ),
@@ -438,140 +475,133 @@ class _Bodystate extends State<Body> {
               ],
             ),
 
-
-
-
-
-            
             SizedBox(
               height: 10.0,
             ),
-           FutureBuilder(
-             future: helper.getPT(widget.id[0]['email']),
-             builder: (context, snapshot){
-               print(snapshot.data);
-      // //        if (data.connectionState == ConnectionState.none && data.hasData == null) {
-      // //   //print('project snapshot data is: ${projectSnap.data}');
-      // //   return Container();
-      // // }
-        if (snapshot.connectionState == ConnectionState.done) {
-          print("hi list view 1");
-        final Pt=snapshot.data;
-        var l= 60.0*Pt.length;
-       return 
-       new Row(
-       children: <Widget>[
-         Expanded(
-           child:SizedBox(
-             height: l as double,
-      child: ListView.builder(
-        
-      //   //   itemCount: data.data.length,
-                    itemCount: Pt.length,
-         itemBuilder: (context, index) {
-         // print("{Pt[index]['Name']}");
+            FutureBuilder(
+              future: helper.getPT(widget.id[0]['email']),
+              builder: (context, snapshot) {
+                print(snapshot.data);
+                // //        if (data.connectionState == ConnectionState.none && data.hasData == null) {
+                // //   //print('project snapshot data is: ${projectSnap.data}');
+                // //   return Container();
+                // // }
+                if (snapshot.connectionState == ConnectionState.done) {
+                  print("hi list view 1");
+                  final Pt = snapshot.data;
+                  var l = 60.0 * Pt.length;
+                  return new Row(children: <Widget>[
+                    Expanded(
+                        child: SizedBox(
+                            height: l as double,
+                            child: ListView.builder(
+                              //   //   itemCount: data.data.length,
+                              itemCount: Pt.length,
+                              itemBuilder: (context, index) {
+                                // print("{Pt[index]['Name']}");
 
-         // var project = snapshot.data[index];
+                                // var project = snapshot.data[index];
 
-
-            Card(
-              child: Padding(
-                padding: EdgeInsets.only(right: 20.0, bottom: 10.0, top: 10.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'فحص العين',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 40.0,
-                    ),
-                    Text(
-                      '1/1/2019',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 80.0,
-                    ),
-                    Text(
-                      'سليمة',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-            SizedBox(
-              height: 5.0,
-            );
-            Card(
-              child: Padding(
-                padding: EdgeInsets.only(right: 20.0, bottom: 10.0, top: 10.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'فحص الكلى',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 35.0,
-                    ),
-                    Text(
-                      '1/12/2018',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 70.0,
-                    ),
-                    Text(
-                      'سليمة',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-
-           },
-           
+                                Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        right: 20.0, bottom: 10.0, top: 10.0),
+                                    child: new Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'فحص فحص العين',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 40.0,
+                                        ),
+                                        Text(
+                                          '1/1/2019',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 80.0,
+                                        ),
+                                        Text(
+                                          'سليمة',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                                SizedBox(
+                                  height: 5.0,
+                                );
+                                Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        right: 20.0, bottom: 10.0, top: 10.0),
+                                    child: new Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          'فحص فحص الكلى',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 35.0,
+                                        ),
+                                        Text(
+                                          '1/12/2018',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 70.0,
+                                        ),
+                                        Text(
+                                          'سليمة',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
 
 //            itemCount: Pt.length,
-                  )
+                            )
 //--
-         )  )  ] );
-        }
-        else{
-          return Card();
-          //C]enter(child: CircularProgressIndicator());
-        }
-             },
+                            ))
+                  ]);
+                } else {
+                  return Card();
+                  //C]enter(child: CircularProgressIndicator());
+                }
+              },
 
-             //future: getProjectDetails(),
-             ),
-
-
+              //future: getProjectDetails(),
+            ),
           ]),
         ));
   }

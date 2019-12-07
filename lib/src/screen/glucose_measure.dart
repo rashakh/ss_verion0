@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dtfbl/diabetes_icons_icons.dart';
 import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/models/BG.dart';
 import 'package:dtfbl/src/models/PA.dart';
@@ -17,10 +18,11 @@ import 'package:intl/intl.dart' as intl; // flutter main package
 import 'mainpage.dart';
 
 class GlucoseMeasure extends StatelessWidget {
-  GlucoseMeasure(this.id,this.A1c);
+  GlucoseMeasure(this.id, this.BMI, this.A1c,this.carb);
   var id;
   var BMI;
   var A1c;
+  var carb;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -35,17 +37,18 @@ class GlucoseMeasure extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id,BMI,A1c)),
+          body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb)),
           // Padding(padding: const EdgeInsets.only(top: 100), child: Body()),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id,this.BMI,this.A1c);
+  Body(this.id, this.BMI, this.A1c,this.carb);
   var id;
   var BMI;
   var A1c;
+  var carb;
   @override
   State createState() => new _Bodystate();
 }
@@ -138,7 +141,7 @@ class _Bodystate extends State<Body> {
       gm = e;
       if (gm < 70 || gm > 180) {
         slider = Colors.redAccent[400];
-        evaluation = 'هذا ليس جيد، يجب عليك الانتباه';
+        evaluation = 'هذا ليس جيد، سكرك مرتفع';
       } else {
         slider = Colors.greenAccent[400];
         evaluation = 'هذا رائع انت تبلي جيدا';
@@ -218,9 +221,9 @@ class _Bodystate extends State<Body> {
           ),
         ),
         Icon(
-          Icons.arrow_drop_up,
+          DiabetesIcons.swipe,
           color: slider,
-          size: 40,
+          size: 35,
         ),
       ],
     );
@@ -551,7 +554,8 @@ class _Bodystate extends State<Body> {
                   //     style: TextStyle(
                   //       fontSize: 20.0,
                   //     )),
-                  onPressed: () => setState(() async {
+                  onPressed: () async{
+                  
                     if (slot == 8) {
                       PA padb = new PA(widget.id[0]['email'].toString(),
                           pas[pa], 0, dateTime.toIso8601String());
@@ -566,10 +570,11 @@ class _Bodystate extends State<Body> {
                       int padu = dur.inMinutes;
                       print("click 9:$padu, ");
                       var palw = await helper.UpdatetPA(padu);
-                      //     print("click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
-                      // BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
-                      // var mealw = await helper.insertBG(bg);
+                          print("click 4 BG bg=BG(${widget.id[0]['email'].toString()}, ${slots[slot]}, $gm, $note,${dateTime.toIso8601String()}");
+                      BG bg=BG(widget.id[0]['email'].toString(), slots[slot], gm, note,dateTime.toIso8601String());
+                      var mealw = await helper.insertBG(bg);
                       print("click 9.1:$palw, ");
+                      print("click 9.1:$mealw, ");
                        setState(() {
                       a11c();
                                               print("hi set stet");
@@ -585,19 +590,23 @@ class _Bodystate extends State<Body> {
                        _BGRe();
                       _BGTotal();
                                               print("hi set stet");
-
+                      a11c();
                      }); 
-                     // a11c();
                     }
                     widget.A1c=(await helper.getA1C(widget.id[0]['email']))[0]['a1C'];
-                    print("reples to home: widget.A1c");
+                    print("reples to home:${widget.A1c}");
                     print(widget.A1c);
+                     setState(()  {
+
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c)),
+                          builder: (context) => MainPage(widget.id,
+                          widget.BMI,
+                          widget.A1c,
+                          widget.carb)),
                     );
-                  }),
+                  });}
                 ),
                 SizedBox(width: 160.0),
                 new FlatButton(
@@ -664,7 +673,10 @@ _BGRe();
     double mod = pow(10.0, 1); 
     var nwe =((wA1c * mod).round().toDouble() / mod);
     print("wA1c After: $nwe");
-    widget.A1c=nwe;
+   setState(() {
+      widget.A1c=nwe;
+   });
+   
     if(_rec==0){ //if new user 
     DateTime newdate = dateTime.add(new Duration(days: 90));
     A1C ss = A1C(nwe,widget.id[0]['email'].toString() ,dateTime.toIso8601String(), newdate.toIso8601String());
