@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:dtfbl/src/models/carb.dart';
 import 'package:dtfbl/src/models/meal.dart';
 import 'package:dtfbl/src/models/variety.dart';
 import 'package:dtfbl/src/models/variety.dart' as prefix0;
@@ -70,7 +71,7 @@ class Meals extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MedAlert(id, BMI, A1c.toString(), carb)),
+                          MedAlert(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -81,7 +82,7 @@ class Meals extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          PeriodicTest(id, BMI, A1c.toString(), carb)),
+                          PeriodicTest(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -92,7 +93,7 @@ class Meals extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          ExportPDF(id, BMI, A1c.toString(), carb)),
+                          ExportPDF(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -844,34 +845,39 @@ class _Bodystate extends State<Body> {
                       //widget.carb=_sum;
                       dbslot = slots[slot];
                       dbdm = dateTime.toIso8601String();
-                      print(
-                          "click 27: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
+
                       Meal meal = Meal(dbemail, dbslot, dbcarb, dbnote, dbdm);
                       var mealw = await helper.insertMeal(meal);
-                      print('this result id : ${mealw}');
-
-                      // Variety variety= Variety(dbvarId,mealw,dbemail,dbeat,dbvarycarb,dbamount);
-                      // var varyw = await helper.insertVariety(variety);
-                      // print('this result id : ${varyw}');
-                      print(
-                          "click 28: slot: $dbslot, email:$dbemail, carb: $dbcarb , not: $dbnote, date: $dbdm");
                       var meali = await helper.getMeal(dbemail);
                       print('last meal result id : ${meali}');
                       var mealid= meali[0]["mealId"];
                       print('meal result id : $mealid');
-                      //  for (final x in food) {
 
 // ------------------------------------------------------------------------------------------------------------
                      for (int i = 0; i < food.length; i++) {
-                       // var l = varty;
-                         print("I= $i");
-                         print("l= ${food.elementAt(0)}");
                           var f=food.elementAt(i);
-                          print("l= ${f[0]}");
                         Variety vat =new Variety(f[0],meali[0]['mealId'],f[1],dbemail,f[2],f[3]);
                           var vary = await helper.insertVariety(vat);
-                          print("vary result : $vary");
+                          print(" FOOD ARE SAVE : vary");
                       }
+                      // //get
+                      // var vartget=await helper.getfood(dbemail);
+                      // print("vart get: $vartget");
+                      
+
+                    //  String date =dbdm.substring(0, 10);
+
+                    //   //CARB:
+                    //   if((await helper.getCarb(dbemail))[0]['date']==date){
+                    //      var update=await helper.updataCarb(dbemail, dbcarb,date);
+                    //     print("update carb: $update");
+                    //   }
+                    //   else{
+                    //     Carb carba= new Carb(dbcarb,dbemail,date);
+                    //     //insert
+                    //     var inser=await helper.insertCARB(carba);
+                    //     print("inser carb: $inser");
+                    //   }
 //-----------------------------------------------------------------------------------------------------------------------------
                       setState(() {
                         food=[];
@@ -884,7 +890,7 @@ class _Bodystate extends State<Body> {
                               builder: (context) => MainPage(
                                   widget.id,
                                   widget.BMI,
-                                  widget.A1c.toString(),
+                                  widget.A1c,
                                   widget.carb)),
                         );
                       });

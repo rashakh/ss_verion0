@@ -65,21 +65,25 @@ class _LoginPageState extends State<LoginPage> {
     } else if (_validateAndSave(id)) {
       print('here is login id : ${id}');
 var BMI;
-var A1c;
+double  A1c;
 var carb=0.0;
     //  setState(() async{
           BMI=(await helper.getWight(id[0]['email']));
-         if(
-          ((await helper.getA1C(id[0]['email']))).isNotEmpty
-         ){
-         A1c=(await helper.getA1C(id[0]['email']));
-          }else{ A1c=0.0;}
+         
+         if(((await helper.getA1C(id[0]['email']))).isNotEmpty)
+         {
+         var a1ca= (await helper.getA1C(id[0]['email']))[0]['a1C'];
+         print("A1c now : $a1ca");
+         A1c=double.parse( a1ca);
+         print("A1c now : $A1c");
+          }
+          else{ A1c=0.0;}
 
-          if(
-          ((await helper.getCarb(id[0]['email']))).isNotEmpty
-         ){
+          if(((await helper.getCarb(id[0]['email']))).isNotEmpty)
+          {
          carb=(await helper.getCarb(id[0]['email']))[0]['carb'];
-          }else{ carb=0.0;} 
+          }
+          else{ carb=0.0;} 
       // print("A1c list: null");
 
         // }

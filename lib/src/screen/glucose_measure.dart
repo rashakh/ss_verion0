@@ -592,7 +592,7 @@ class _Bodystate extends State<Body> {
                                               print("hi set stet");
 
                      }); 
-                     // a11c();
+                      a11c();
                     }
                     widget.A1c=(await helper.getA1C(widget.id[0]['email']))[0]['a1C'];
                     print("reples to home: widget.A1c");
@@ -600,7 +600,7 @@ class _Bodystate extends State<Body> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c.toString(),widget.carb)),
+                          builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c,widget.carb)),
                     );
                   }),
                 ),

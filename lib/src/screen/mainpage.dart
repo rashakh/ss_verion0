@@ -4,12 +4,10 @@
 import 'dart:async';
 
 import 'package:dtfbl/diabetes_icons_icons.dart';
-import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'homepage.dart'; //import homepage file
 import 'meals.dart'; //import meals file
-//import 'physical_activity.dart'; //import physical_activity file
 import 'instructions.dart'; //import instructions file
 import 'medications.dart'; //import medications file
 import '../widgets/fancy_fab.dart';
@@ -19,7 +17,7 @@ class MainPage extends StatefulWidget {
   MainPage(@required this.id,@required this.BMI,@required this.A1c,@required this.carb);
   var id ;
   var BMI;
-  var A1c;
+  double A1c;
   var carb;
   @override
   State createState() => _MainPageState();
@@ -32,11 +30,11 @@ class _MainPageState extends State<MainPage> {
   // }
    Widget pages(_selectedPage) {
     final List<Widget> _pages = [
-      new HomePage(widget.id,widget.BMI,widget.A1c.toString(), widget.carb),
-      new Meals(widget.id,widget.BMI,widget.A1c.toString(), widget.carb),
+      new HomePage(widget.id,widget.BMI,widget.A1c, widget.carb),
+      new Meals(widget.id,widget.BMI,widget.A1c, widget.carb),
       //new PhysicalActivity(),
-      new Instructions(widget.id,widget.BMI,widget.A1c.toString(), widget.carb),
-      new Medications(widget.id,widget.BMI,widget.A1c.toString(), widget.carb),
+      new Instructions(widget.id,widget.BMI,widget.A1c, widget.carb),
+      new Medications(widget.id,widget.BMI,widget.A1c, widget.carb),
     ];
     return _pages[_selectedPage];
   }

@@ -396,7 +396,7 @@ class _Bodystate extends State<Body> {
                                                   PeriodicTest(
                                                       widget.id,
                                                       widget.BMI,
-                                                      widget.A1c.toString(),
+                                                      widget.A1c,
                                                       widget.carb)),
                                         );
                                         //     Navigator.pop(context,MaterialPageRoute(builder: (context) => PeriodicTest(widget.id,widget.BMI,widget.A1c.toString(), widget.carb)));

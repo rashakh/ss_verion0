@@ -1,4 +1,6 @@
-import 'package:dtfbl/src/models/A1C.dart';
+import 'dart:developer';
+
+import 'package:dtfbl/src/screen/mainpage.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:percent_indicator/percent_indicator.dart';
@@ -6,17 +8,18 @@ import './medalert.dart';
 import './pt.dart';
 import './profile.dart';
 import 'exportPDF.dart';
-import 'mainpage.dart';
 //import 'package:intl/intl.dart';
 
 class HomePage extends StatelessWidget {
   HomePage(this.id, this.BMI, this.A1c, this.carb);
   var id;
   var BMI;
-  var A1c;
+  double A1c;
   var carb;
+
   @override
   Widget build(BuildContext context) {
+    print("this is a1c ${this.A1c}");
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF2A79D2), //Color(0xFF7EAFE5),
@@ -101,12 +104,11 @@ class Body extends StatefulWidget {
   @override
   State createState() => new _Bodystate();
 }
-
-double a1c = 0;
 // double a1c = 0;
 int i=0;
 class _Bodystate extends State<Body> {
   DatabaseHelper helper = DatabaseHelper();
+  double a1c =0.0;
   var _sum = 0;
   var _num = 0;
   var dd = 45 * 0.55;
@@ -116,80 +118,81 @@ class _Bodystate extends State<Body> {
     color: Colors.green,
     size: 40.0,
   );
-
+  int mealid;
   Color colorA1c = Colors.green;
   Color colorcarb = Colors.green;
-
-  double _a1c() {
-    // _getA1c();
-setState(() {
-  print("a1c: $a1c");
-  a1c=widget.A1c;
-});
+ 
+   double _a1c() {
+setState(() {  a1c=widget.A1c;});
     var n = a1c / 14;
     print('n: $n');
     _bgratio();
+        mea();
+
     return n;
   }
 
-  double _carb() {
-    // _getA1c();
-    var n = 40 / 100;
-    print('n: $n');
-  //  _bgratiocarb();
-    return n;
-  }
+  // doub le _carb() {
+  // // _getA1c();
+  //   var n = widget / 100;
+  //   print('n: $n');
+  //   _bgratiocarb();
+  //   return n;
+  // }
 
   Future _bgratio() {
-    if (widget.A1c[0]['a1C'] <= 6.0) {
+    if (widget.A1c <= 6.5) {
       icon = Icon(
         Icons.mood,
         color: Colors.green,
         size: 40.0,
       );
       colorA1c = Colors.green;
-    }// else if (double.parse(widget.A1c) > 6.0 &&
-    //     double.parse(widget.A1c) <= 8.0) {
-    //   icon = Icon(
-    //     Icons.mood,
-    //     color: Colors.orangeAccent,
-    //     size: 40.0,
-    //   );
-    //   colorA1c = Colors.orangeAccent;
-    // } else {
-    //   icon = Icon(
-    //     Icons.mood_bad,
-    //     color: Colors.redAccent,
-    //     size: 40.0,
-    //   );
-    //   colorA1c = Colors.redAccent;
-    // }
+    }
+
+
+     else if (widget.A1c> 6.5 &&
+     widget.A1c <= 8.0) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorA1c = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
+        color: Colors.redAccent,
+        size: 40.0,
+      );
+      colorA1c = Colors.redAccent;
+    }
   }
 
-  // Future _bgratiocarb() {
-  //   if (widget.A1c[0]['a1C'] <= 6.0) {
-  //     icon = Icon(
-  //       Icons.mood,
-  //       color: Colors.green,
-  //       size: 40.0,
-  //     );
-  //   //   colorcarb = Colors.green;
-  //   // } else if (widget.A1c > 6.0 && widget.A1c <= 8.0) {
-  //   //   icon = Icon(
-  //   //     Icons.mood,
-  //   //     color: Colors.orangeAccent,
-  //   //     size: 40.0,
-  //   //   );
-  //   //   colorcarb = Colors.orangeAccent;
-  //   // } else {
-  //   //   icon = Icon(
-  //   //     Icons.mood_bad,
-  //   //     color: Colors.redAccent,
-  //   //     size: 40.0,
-  //   //   );
-  //   //   colorcarb = Colors.redAccent;
-  //   // }
-  // }
+  Future _bgratiocarb() {
+    if (widget.A1c <= 6.0) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorcarb = Colors.green;
+    } else if (widget.A1c > 6.0 && widget.A1c <= 8.0) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorcarb = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
+        color: Colors.redAccent,
+        size: 40.0,
+      );
+      colorcarb = Colors.redAccent;
+    }
+  }
 
   // void initState() {
   //  super.initState();
@@ -197,10 +200,11 @@ setState(() {
   //   this._bgratio();}
 
   @override
+
   Widget build(BuildContext context) {
-    print(widget.A1c);
-    String m = 'موز';
-    double carb = 13.41;
+
+    print("crunt widget.A1c in homepage :${ widget.A1c}");
+  
     return Directionality(
       textDirection: TextDirection.rtl,
       child: new Column(
@@ -216,12 +220,12 @@ setState(() {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: 0.4,
-                   //   _a1c(), //double.parse( widget.A1c.toString()) / 14, //  _a1c/14, /
-                  center: Text('7.2 :التراكمي',
+                  percent: 
+                      _a1c(), 
+                  center: Text('$a1c :التراكمي',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: Colors.yellow //colorA1c,
+                  progressColor: colorA1c,
                 ),
               ),
               Padding(
@@ -231,8 +235,8 @@ setState(() {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: 0.35,// _carb(),
-                  center: Text('75 / 220 :الكاربوهيدرات',
+                  percent: 0.2,// _carb(),
+                  center: Text('30 / 220 :الكاربوهيدرات',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: colorcarb,
@@ -245,8 +249,8 @@ setState(() {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                     percent:0.5,  //_a1c(),
-                  center: Text('الانسولين: 20/40 وحدة',
+                     percent:0.25,  //_a1c(),
+                  center: Text('الانسولين: 10/40 وحدة',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor:   Colors.green,  //colorA1c,
@@ -259,11 +263,11 @@ setState(() {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                    percent: 0.33, //_a1c(),
-                  center: Text('النشاط البدني: 40/135 دقيقة',
+                    percent: 0.5, //_a1c(),
+                  center: Text('النشاط البدني: 70/135 دقيقة',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: Colors.redAccent, //colorA1c,
+                  progressColor: Colors.yellow, //colorA1c,
                 ),
               ),
               Container(
@@ -293,64 +297,112 @@ setState(() {
                             ),
                           ),
 
+          FutureBuilder(
+            future: helper.getfood(widget.id[0]['email']),
+            builder: (context, snapshot) {
+            print("meal id of list : ${snapshot.data==null}");
+          if (snapshot.connectionState == ConnectionState.done && snapshot.data!=null ) {
+            print("hi list view");
+              final foods=snapshot.data;
+            print("meal id of list : ${foods.length}");
+              var i= ((foods.length==null)? 0:foods.length) *50.0 ;
+        return new Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: SizedBox(
+                                        height: i,
+                                        child:    
+               ListView.builder(
+                 
+                itemBuilder: (context, index){
+               print(foods[index]['varcarb']);
+                return  
+                new Padding(
+                              padding: const EdgeInsets.only(
+                                right: 20.0,
+                              ),
+                              child: new Row(
+                                children: <Widget>[
+                                  new Text(
+                                    '${foods[index]['eat']}',
+                                    style: TextStyle(
+                                      fontSize: 13.0,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  new Container(
+                                      margin: new EdgeInsets.only(
+                                          top: 10.0, left: 5.0, right: 5.0),
+                                      height: 2.0,
+                                      width: 10.0,
+                                      color: Colors.blueGrey),
+                                  new Text(
+                                    'الكاربوهيدرات: ',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  new Text(
+                                    '${foods[index]['varcarb']}',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 8.0,
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete_forever,
+                                        size: 30.0, color: Colors.red),
+                                    onPressed: () async {
+                                      
+                                      var result =await helper.deleteVariety(
+                                        foods[index]['id'],foods[index]['email'].toString(),foods[index]['mealId']);
+                                                print(result);
+                                                // Navigator.pop(context);
+                                                //Navigator.of(context).popAndPushNamed(routeName)
+                                                Navigator.pushReplacement(
+                                                    context,MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            MainPage(widget.id,widget.BMI,widget.A1c,widget.carb)));
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                       
+                           
+                },
+                itemCount:foods.length ,
+              ),
+//--------------------------------------------------------
+                                      ),
+                                      ),
+                                    ],
+                                      );
+          }
+          else{
+            return new Container();
+          }
+         // return Center(child: CircularProgressIndicator());
+            },
+         )
 
 
-
-
-//                           FutureBuilder (
-//                             //  future: helper.getMeal(widget.id[0]['email']),
-//                               builder: (context, snapshot) {
-//                 print("snap: ${snapshot.data}");
-//             ///  if (snapshot.connectionState == ConnectionState.none || snapshot.hasData == null) {
-                  
-//                   //print('project snapshot data is: ${projectSnap.data}');
-//                //   return Container();
-//                 //} else {
-//                   //hi();
-//                                 // if (snapshot.connectionState ==
-//                                 //     ConnectionState.done) {
-
-//                                 //  final Pt = snapshot.data;
-//                                   // var l = 65.0 *
-//                                   //     Pt.length; //lenght of the view for carunt record (to be flixable)
-//                                   //     print("fun: $Pt");
-//                                   return new Row(
-//                                     children: <Widget>[
-//                                       Expanded(
-//                                           child: SizedBox(
-//                                         height: 100,
-//                                         child: ListView.builder(
-//                                           itemCount: 2,
-//                                           itemBuilder: (context, index) {
-//                                             return
-//                                                 // new Divider(
-//                                                 //   color: Color(0xFFBDD22A),
-//                                                 //   height: 0.0,
-//                                                 // );
-//                                                 new Column(
-//                                                   children: <Widget>[
-//                                                     _fun(),
-//                                                     _fun2(),
-//                                                   ],
-//                                                 );
-//  //------------------------------------       
-                                  
-//                                             // new Divider(
-//                                             //   color: Color(0xFFBDD22A),
-//                                             //   height: 0.0,
-//                                             // );
-     
-//                                           },
-//                                         ),
-//                                       ))
-//                                     ],
-//                                   );
-//                            //     }
-//                                 // else{
-//                                 //   return Card();
-//                                 // }
-//                               }
-                              
+                  ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }                            
                               // ),
                           // new Container(
                           //     width: 380.0,
@@ -453,154 +505,8 @@ setState(() {
                           //           ],
                           //         ),
                           //       ],
-                          //     )),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-Widget _fun(){
-  if (i == 0){
-    return new Padding(
-                                              padding: const EdgeInsets.only(
-                                                right: 20.0,
-                                              ),
-                                              child: new Row(
-                                                children: <Widget>[
-                                                  new Text(
-                                                    'موز',
-                                                    style: TextStyle(
-                                                      fontSize: 18.0,
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                    ),
-                                                  ),
-                                                  new Container(
-                                                      margin:
-                                                          new EdgeInsets.only(
-                                                              top: 10.0,
-                                                              left: 5.0,
-                                                              right: 5.0),
-                                                      height: 2.0,
-                                                      width: 10.0,
-                                                      color: Colors.blueGrey),
-                                                  new Text(
-                                                    'الكاربوهيدرات: ',
-                                                    style: TextStyle(
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                  new Text(
-                                                    ' 13.41',
-                                                    style: TextStyle(
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 80.0,
-                                                  ),
-                                                  IconButton(
-                                                    icon: Icon(Icons.delete,
-                                                        size: 30.0,
-                                                        color: Colors.red),
-                                                    onPressed: () async {
-                                                      i = 1;
+                          //     ))
 
-                                                      Navigator.pushReplacement(context, MaterialPageRoute(
-                              builder: (context) =>  HomePage(widget.id,widget.BMI,widget.A1c, widget.carb)));
-                                                // var result =
-                                                //     await helper.deletExam(
-                                                //         Pt[index]['id'],
-                                                //         Pt[index]['email']
-                                                //             .toString());
-                                                // print(result);
-
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                              
-                                            );
-  }
-  return Container();
-}
-Widget _fun2(){
-  if(i==0){
-    return new Padding(
-                                              padding: const EdgeInsets.only(
-                                                right: 20.0,
-                                              ),
-                                              child: new Row(
-                                                children: <Widget>[
-                                                  new Text(
-                                                    'تفاح',
-                                                    style: TextStyle(
-                                                      fontSize: 18.0,
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                    ),
-                                                  ),
-                                                  new Container(
-                                                      margin:
-                                                          new EdgeInsets.only(
-                                                              top: 10.0,
-                                                              left: 5.0,
-                                                              right: 5.0),
-                                                      height: 2.0,
-                                                      width: 10.0,
-                                                      color: Colors.blueGrey),
-                                                  new Text(
-                                                    'الكاربوهيدرات: ',
-                                                    style: TextStyle(
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                  new Text(
-                                                    '25.13',
-                                                    style: TextStyle(
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 80.0,
-                                                  ),
-                                                  IconButton(
-                                                    icon: Icon(Icons.delete,
-                                                        size: 30.0,
-                                                        color: Colors.red),
-                                                    onPressed: () async {
-                                                      i = 1;
-                                                // var result =
-                                                //     await helper.deletExam(
-                                                //         Pt[index]['id'],
-                                                //         Pt[index]['email']
-                                                //             .toString());
-                                                // print(result);
-
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                              
-                                            );
-  }
-  return Container();
-}
 // void _BGTotal() async{
 //   var total = (await helper.BGTotal())[0]['Total'];
 //     print("num3: $total");
@@ -625,36 +531,32 @@ Widget _fun2(){
 
 // 
 
-void hi()async{
-var hi= await helper.getMeal(widget.id[0]['email']);
+// void hi()async{
+// var hi= await helper.getMeal(widget.id[0]['email']);
 
-print("get hi: $hi");
+// print("get hi: $hi");
 
+// }
+
+//git heal id:
+void mea() async {
+                     var meali = await helper.getMeal(widget.id[0]['eamil']);
+                      print('last meal result id of homepage : $meali');
+                      if(!meali.isEmpty){
+                      var mealid= meali[0]["mealId"];
+                      print('meal result id : $mealid');
+
+//setState(() {
+  meali=mealid;
+  print("meali is :$meali");
+//});
 }
-
+else{
+//setState(() {
+  meali=0;
+  print("meali is :$meali");
+//});
 }
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-////
-///
-///
-///
-///
-// 
+}
+}
 

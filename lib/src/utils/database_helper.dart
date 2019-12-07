@@ -63,12 +63,9 @@ class DatabaseHelper {
   String colDiastolic = 'Diastolic';
   String colSystolic='Systolic';
 
-
-
 //BW table:
   String bWTable= 'BW_table';
   String colwieght='wieght';
-
 
 //Instruction table:
   String instrTable= 'Instr_table';
@@ -271,14 +268,14 @@ class DatabaseHelper {
     Database db = await this.database;
     var result =
         await db.rawQuery('SELECT * FROM $mealTable  WHERE  $colEmail=\"$email\" ORDER BY $colId DESC LIMIT 1 ');
-   print("meal: ${result.toList()}");
+   print(" db.  meal: ${result.toList()}");
 
 if(result.isEmpty){
   return [];
 }
-
-  print("hi list");
- return result;
+else{
+  print("hi meal id from db");
+ return result;}
   }
   
 //-------------------------------Variety Table--------------------------------------------
@@ -297,14 +294,14 @@ if(result.isEmpty){
   }
 
  //delete one variety
-  Future<int> deleteVariety(int id, int mealid,String email) async {
+  Future<int> deleteVariety(int id,String email, int mealid) async {
   	var db = await this.database;
-  	int result = await db.rawDelete('DELETE FROM $varietyTable WHERE $colid = $id AND $colId=$mealid, $colEmail=\"$email\"');
+  	int result = await db.rawDelete('DELETE FROM $varietyTable WHERE $colid = $id AND $colId=$mealid AND $colEmail=\"$email\"');
   	return result;
   }
 
-//get last vart:
-Future getvr(int meal) async {
+//get vart by id meal:  
+Future getvr(int meal,) async {
  Database db = await this.database;
 var result = await db.rawQuery('SELECT * FROM $varietyTable WHERE $colId= $meal');
  print("getvart: ${result.toList()}");
@@ -313,6 +310,32 @@ var result = await db.rawQuery('SELECT * FROM $varietyTable WHERE $colId= $meal'
  return result;
 }
 
+//get vart by email: noo need 
+Future getfood(String email,) async {
+ Database db = await this.database;
+        var id=await db.rawQuery('SELECT * FROM $mealTable  WHERE  $colEmail=\"$email\" ORDER BY $colId DESC LIMIT 1 ');
+      print("from get food mesl id = $id");
+      print("from get food mesl id = ${id[0]['$colId']}");
+
+        var result = await db.rawQuery('SELECT * FROM $varietyTable WHERE $colEmail=\"$email\"  AND $colId=${id[0]['$colId']} ');
+ print("getvart list: ${result.toList()}");
+
+ if(result.isEmpty) return [];
+ else 
+ return result;//.toList();
+}
+
+
+// //get vart by email: noo need 
+// Future getfood(String email,) async {
+//  Database db = await this.database;
+// var result = await db.rawQuery('SELECT * FROM $varietyTable WHERE $colEmail=\"$email\" AND $colId=$colId=$meal ');
+//  print("getvart list: ${result.toList()}");
+
+//  if(result.isEmpty) return [];
+//  else 
+//  return result;
+// }
  //delete All varietise meal
   Future<int> deleteAllVarieteis(int id, int mealid) async {
   	var db = await this.database;
@@ -491,16 +514,19 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $a1CTable WHERE $colEm
   }
 
 //UPDATE
-
+Future<int> updataCarb(String email,double carb,String date) async {
+ Database db = await this.database;
+var result = await db.rawUpdate('UPDATE $carbTable SET $colcurnt =$carb+$colcurnt   WHERE $colEmail = \"$email\" AND $coldate=\"$date\"');
+ print("update Carb: ${result}");
+return result;
+}
 
 //GET last value:
 Future<List<Map<String, dynamic>>> getCarb(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT $colcurnt as carbe FROM $carbTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
+var result = await db.rawQuery('SELECT * FROM $carbTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
  print("getCarb: ${result.isEmpty}");
 result.toList();
-
-
 if(result.isEmpty){ //result.add({'a1C':0.0});
   return [];}
   else{

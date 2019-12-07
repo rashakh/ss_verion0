@@ -125,10 +125,3 @@ class _Bodystate extends State<Body> {
       ),
     );
   }
-
-
-
-
-
-
-

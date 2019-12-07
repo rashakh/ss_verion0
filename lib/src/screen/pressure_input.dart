@@ -315,7 +315,7 @@ class _Bodystate extends State<Body> {
                        print("sent A1c: ${widget.A1c}");
                     Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c.toString(), widget.carb)),
+                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c, widget.carb)),
                         );
                   }),
                 ),
