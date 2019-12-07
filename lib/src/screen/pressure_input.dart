@@ -41,8 +41,8 @@ class Pressureinput extends StatelessWidget {
 class Body extends StatefulWidget {
   Body(this.id, this.BMI, this.A1c,this.carb);
   var id;
-  var BMI;
-  var A1c;
+  List<Map<String,dynamic>> BMI;
+  double A1c;
   var carb;
   @override
   State createState() => new _Bodystate();
@@ -51,8 +51,8 @@ class Body extends StatefulWidget {
 class _Bodystate extends State<Body> {
     DatabaseHelper helper = DatabaseHelper();
 
-  final String url =
-      'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
+  // final String url =
+  //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   bool _result;
   int pressureSys = 120;
   int pressureDia = 85;
@@ -61,23 +61,23 @@ class _Bodystate extends State<Body> {
   DateTime dateTime = DateTime.now();
   String note = '';
 
-  Future<bool> _postData() async {
-    // map data to converted to json data
-    final Map<String, dynamic> userData = {
-      'email': widget.id[0]['email'],
-      'PressureSys': pressureSys,
-      'pressureDia': pressureDia,
-      'DateTime': dateTime.toIso8601String(),
-      'Note': note,
-    };
-    var jsonData = JsonCodec().encode(userData); // encode data to json
-    var httpclient = new http.Client();
-    var response = await httpclient.post(url,
-        body: jsonData, headers: {'Content-type': 'application/json'});
-    print('the body of the response = \n${response.body}\n.');
-    _result =
-        response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
-  }
+  // Future<bool> _postData() async {
+  //   // map data to converted to json data
+  //   final Map<String, dynamic> userData = {
+  //     'email': widget.id[0]['email'],
+  //     'PressureSys': pressureSys,
+  //     'pressureDia': pressureDia,
+  //     'DateTime': dateTime.toIso8601String(),
+  //     'Note': note,
+  //   };
+  //   var jsonData = JsonCodec().encode(userData); // encode data to json
+  //   var httpclient = new http.Client();
+  //   var response = await httpclient.post(url,
+  //       body: jsonData, headers: {'Content-type': 'application/json'});
+  //   print('the body of the response = \n${response.body}\n.');
+  //   _result =
+  //       response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
+  // }
 
   void _onChangedSys(e) {
     setState(() {
@@ -306,18 +306,18 @@ class _Bodystate extends State<Body> {
                   //     style: TextStyle(
                   //       fontSize: 20.0,
                   //     )),
-                  onPressed: () => setState(() async {
+                  onPressed: ()  async{
 
-                    print("click 1 BG bg=BG(${widget.id[0]['email'].toString()}, $pressureSys, $pressureDia, $note,${dateTime.toIso8601String()}");
+                    print("click 1 BP BPruss=BG(${widget.id[0]['email'].toString()}, $pressureSys, $pressureDia, $note,${dateTime.toIso8601String()}");
                     BP bp=BP(widget.id[0]['email'].toString(), pressureSys, pressureDia, note,dateTime.toIso8601String());
                       var mealw = await helper.insertBP(bp);
                     print("click 2: $mealw");
-                       print("sent A1c: ${widget.A1c}");
+                       setState(()  {
                     Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c, widget.carb)),
                         );
-                  }),
+                  });}
                 ),
                 SizedBox(width: 160.0),
                 new FlatButton(

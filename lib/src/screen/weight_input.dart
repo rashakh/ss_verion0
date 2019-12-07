@@ -12,7 +12,7 @@ import 'mainpage.dart';
 class Weightinput extends StatelessWidget {
   Weightinput(this.id, this.BMI, this.A1c,this.carb);
   var id;
-  var BMI;
+  List<Map<String,dynamic>> BMI;
   var A1c;
   var carb;
   @override
@@ -37,7 +37,7 @@ class Weightinput extends StatelessWidget {
 class Body extends StatefulWidget {
   Body(this.id, this.BMI, this.A1c,this.carb);
   var id;
-  var BMI;
+  List<Map<String,dynamic>> BMI;
   var A1c;
   var carb;
   @override
@@ -284,17 +284,28 @@ class _Bodystate extends State<Body> {
                     //   print("new A1c: $A1cr");
                     // }
                     var f=await helper.getWight(widget.id[0]['email'].toString());
-                    var d= await helper.getA1C(widget.id[0]['email'].toString());
+                    //var d= await helper.getA1C(widget.id[0]['email'].toString());
                     var bmii=(((weight / widget.id[0]['hight']) / widget.id[0]['hight']) * 10000);
+                   Map<String,dynamic> h= {'wit':weight ,'bmi':bmii};
                     setState(()  {
-                      widget.BMI=f;
-                      widget.BMI=[{'wit':weight},{'bmi':bmii}];
+                     // widget.BMI[0]['wit']=weight;
+                     // var widget.BMI[0]['bmi'].add(bmii);
+
+                      print("${widget.BMI}");
+                      
+                      widget.BMI.clear();
+                      widget.BMI.add(h);
                       //widget.BMI[0]['wit'];
-                      widget.A1c= d;
-                      print("hi: ${widget.BMI},${widget.A1c}");});
+                      //widget.A1c= d;
+                      print("hi: ${widget.BMI},${widget.A1c}");
+                    }
+                    );
                     Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c,widget.carb)),
+                          MaterialPageRoute(builder: (context) => MainPage(widget.id,
+                           widget.BMI ,
+                          widget.A1c,
+                          widget.carb)),
                         );
                   }
                 ),

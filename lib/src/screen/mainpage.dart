@@ -14,11 +14,11 @@ import '../widgets/fancy_fab.dart';
   DatabaseHelper helper = DatabaseHelper();
 
 class MainPage extends StatefulWidget {
-  MainPage(@required this.id,@required this.BMI,@required this.A1c,@required this.carb);
+  MainPage(@required this.id,@required this.BMI, this.A1c,@required this.carb);
   var id ;
-  var BMI;
+  List<Map<String,dynamic>> BMI;
   double A1c;
-  var carb;
+  double carb;
   @override
   State createState() => _MainPageState();
 }
@@ -51,7 +51,7 @@ class _MainPageState extends State<MainPage> {
    print("check in mainpage ${widget.A1c.toString()}, ${widget.BMI}, ${widget.carb},");
     return new Scaffold(
       body: pages(_selectedPage),
-      floatingActionButton: new FancyFab(widget.id,widget.BMI, widget.A1c.toString(), widget.carb),
+      floatingActionButton: new FancyFab(widget.id,widget.BMI, widget.A1c, widget.carb),
       bottomNavigationBar: new BottomNavigationBar(
         currentIndex: _selectedPage,
         onTap: (int index) {

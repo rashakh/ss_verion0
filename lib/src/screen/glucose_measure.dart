@@ -554,15 +554,15 @@ class _Bodystate extends State<Body> {
                   //     style: TextStyle(
                   //       fontSize: 20.0,
                   //     )),
-                  onPressed: () => setState(() async {
+                  onPressed: () async{
                   
                     if (slot == 8) {
-                    //   PA padb = new PA(widget.id[0]['email'].toString(),
-                    //       pas[pa], 0, dateTime.toIso8601String());
-                    //   var palw = await helper.insertPA(padb);
-                    //   BG bg = BG(widget.id[0]['email'].toString(), slots[slot],
-                    //       gm, note, dateTime.toIso8601String());
-                    //   var mealw = await helper.insertBG(bg);
+                      PA padb = new PA(widget.id[0]['email'].toString(),
+                          pas[pa], 0, dateTime.toIso8601String());
+                      var palw = await helper.insertPA(padb);
+                      BG bg = BG(widget.id[0]['email'].toString(), slots[slot],
+                          gm, note, dateTime.toIso8601String());
+                      var mealw = await helper.insertBG(bg);
                       setState(() {
                       a11c();
                      });
@@ -590,19 +590,23 @@ class _Bodystate extends State<Body> {
                        _BGRe();
                       _BGTotal();
                                               print("hi set stet");
-
-                     }); 
                       a11c();
+                     }); 
                     }
                     widget.A1c=(await helper.getA1C(widget.id[0]['email']))[0]['a1C'];
-                    print("reples to home: widget.A1c");
+                    print("reples to home:${widget.A1c}");
                     print(widget.A1c);
+                     setState(()  {
+
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c,widget.carb)),
+                          builder: (context) => MainPage(widget.id,
+                          widget.BMI,
+                          widget.A1c,
+                          widget.carb)),
                     );
-                  }),
+                  });}
                 ),
                 SizedBox(width: 160.0),
                 new FlatButton(
@@ -669,7 +673,10 @@ _BGRe();
     double mod = pow(10.0, 1); 
     var nwe =((wA1c * mod).round().toDouble() / mod);
     print("wA1c After: $nwe");
-    widget.A1c=nwe;
+   setState(() {
+      widget.A1c=nwe;
+   });
+   
     if(_rec==0){ //if new user 
     DateTime newdate = dateTime.add(new Duration(days: 90));
     A1C ss = A1C(nwe,widget.id[0]['email'].toString() ,dateTime.toIso8601String(), newdate.toIso8601String());

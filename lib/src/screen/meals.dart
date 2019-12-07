@@ -865,25 +865,40 @@ class _Bodystate extends State<Body> {
                       // print("vart get: $vartget");
                       
 
-                    //  String date =dbdm.substring(0, 10);
+                     String date =dbdm.substring(0, 10);
+                    var carb=await helper.getCarb(dbemail);
+                      print("carb date: ${carb}");
+                      //CARB:
+                      print("carb date: ${carb.isNotEmpty}");
+                      if(carb.isNotEmpty){
+                      if((await helper.getCarb(dbemail))[0]['date']==date){
+                         var update=await helper.updataCarb(dbemail, dbcarb,date);
+                        print("update carb: $update");
 
-                    //   //CARB:
-                    //   if((await helper.getCarb(dbemail))[0]['date']==date){
-                    //      var update=await helper.updataCarb(dbemail, dbcarb,date);
-                    //     print("update carb: $update");
-                    //   }
-                    //   else{
-                    //     Carb carba= new Carb(dbcarb,dbemail,date);
-                    //     //insert
-                    //     var inser=await helper.insertCARB(carba);
-                    //     print("inser carb: $inser");
-                    //   }
+                      }
+                      else{
+                        Carb carba= new Carb(dbcarb,dbemail,date);
+                        //insert
+                        var inser=await helper.insertCARB(carba);
+                        print("inser carb: $inser");
+                      }
+                      }
+                      else{
+                        Carb carba= new Carb(dbcarb,dbemail,date);
+                        //insert
+                        var inser=await helper.insertCARB(carba);
+                        print("inser carb: $inser");
+
+                        }
+                        var cget= (await helper.getCarb(dbemail))[0]['curnt'];
+                        double newcarb= cget as double;
 //-----------------------------------------------------------------------------------------------------------------------------
                       setState(() {
                         food=[];
                         _carbs = [];
                         _sum = 0.0;
                         _inter = 0;
+                        widget.carb=newcarb;
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

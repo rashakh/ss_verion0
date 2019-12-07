@@ -13,9 +13,9 @@ import 'exportPDF.dart';
 class HomePage extends StatelessWidget {
   HomePage(this.id, this.BMI, this.A1c, this.carb);
   var id;
-  var BMI;
+  List<Map<String,dynamic>>  BMI;
   double A1c;
-  var carb;
+  double carb;
 
   @override
   Widget build(BuildContext context) {
@@ -109,9 +109,17 @@ int i=0;
 class _Bodystate extends State<Body> {
   DatabaseHelper helper = DatabaseHelper();
   double a1c =0.0;
+  double carb=0.0;
+  double pa=60.55;
+  double maxPA=135.0;
+  double minPA=0.0;
+  double total=40;
+  double unit=20;
   var _sum = 0;
   var _num = 0;
   var dd = 45 * 0.55;
+  var minCarb=0.0;
+  var maxCarb=200;
   var bgratio;
   Widget icon = Icon(
     Icons.mood,
@@ -121,25 +129,41 @@ class _Bodystate extends State<Body> {
   int mealid;
   Color colorA1c = Colors.green;
   Color colorcarb = Colors.green;
- 
+  Color colorPA = Colors.green;
    double _a1c() {
 setState(() {  a1c=widget.A1c;});
     var n = a1c / 14;
-    print('n: $n');
+    print('A1c n: $n');
     _bgratio();
         mea();
 
     return n;
   }
 
-  // doub le _carb() {
-  // // _getA1c();
-  //   var n = widget / 100;
-  //   print('n: $n');
-  //   _bgratiocarb();
-  //   return n;
-  // }
+  double _carb() {
+setState(() {  carb=widget.carb;});
+    var n = carb / 300;
+    print('carb n: $n');
+    _bgratiocarb();
+    return n/10;
+  }
 
+
+double _PA(){
+//setState(() {  carb=widget.carb;});
+    var n = pa / maxPA;
+    print('PA n: $n');
+    _bgratioPA();
+    return n;  
+}
+
+double _IS(){
+//setState(() {  carb=widget.carb;});
+    var n = unit / total;
+    print('IS n: $n');
+    _bgratioIS();
+    return n;  
+}
   Future _bgratio() {
     if (widget.A1c <= 6.5) {
       icon = Icon(
@@ -170,14 +194,14 @@ setState(() {  a1c=widget.A1c;});
   }
 
   Future _bgratiocarb() {
-    if (widget.A1c <= 6.0) {
+    if (widget.carb <= minCarb) {
       icon = Icon(
         Icons.mood,
         color: Colors.green,
         size: 40.0,
       );
       colorcarb = Colors.green;
-    } else if (widget.A1c > 6.0 && widget.A1c <= 8.0) {
+    } else if (widget.carb > minCarb && widget.carb <= maxCarb) {
       icon = Icon(
         Icons.mood,
         color: Colors.orangeAccent,
@@ -193,6 +217,59 @@ setState(() {  a1c=widget.A1c;});
       colorcarb = Colors.redAccent;
     }
   }
+
+  
+    Future _bgratioPA() {
+    if (pa <= (maxPA/2)) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorPA = Colors.green;
+    } else if (pa > (maxPA/2) && pa <= maxPA) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorPA = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
+        color: Colors.redAccent,
+        size: 40.0,
+      );
+      colorPA = Colors.redAccent;
+    }
+  }
+
+
+    Future _bgratioIS() {
+    if (pa <= (maxPA/3)) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorPA = Colors.green;
+    } else if (pa > (total/3) && pa <= total/2) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorPA = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
+        color: Colors.redAccent,
+        size: 40.0,
+      );
+      colorPA = Colors.redAccent;
+    }
+  }
+
 
   // void initState() {
   //  super.initState();
@@ -235,8 +312,8 @@ setState(() {  a1c=widget.A1c;});
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: 0.2,// _carb(),
-                  center: Text('30 / 220 :الكاربوهيدرات',
+                  percent:  _carb(),
+                  center: Text('$maxCarb / $carb :الكاربوهيدرات',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: colorcarb,
@@ -263,11 +340,11 @@ setState(() {  a1c=widget.A1c;});
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                    percent: 0.5, //_a1c(),
-                  center: Text('النشاط البدني: 70/135 دقيقة',
+                    percent: _PA(),
+                  center: Text('النشاط البدني: ${maxPA} /$pa دقيقة',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: Colors.yellow, //colorA1c,
+                  progressColor: colorPA, //colorA1c,
                 ),
               ),
               Container(

@@ -435,7 +435,7 @@ print('updated: $result');
  //   int count = await database.rawUpdate(SELECT * FROM tablename ORDER BY column DESC LIMIT 1);
     var result = await db.rawQuery('SELECT * FROM $pATable ORDER BY $colAototId DESC LIMIT 1');
    // var result1 = await db.update(pATable, pa.map(), where: '$colAototId = ?', whereArgs: [variety.id]));
-    var result1 = await db.rawUpdate('UPDATE $pATable  SET $coldur = $pa  WHERE colAototId=${result[0]['id']}');
+    var result1 = await db.rawUpdate('UPDATE $pATable  SET $coldur = $pa  WHERE $colAototId=${result[0]['id']}');
 print('updated: $result');
 print('updated 1: $result1');
     return result1;
@@ -526,7 +526,7 @@ Future<List<Map<String, dynamic>>> getCarb(String email) async {
  Database db = await this.database;
 var result = await db.rawQuery('SELECT * FROM $carbTable WHERE $colEmail=\"$email\" ORDER BY $colAototId  DESC LIMIT 1 ');
  print("getCarb: ${result.isEmpty}");
-result.toList();
+ 
 if(result.isEmpty){ //result.add({'a1C':0.0});
   return [];}
   else{

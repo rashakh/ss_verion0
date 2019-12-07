@@ -64,9 +64,9 @@ class _LoginPageState extends State<LoginPage> {
           'form invalid, Email: ${emailController.text}, Passwoer: ${passwordController.text}');
     } else if (_validateAndSave(id)) {
       print('here is login id : ${id}');
-var BMI;
+List<Map<String,dynamic>> BMI;
 double  A1c;
-var carb=0.0;
+double carb;
     //  setState(() async{
           BMI=(await helper.getWight(id[0]['email']));
          
@@ -81,7 +81,10 @@ var carb=0.0;
 
           if(((await helper.getCarb(id[0]['email']))).isNotEmpty)
           {
-         carb=(await helper.getCarb(id[0]['email']))[0]['carb'];
+         var carba=(await helper.getCarb(id[0]['email']))[0]['curnt'];
+         print("carb now : $carba");
+          carb=carba as double;
+         print("carb now : $carb");
           }
           else{ carb=0.0;} 
       // print("A1c list: null");

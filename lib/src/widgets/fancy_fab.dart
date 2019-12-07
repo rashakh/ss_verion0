@@ -10,11 +10,11 @@ class FancyFab extends StatefulWidget {
   IconData icon;
   List<Map<String, dynamic>> id;
   List<Map<String, dynamic>> BMI;
-  var A1c;
-var carb;
-var bMI;
+  double A1c;
+  double carb;
+//var bMI;
   FancyFab(
-    this.id, this.A1c,this.bMI,this.carb, {
+    this.id,this.BMI,this.A1c,this.carb, {
     this.onPressed,
     this.tooltip,
     this.icon,
