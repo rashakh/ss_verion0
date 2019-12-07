@@ -6,8 +6,9 @@ class Carb {
   double _max;
   String _Dc;
 
-  Carb(this._curnt,this._email, this._min, this._max,this._Dc);
+  //Carb(this._curnt,this._email, this._min, this._max,this._Dc);
   Carb.Carb(this._curnt);
+  Carb(this._curnt,this._email,this._Dc);
 
 
   int get id => _id;
