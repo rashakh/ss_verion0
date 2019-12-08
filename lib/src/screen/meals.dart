@@ -1234,10 +1234,12 @@ class MealCardState extends State<MealCard> {
                       child: new TextFormField(
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.symmetric(vertical: 0.0),
-                          hintText: 'الكمية: 1',
+                          hintText: 'الكمية: ${widget.Amunt}',
                         ),
                         keyboardType: TextInputType.number,
-                        onSaved: (value) {},
+                        onSaved: (e) {
+                          widget.Amunt = int.parse(e);
+                        },
                       ),
                     ),
                   ),
