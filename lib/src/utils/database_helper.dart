@@ -48,6 +48,7 @@ class DatabaseHelper {
 // variety table:
   String varietyTable = 'variety_table';
   String colid = 'id';
+  String colidao = 'idao';
   String coleat = 'eat';
   String colvarcarb = 'varcarb';
   String colamount = 'amount';
@@ -132,7 +133,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user11.db';
+    String path = directory.path + 'user12.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
@@ -151,9 +152,11 @@ class DatabaseHelper {
         '$colCarb REAL, $colnote TEXT, $coldate TEXT)');
 
     await db.execute('CREATE TABLE $varietyTable ('
+        '$colidao INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colid INT,$colId INT,$coleat TEXT,'
         '$colEmail TEXT, $colvarcarb REAL,'
-        '$colamount REAL,PRIMARY KEY ($colid,$colId))');
+        '$colamount REAL)'//,PRIMARY KEY ($colid,$colId))'
+        );
 
     await db.execute('CREATE TABLE $bGTable ('
         '$colEmail TEXT,$coldate TEXT,$colBGSlot TEXT,'

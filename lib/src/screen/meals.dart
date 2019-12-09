@@ -168,12 +168,13 @@ class _Bodystate extends State<Body> {
   //dbslot= slots[slot];
   void decisionFun() {
     setState(() {
+double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
       if (widget.id[0]['gender'] == 0) {
         if (widget.BMI[0]['bmi'] <= 29) {
           // this should be the total carb, and needed to decrease each time
           double neededcarb = 230; // it should be in database
           // insulin
-          double insulin = 0.0;
+         // double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
           String insu = '\nعدد جرعات الانسولين هي $insulin وحدة';
           if (slot == 0 || slot == 1) {
             double mealCarb = neededcarb * 0.2;
@@ -216,7 +217,7 @@ class _Bodystate extends State<Body> {
           // this should be the total carb, and needed to decrease each time
           double neededcarb = 180; // it should be in database
           // insulin
-          double insulin = 0.0;
+        //  double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
           String insu = '\nعدد جرعات الانسولين هي $insulin وحدة';
           if (slot == 0 || slot == 1) {
             double mealCarb = neededcarb * 0.2;
@@ -261,7 +262,7 @@ class _Bodystate extends State<Body> {
           // this should be the total carb, and needed to decrease each time
           double neededcarb = 330; // it should be in database
           // insulin
-          double insulin = 0.0;
+         // double insulin = 0.0;
           String insu = '\nعدد جرعات الانسولين هي $insulin وحدة';
           if (slot == 0 || slot == 1) {
             double mealCarb = neededcarb * 0.2;
@@ -304,7 +305,7 @@ class _Bodystate extends State<Body> {
           // this should be the total carb, and needed to decrease each time
           double neededcarb = 220; // it should be in database
           // insulin
-          double insulin = 0.0;
+        //  double insulin = 0.0;
           String insu = '\nعدد جرعات الانسولين هي $insulin وحدة';
           if (slot == 0 || slot == 1) {
             double mealCarb = neededcarb * 0.2;
@@ -1128,6 +1129,7 @@ class _Bodystate extends State<Body> {
         ],
       ),
     );
+  
   }
 
   @override
@@ -1139,14 +1141,19 @@ class _Bodystate extends State<Body> {
     // this.getData();
   }
 }
+  double insulinUnit(double totalcarb,double wit){
+  //insulin unit:
+double unit= wit *0.5;
 
-class Varty {
-  var id;
-  var name;
-  var carb;
-  var amount;
-  Varty(this.id, this.name, this.amount, this.carb);
+double coff= 500/unit;
+
+double durg= totalcarb/coff;
+ double mod = pow(1.0, 1);
+                      double nwe = ((durg * mod).round().toDouble() / mod);
+                      dbcarb = nwe;
+return unit ;
 }
+
 
 class MealCard extends StatefulWidget {
   String name;
@@ -1327,7 +1334,11 @@ class MealCardState extends State<MealCard> {
         ),
       ],
     );
+  
   }
+
+
+
 }
 
 //----------------- counterar of search:

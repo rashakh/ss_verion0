@@ -120,6 +120,7 @@ class _Bodystate extends State<Body> {
 
   void decisionFun() {
     setState(() {
+      
       if (widget.id[0]['gender'] == 0) {
         //here female
         if (widget.BMI[0]['bmi'] <= 29) {
