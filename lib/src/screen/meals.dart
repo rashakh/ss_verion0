@@ -1150,8 +1150,7 @@ double coff= 500/unit;
 double durg= totalcarb/coff;
  double mod = pow(1.0, 1);
                       double nwe = ((durg * mod).round().toDouble() / mod);
-                      dbcarb = nwe;
-return unit ;
+return nwe ;
 }
 
 
