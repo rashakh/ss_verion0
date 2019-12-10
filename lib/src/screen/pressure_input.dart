@@ -219,7 +219,7 @@ class _Bodystate extends State<Body> {
                   initialValue: pressure,
                   minValue: 0,
                   maxValue: max,
-                  itemExtent: 40,
+                  itemExtent: 41,
                   onChanged: (e) => fun(e)),
             ),
           ),
