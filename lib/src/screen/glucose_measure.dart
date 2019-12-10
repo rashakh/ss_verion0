@@ -143,19 +143,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,widget.BMI[0]['bmi'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 6) {
             double mealCarb = neededcarb * 0.3;
@@ -172,19 +172,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 10) {
             double mealCarb = neededcarb * 0.1;
@@ -201,19 +201,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 8) {
             double mealCarb = neededcarb * 0.3;
@@ -309,11 +309,11 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 180) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
+                  'تتناول وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
+                  'تتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],170);
@@ -342,19 +342,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 6) {
             double mealCarb = neededcarb * 0.3;
@@ -371,19 +371,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 10) {
             double mealCarb = neededcarb * 0.1;
@@ -400,19 +400,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 8) {
             double mealCarb = neededcarb * 0.3;
@@ -508,11 +508,11 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 180) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
+                  'تتناول وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
+                  'تتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],170);
@@ -544,19 +544,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 6) {
             double mealCarb = neededcarb * 0.3;
@@ -573,19 +573,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 10) {
             double mealCarb = neededcarb * 0.1;
@@ -602,19 +602,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 8) {
             double mealCarb = neededcarb * 0.3;
@@ -710,11 +710,11 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 180) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
+                  'تتناول وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
+                  'تتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],170);
@@ -743,19 +743,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 6) {
             double mealCarb = neededcarb * 0.3;
@@ -772,19 +772,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130 ){
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = 0.0;
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 10) {
             double mealCarb = neededcarb * 0.1;
@@ -801,19 +801,19 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 130) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
-                  'بتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
+                  'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             }
           } else if (slot == 8) {
             double mealCarb = neededcarb * 0.3;
@@ -909,11 +909,11 @@ class _Bodystate extends State<Body> {
             } else if (70 <= gm && gm <= 180) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
+                  'تتناول وجبة خفيفة تحتوي على الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه بعد الرياضه سينخفض السكر في الدم تدريجيا';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.success;
               decision =
-                  'بتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
+                  'تتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
               double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['bmi'],170);
