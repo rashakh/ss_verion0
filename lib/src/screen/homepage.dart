@@ -135,7 +135,7 @@ setState(() {  a1c=widget.A1c;});
     var n = a1c / 14;
     print('A1c n: $n');
     _bgratio();
-        mea();
+      //  mea();
 
     return n;
   }
@@ -377,11 +377,8 @@ double _IS(){
           FutureBuilder(
             future: helper.getfood(widget.id[0]['email']),
             builder: (context, snapshot) {
-            print("meal id of list : ${snapshot.data==null}");
           if (snapshot.connectionState == ConnectionState.done && snapshot.data!=null ) {
-            print("hi list view");
               final foods=snapshot.data;
-            print("meal id of list : ${foods.length}");
               var i= ((foods.length==null)? 0:foods.length) *50.0 ;
         return new Row(
                                     children: <Widget>[
@@ -616,24 +613,20 @@ double _IS(){
 // }
 
 //git heal id:
-void mea() async {
-                     var meali = await helper.getMeal(widget.id[0]['eamil']);
-                      print('last meal result id of homepage : $meali');
-                      if(!meali.isEmpty){
-                      var mealid= meali[0]["mealId"];
-                      print('meal result id : $mealid');
+// void mea() async {
+//                      var meali = await helper.getMeal(widget.id[0]['eamil']);
+//                       if(!meali.isEmpty){
+//                       var mealid= meali[0]["mealId"];
 
-//setState(() {
-  meali=mealid;
-  print("meali is :$meali");
-//});
-}
-else{
-//setState(() {
-  meali=0;
-  print("meali is :$meali");
-//});
-}
-}
+// //setState(() {
+//   meali=mealid;
+// //});
+// }
+// else{
+// //setState(() {
+//   meali=0;
+// //});
+// }
+// }
 }
 
