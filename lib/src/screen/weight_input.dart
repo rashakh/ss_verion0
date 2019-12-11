@@ -47,9 +47,7 @@ class Body extends StatefulWidget {
 
 class _Bodystate extends State<Body> {
   DatabaseHelper helper = DatabaseHelper();
-  // final String url =
-  //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
-  // bool _result;
+
   int weight = 57;
   String evaluation = '';
   Color slider = Colors.greenAccent[400];

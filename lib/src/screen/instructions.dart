@@ -101,8 +101,6 @@ class Body extends StatefulWidget {
 }
 
 class _Bodystate extends State<Body> {
-  // final String url =
-  //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
 
   bool _visible = true;
   double totalCarb = 0.0; // total carb for each day, for 7 days
@@ -113,11 +111,12 @@ class _Bodystate extends State<Body> {
 
   List<Widget> _behave() {
     double meanofTotalCarb = totalCarb / 7;
-    double meanofTotalPA = totalCarb / 3;
+    
     double meanofTotalA1c = totalA1c / 7;
     if (widget.id[0]['gender'] == 0) {
       //here female
       if (widget.BMI[0]['bmi'] <= 29) {
+        double meanofTotalPA = totalCarb / 3;
         double cCPercent = (meanofTotalCarb / 230) * 100;
         double paCPercent = (meanofTotalPA / 230) * 100;
         if (cCPercent < 50) {
@@ -152,7 +151,7 @@ class _Bodystate extends State<Body> {
         if (paCPercent < 50) {
           title = 'تم ملاحظة انك لا تمارس النشاط البدني بكثرة';
           info =
-              'الرياضة مفيدة بشكل عام ولكن مهمة بشكل خاص للمصابين بالسكري.\n\nمن منفاعها : \n- تساعد على التحكم في مستوى السكر في الدم و ضغط الدم و الكولسترول.\n- تساهم في الوقاية من مقاومة الانسولين.\n- تحسن من اداء الق��ب و الجهاز التنفسي.\n- تساهل في الوقاية والتقليل من مصاعفات السكري.\n\nيفضل لك ان تمارس النشاط البدني لمدة 45 دقيقة ثلاث مرات في الاسبوع.';
+              'الرياضة مفيدة بشكل عام ولكن مهمة بشكل خاص للمصابين بالسكري.\n\nمن منفاعها : \n- تساعد على التحكم في مستوى السكر في الدم و ضغط الدم و الكولسترول.\n- تساهم في الوقاية من مقاومة الانسولين.\n- تحسن من اداء القلب و الجهاز التنفسي.\n- تساهل في الوقاية والتقليل من مصاعفات السكري.\n\nيفضل لك ان تمارس النشاط البدني لمدة 45 دقيقة ثلاث مرات في الاسبوع.';
           insts.add(_instrTxt(title, info));
         }
         // else if (paCPercent >= 50 && paCPercent <= 100) {
@@ -160,6 +159,7 @@ class _Bodystate extends State<Body> {
 
         // }
       } else if (widget.BMI[0]['bmi'] > 29) {
+        //double meanofTotalPA = totalCarb / 7;
         double cCPercent = (meanofTotalCarb / 180) * 100;
       }
       if (meanofTotalA1c < 5) {

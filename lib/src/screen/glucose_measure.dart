@@ -18,6 +18,7 @@ import 'package:intl/intl.dart' as intl; // flutter main package
 import 'mainpage.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+
 class GlucoseMeasure extends StatelessWidget {
   GlucoseMeasure(this.id, this.BMI, this.A1c, this.carb);
   var id;
@@ -295,7 +296,7 @@ class _Bodystate extends State<Body> {
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
             }
-          } else if (slot == 9) {
+          } else if (slot == 9) { // update PA in database
             if (gm < 54) {
               alerttype = AlertType.warning;
               decision =
