@@ -126,6 +126,7 @@ class _Bodystate extends State<Body> {
 
   void decisionFun() {
     setState(() {
+String helpMessage="من بسيط وحلو مرحبا رشا";
 
       if (widget.id[0]['gender'] == 0) {
         //here female
@@ -139,7 +140,9 @@ class _Bodystate extends State<Body> {
             neededcarb -= mealCarb; // to show the concept
             if (gm < 54) {
               print("object 2");
-                FlutterSms.sendSMS(recipients: "0562790017", message: "من بسيط وحلو مرحبا رشا");
+//                FlutterSms.sendSMS(recipients: "0562790017", message: "من بسيط وحلو مرحبا رشا");
+                FlutterSms.sendSMS(recipients: widget.id[0]['number'], message: helpMessage);
+
               alerttype = AlertType.warning;
               decision =
                   'تم ارسال رساله نصية الى ...'; // phonenumber from database
@@ -546,8 +549,7 @@ class _Bodystate extends State<Body> {
               String g='';
               String f='';
                print("object male");
-
-                FlutterSms.sendSMS(recipients: "0554540056", message: "hi");
+              FlutterSms.sendSMS(recipients: widget.id[0]['number'], message: helpMessage);
               alerttype = AlertType.warning;
               decision =
                   'تم ارسال رساله نصية الى ...'; // phonenumber from database
