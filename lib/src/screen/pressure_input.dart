@@ -219,7 +219,7 @@ class _Bodystate extends State<Body> {
                   initialValue: pressure,
                   minValue: 0,
                   maxValue: max,
-                  itemExtent: 41,
+                  itemExtent: 45,
                   onChanged: (e) => fun(e)),
             ),
           ),
@@ -370,7 +370,7 @@ class _Bodystate extends State<Body> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MainPage(widget.id,
-                                        widget.BMI, widget.A1c, widget.carb)),
+                                        widget.BMI, widget.A1c, widget.carb,0)),
                               ),
                               width: 120,
                             )

@@ -146,13 +146,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,widget.BMI[0]['bmi'],100);
+              double insulinCorrection = insulinUnit(gm,widget.BMI[0]['wit'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -175,13 +175,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -204,13 +204,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -240,7 +240,7 @@ class _Bodystate extends State<Body> {
               }
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection =  insulinUnit(gm,  widget.BMI[0]['bmi'],180);
+              double insulinCorrection =  insulinUnit(gm,  widget.BMI[0]['wit'],180);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -263,13 +263,13 @@ class _Bodystate extends State<Body> {
               decision = 'نوما هنيئا';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -285,13 +285,13 @@ class _Bodystate extends State<Body> {
               decision = 'لقد احسنت ادارة مستوى السكر لديك';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],150);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],150);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   ',ان تمارس الرياضه\n او ان تاخذ عدد $insulin جرعة من الانسولين';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],150);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],150);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -316,7 +316,7 @@ class _Bodystate extends State<Body> {
                   'تتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],170);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],170);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -345,13 +345,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -374,13 +374,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -403,13 +403,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -439,7 +439,7 @@ class _Bodystate extends State<Body> {
               }
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],180);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],180);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -462,13 +462,13 @@ class _Bodystate extends State<Body> {
               decision = 'نوما هنيئا';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -484,13 +484,13 @@ class _Bodystate extends State<Body> {
               decision = 'لقد احسنت ادارة مستوى السكر لديك';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],150);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],150);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   ',ان تمارس الرياضه\n او ان تاخذ عدد $insulin جرعة من الانسولين';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['bmi'],150);
+              double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['wit'],150);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -515,7 +515,7 @@ class _Bodystate extends State<Body> {
                   'تتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],170);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],170);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -547,13 +547,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -576,13 +576,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -605,13 +605,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -641,7 +641,7 @@ class _Bodystate extends State<Body> {
               }
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection =  insulinUnit(gm,  widget.BMI[0]['bmi'],180);
+              double insulinCorrection =  insulinUnit(gm,  widget.BMI[0]['wit'],180);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -664,13 +664,13 @@ class _Bodystate extends State<Body> {
               decision = 'نوما هنيئا';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -686,13 +686,13 @@ class _Bodystate extends State<Body> {
               decision = 'لقد احسنت ادارة مستوى السكر لديك';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],150);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],150);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   ',ان تمارس الرياضه\n او ان تاخذ عدد $insulin جرعة من الانسولين';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],150);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],150);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -717,7 +717,7 @@ class _Bodystate extends State<Body> {
                   'تتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],170);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],170);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -746,13 +746,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],100);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],100);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -775,7 +775,7 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -804,13 +804,13 @@ class _Bodystate extends State<Body> {
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (130 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'تتناول $mealCarb من الكربوهيدرات لهذة الوجبة \n عدد جرعات الانسولين هي $insulin وحدة';
@@ -840,7 +840,7 @@ class _Bodystate extends State<Body> {
               }
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection =  insulinUnit(gm,  widget.BMI[0]['bmi'],180);
+              double insulinCorrection =  insulinUnit(gm,  widget.BMI[0]['wit'],180);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -863,13 +863,13 @@ class _Bodystate extends State<Body> {
               decision = 'ن��ما هنيئا';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],120);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],120);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -885,13 +885,13 @@ class _Bodystate extends State<Body> {
               decision = 'لقد احسنت ادارة مستوى السكر لديك';
             } else if (180 < gm && gm <= 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],150);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],150);
               insulin += insulinCorrection; // insulin + correction dosage
               decision =
                   ',ان تمارس الرياضه\n او ان تاخذ عدد $insulin جرعة من الانسولين';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['bmi'],150);
+              double insulinCorrection = insulinUnit(gm,  widget.BMI[0]['wit'],150);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -916,7 +916,7 @@ class _Bodystate extends State<Body> {
                   'تتناول من 15 الى 30  من الكربوهيدرات المعقدة مثل الفواكة او الشوفان، لانه قد ينخفض السكر في الدم تدريجيا';
             } else if (gm > 240) {
               alerttype = AlertType.warning;
-              double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['bmi'],170);
+              double insulinCorrection =insulinUnit(gm,  widget.BMI[0]['wit'],170);
               insulin += insulinCorrection; // insulin + correction dosage
               decision = 'ترتاح وتشرب الماء \n' +
                   'عدد جرعات الانسولين هي $insulin وحدة';
@@ -926,7 +926,25 @@ class _Bodystate extends State<Body> {
       }
     });
   }
+ 
+// void foot(){
 
+// var last_date_foot= (await helper.getpA(email))[0]['date'];
+// final date2 = DateTime.now();
+// final difference = _ptDate.difference(date2).inDays;
+
+// if(difference>29){
+//   alerttype = AlertType.success;
+//               decision = 'لقد احسنت ادارة مستوى السكر لديك';
+
+
+// }
+// else {
+
+
+
+// }
+// }
   // Future<bool> _postData() async {
   //   // map data to converted to json data
   //   final Map<String, dynamic> userData = {
@@ -1364,6 +1382,7 @@ class _Bodystate extends State<Body> {
                     //       fontSize: 20.0,
                     //     )),
                     onPressed: () async {
+                      int code=0;
                       if (slot == 8) {
                         PA padb = new PA(widget.id[0]['email'].toString(),
                             pas[pa], 0, dateTime.toIso8601String());
@@ -1375,6 +1394,7 @@ class _Bodystate extends State<Body> {
                           _BGRe();
                           _BGTotal();
                           a11c();
+
                         });
                       } else if (slot == 9) {
                         int padu = dur.inMinutes;
@@ -1382,11 +1402,14 @@ class _Bodystate extends State<Body> {
                         BG bg = BG(widget.id[0]['email'].toString(),
                             slots[slot], gm, note, dateTime.toIso8601String());
                         var mealw = await helper.insertBG(bg);
+                          code=1;
                         setState(() {
                           _BGRe();
                           _BGTotal();
                           a11c();
+
                         });
+
                       } else {
                         BG bg = BG(widget.id[0]['email'].toString(),
                             slots[slot], gm, note, dateTime.toIso8601String());
@@ -1420,7 +1443,7 @@ class _Bodystate extends State<Body> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MainPage(widget.id,
-                                        widget.BMI, widget.A1c, widget.carb)),
+                                        widget.BMI, widget.A1c, widget.carb,code)),
                               ),
                               width: 120,
                             )
@@ -1510,9 +1533,33 @@ class _Bodystate extends State<Body> {
     var ree = await helper.UpdatetA1C(a, widget.id[0]['email'].toString());
   }
 
+// void foot(){
+// String decision='تقوم بتأكد من سلامة قدمك';
+// AlertType alerttype= AlertType.warning;
+//           Alert(
+//                           style: AlertStyle(isCloseButton: false,),
+//                           context: context,
+//                           type: alerttype,
+//                           title: ' : نقترح عليك ان',
+//                           desc: decision,
+//                           buttons: [
+//                             DialogButton(
+//                               child: Text('حسنا', style: TextStyle(color: Colors.white, fontSize: 20),
+//                               ),
+//                               onPressed: () => Navigator.pushReplacement(
+//                                 context, 
+//                                 MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI, widget.A1c, widget.carb)),
+//                               ),width: 120,
+//                             )
+//                           ],
+//                         ).show();
+                      
 
-    double insulinUnit(int BG,double wit, int correct){
+// }
+
+    double insulinUnit(int BG,int wit, var correct){
   //insulin unit:
+  print("wit: $wit");
 double unit= wit *0.5;
 print("unit: $unit");
 

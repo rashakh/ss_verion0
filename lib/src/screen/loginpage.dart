@@ -95,7 +95,7 @@ double carb;
       print("BMI list: $BMI");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c,carb)),
+        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c,carb,0)),
       );
       //Navigator.of(context).pushNamed('/MainPage',arguments: _email);
       _formKey.currentState.reset();

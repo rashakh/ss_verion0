@@ -6,7 +6,8 @@ class Dug {
   int _dug;
 
 
-  Dug(this._email, this._Name, this._dug, this._type);
+  Dug(this._email, this._Name, this._dug);
+  //Dug(this._email, this._Name, this._dug, this._type);
 
   int get id => _id;
   String get email => _email;
@@ -28,7 +29,7 @@ class Dug {
     }
     map['email']=_email;
     map['Name'] = _Name;
-    map['dur'] = _type;
+    map['type'] = _type;
     map['dug'] = _dug;
     return map;
   }
@@ -37,7 +38,7 @@ class Dug {
    
     this._email = map['email'];
     this._Name = map['Name'];
-    this._type = map['dur'];
+    this._type = map['type'];
     this._dug = map['dug'];
 
   }

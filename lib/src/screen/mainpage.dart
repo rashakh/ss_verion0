@@ -14,11 +14,12 @@ import '../widgets/fancy_fab.dart';
   DatabaseHelper helper = DatabaseHelper();
 
 class MainPage extends StatefulWidget {
-  MainPage(@required this.id,@required this.BMI, this.A1c,@required this.carb);
+  MainPage(@required this.id,@required this.BMI, this.A1c,@required this.carb,this.code);
   var id ;
   List<Map<String,dynamic>> BMI;
   double A1c;
   double carb;
+  int code;
   @override
   State createState() => _MainPageState();
 }
@@ -30,11 +31,11 @@ class _MainPageState extends State<MainPage> {
   // }
    Widget pages(_selectedPage) {
     final List<Widget> _pages = [
-      new HomePage(widget.id,widget.BMI,widget.A1c, widget.carb),
-      new Meals(widget.id,widget.BMI,widget.A1c, widget.carb),
+      new HomePage(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code),
+      new Meals(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code),
       //new PhysicalActivity(),
-      new Instructions(widget.id,widget.BMI,widget.A1c, widget.carb),
-      new Medications(widget.id,widget.BMI,widget.A1c, widget.carb),
+      new Instructions(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code,),
+      new Medications(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code),
     ];
     return _pages[_selectedPage];
   }

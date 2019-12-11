@@ -39,13 +39,17 @@ List<Map<int, dynamic>> food = [];
 // varty['id'];
 //int sr;
 class Meals extends StatelessWidget {
-  Meals(this.id, this.BMI, this.A1c, this.carb);
+  Meals(this.id, this.BMI, this.A1c, this.carb,this.code);
   var id;
   var BMI;
   var A1c;
   var carb;
+  int code;
+  
   @override
+  
   Widget build(BuildContext context) {
+    
     dbemail = id[0]['email'].toString();
     return new Scaffold(
       appBar: AppBar(
@@ -114,24 +118,25 @@ class Meals extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb)),
+      body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb,0)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb);
+  Body(this.id, this.BMI, this.A1c, this.carb,this.code);
   var id;
   var BMI;
   var A1c;
   var carb;
+  int code=0;
   @override
   State createState() => new _Bodystate();
 }
 
 class _Bodystate extends State<Body> {
   DatabaseHelper helper = DatabaseHelper();
-
+         // widget.code=0;
   // final String url =
   //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
   // Db db = new Db("mongodb://localhost:27017/mongo_dart-blog");
@@ -139,7 +144,6 @@ class _Bodystate extends State<Body> {
   //var meals;
   bool _visible = true;
   DateTime dateTime = DateTime.now();
-
   String note;
   int slot = _slot();
   AlertType alerttype = AlertType.success;
@@ -168,7 +172,7 @@ class _Bodystate extends State<Body> {
   //dbslot= slots[slot];
   void decisionFun() {
     setState(() {
-double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
+double insulin = insulinUnit(_sum,  widget.BMI[0]['wit']);
       if (widget.id[0]['gender'] == 0) {
         if (widget.BMI[0]['bmi'] <= 29) {
           // this should be the total carb, and needed to decrease each time
@@ -576,7 +580,7 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
             child: new ListView.builder(
                 shrinkWrap: true,
                 //physics: NeverScrollableScrollPhysics(),
-                itemCount: 7,
+                itemCount: 1,
                 itemBuilder: (BuildContext context, int index) {
                   // var meal = MealCard(9, 'تفاح', 30, 50,1,this);
                   return Column(
@@ -640,7 +644,7 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
             child: new ListView.builder(
                 shrinkWrap: true,
                 //physics: NeverScrollableScrollPhysics(),
-                itemCount: 4,
+                itemCount: 1,
                 itemBuilder: (BuildContext context, int index) {
                   //              var meal = MealCard(9, 'تفاح', 30, 50,1,this);
                   return Column(
@@ -701,9 +705,9 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
           ),
           new Expanded(
             child: new ListView.builder(
-                shrinkWrap: true,
+                shrinkWrap: false,
                 //physics: NeverScrollableScrollPhysics(),
-                itemCount: 7,
+                itemCount: 1,
                 itemBuilder: (BuildContext context, int index) {
                   // var meal = MealCard(9, 'تفاح', 30, 50,1,this);
                   return Column(
@@ -714,7 +718,7 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
                       MealCard(7, 'التفاح', 25.13, 1, this),
                       MealCard(4, ' أرز البني', 36, 1, this),
                       MealCard(5, 'أرز ابيض', 44.5, 1, this),
-                      MealCard(6, 'سلطة سيزر', 50, 1, this),
+                      MealCard(6, 'سلطة سيزر', 46, 1, this),
                     ],
                   );
                 }),
@@ -768,9 +772,9 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
           ),
           new Expanded(
             child: new ListView.builder(
-                shrinkWrap: true,
+                //shrinkWrap: true,
                 //physics: NeverScrollableScrollPhysics(),
-                itemCount: 6,
+                itemCount: 1,
                 itemBuilder: (BuildContext context, int index) {
                   // var meal = MealCard(9, 'تفاح', 30, 50,1,this);
                   return Column(
@@ -787,19 +791,19 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
           ),
         ],
       ),
-      new AnimatedOpacity(
-        opacity: 0.0, // _visible ? 1.0 :0.0
+      // new AnimatedOpacity(
+      //   opacity: 0.0, // _visible ? 1.0 :0.0
 
-        duration: Duration(milliseconds: 600),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 70.0),
-          child: new SpinKitThreeBounce(
-            color: Color((Random().nextDouble() * 0xFFFFFF).toInt() << 3)
-                .withOpacity(0.2),
-            size: 100.0,
-          ),
-        ),
-      ),
+      //   duration: Duration(milliseconds: 600),
+      //   child: Padding(
+      //     padding: const EdgeInsets.only(top: 70.0),
+      //     child: new SpinKitThreeBounce(
+      //       color: Color((Random().nextDouble() * 0xFFFFFF).toInt() << 3)
+      //           .withOpacity(0.2),
+      //       size: 100.0,
+      //     ),
+      //   ),
+      // ),
     ]);
   }
 
@@ -1101,7 +1105,7 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => MainPage(widget.id,
-                                          widget.BMI, widget.A1c, widget.carb)),
+                                          widget.BMI, widget.A1c, widget.carb,0)),
                                 );
                               },
                               width: 120,
@@ -1141,7 +1145,7 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['bmi']);
     // this.getData();
   }
 }
-  double insulinUnit(double totalcarb,double wit){
+  double insulinUnit(double totalcarb,int wit){
   //insulin unit:
 double unit= wit *0.5;
 

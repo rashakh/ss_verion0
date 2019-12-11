@@ -13,7 +13,7 @@
   Exam.withId(this._PTId,this._name, this._email, this._date,this._dur);
 
   Exam(this._name, this._email, this._date,this._dur);
-
+Exam.result(this._PTId,this._name, this._email, this._date,this._result,this._RDate);
   int get id => _id;
   int get PTId => _PTId;
   String get email => _email;
