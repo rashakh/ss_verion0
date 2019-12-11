@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
 
-   print("check in mainpage ${widget.A1c.toString()}, ${widget.BMI}, ${widget.carb},");
+  // print("check in mainpage ${widget.A1c.toString()}, ${widget.BMI}, ${widget.carb},");
     return new Scaffold(
       body: pages(_selectedPage),
       floatingActionButton: new FancyFab(widget.id,widget.BMI, widget.A1c, widget.carb),

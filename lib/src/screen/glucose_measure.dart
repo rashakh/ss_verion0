@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:dtfbl/diabetes_icons_icons.dart';
 import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/models/BG.dart';
@@ -11,13 +10,20 @@ import '../widgets/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:intl/intl.dart' as intl; // flutter main package
+//import 'package:flutter_sms/flutter_sms.dart';
+import 'package:dtfbl/src/screen/sms.dart';
 // import 'dart:async';
 // import 'dart:convert'; // convert json into data
 // import 'package:http/http.dart'
 //     as http; // perform http request on API to get the into
 import 'mainpage.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+//=import 'package:flutter_sms/flutter_sms.dart';
+import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 class GlucoseMeasure extends StatelessWidget {
   GlucoseMeasure(this.id, this.BMI, this.A1c, this.carb);
   var id;
@@ -132,6 +138,8 @@ class _Bodystate extends State<Body> {
             double mealCarb = neededcarb * 0.2;
             neededcarb -= mealCarb; // to show the concept
             if (gm < 54) {
+              print("object 2");
+                FlutterSms.sendSMS(recipients: "0562790017", message: "من بسيط وحلو مرحبا رشا");
               alerttype = AlertType.warning;
               decision =
                   'تم ارسال رساله نصية الى ...'; // phonenumber from database
@@ -420,7 +428,9 @@ class _Bodystate extends State<Body> {
             if (gm < 54) {
               alerttype = AlertType.warning;
               decision =
-                  'تم ارسال رساله نصية الى ...'; // phonenumber from database
+                  'تم ارسال رساله نصية الى ...'; 
+                  
+                  // phonenumber from database
             } else if (54 <= gm && gm <= 100) {
               alerttype = AlertType.warning;
               // 15 X 15
@@ -533,6 +543,11 @@ class _Bodystate extends State<Body> {
             double mealCarb = neededcarb * 0.2;
             neededcarb -= mealCarb; // to show the concept
             if (gm < 54) {
+              String g='';
+              String f='';
+               print("object male");
+
+                FlutterSms.sendSMS(recipients: "0554540056", message: "hi");
               alerttype = AlertType.warning;
               decision =
                   'تم ارسال رساله نصية الى ...'; // phonenumber from database
@@ -1572,3 +1587,4 @@ double nwe = ((durg * mod).round().toDouble() / mod);
 return nwe ;
 }
 }
+

@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
   int code;
   @override
   Widget build(BuildContext context) {
-    print("this is a1c ${this.A1c}");
+    //print("this is a1c ${this.A1c}");
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF2A79D2), //Color(0xFF7EAFE5),
@@ -145,7 +145,7 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
       a1c = widget.A1c;
     });
     var n = a1c / 14;
-    print('A1c n: $n');
+    //print('A1c n: $n');
     _bgratio();
     //  mea();
 
@@ -157,7 +157,7 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
       carb = widget.carb;
     });
     var n = carb / 300;
-    print('carb n: $n');
+    //print('carb n: $n');
     _bgratiocarb();
     return n / 10;
   }
@@ -165,7 +165,7 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
   double _PA() {
 //setState(() {  carb=widget.carb;});
     var n = pa / maxPA;
-    print('PA n: $n');
+    //print('PA n: $n');
     _bgratioPA();
     return n;
   }
@@ -173,7 +173,7 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
   double _IS() {
 //setState(() {  carb=widget.carb;});
     var n = unit / total;
-    print('IS n: $n');
+    //print('IS n: $n');
     _bgratioIS();
     return n;
   }
