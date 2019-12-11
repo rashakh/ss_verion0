@@ -182,7 +182,7 @@ class _Bodystate extends State<Body> {
                                         //     child:
                                         new IconButton(
                                           padding: EdgeInsets.only( bottom:30.0,right: 43.0) ,
-                                              icon: Icon(Icons.delete,
+                                              icon: Icon(Icons.delete,color: Colors.red,
                                                   textDirection:
                                                       TextDirection.ltr,
                                                   size: 20),
@@ -297,26 +297,28 @@ class _Bodystate extends State<Body> {
                                       bottom: 10.0,
                                     ),
                                     child: new DropdownButton<String>(
+                                      isExpanded: true,
+                                      
                                       iconEnabledColor: Color(0xFFBDD22A),
-                                      hint: Text('اختر الفحص'),
+                                      hint: Text('اختر الفحص',style: TextStyle(fontSize: 20)),
                                       value: _pt,
                                       items: [
                                         DropdownMenuItem<String>(
                                           value: 'فحص التراكمي',
                                           child: Text(
-                                            'فحص التراكمي',
+                                            'فحص التراكمي',style: TextStyle(fontSize: 20)
                                           ),
                                         ),
                                         DropdownMenuItem<String>(
                                           value: 'فحص الكلى',
                                           child: Text(
-                                            'فحص الكلى',
+                                            'فحص الكلى',style: TextStyle(fontSize: 20)
                                           ),
                                         ),
                                         DropdownMenuItem<String>(
                                           value: 'فحص العين',
                                           child: Text(
-                                            'فحص العين',
+                                            'فحص العين',style: TextStyle(fontSize: 20)
                                           ),
                                         ),
                                       ],
@@ -357,7 +359,7 @@ class _Bodystate extends State<Body> {
                                         new Text(
                                           ': الموعد',
                                           style: new TextStyle(
-                                              fontSize: 17.0,
+                                              fontSize: 22.0,
                                               color: Colors.grey),
                                         ),
                                       ],
@@ -479,7 +481,7 @@ class _Bodystate extends State<Body> {
               height: 10.0,
             ),
             FutureBuilder(
-              future: helper.getPT(widget.id[0]['email']),
+              future: helper.getResult(widget.id[0]['email']),
               builder: (context, snapshot) {
                 print(snapshot.data);
                 // //        if (data.connectionState == ConnectionState.none && data.hasData == null) {
@@ -487,7 +489,7 @@ class _Bodystate extends State<Body> {
                 // //   return Container();
                 // // }
                 if (snapshot.connectionState == ConnectionState.done) {
-                  print("hi list view 1");
+                  print("hi list view 2");
                   final Pt = snapshot.data;
                   var l = 60.0 * Pt.length;
                   return new Row(children: <Widget>[
@@ -501,88 +503,56 @@ class _Bodystate extends State<Body> {
                                 // print("{Pt[index]['Name']}");
 
                                 // var project = snapshot.data[index];
-
-                                Card(
+                                return Card(
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                        right: 20.0, bottom: 10.0, top: 10.0),
+                                        right: 20.0, bottom: 6.0, top: 10.0),
                                     child: new Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text(
-                                          'فحص فحص العين',
+                                       Padding(
+                                         padding: EdgeInsets.only(),
+                                       
+                                         child: new Text(
+                                          '${Pt[index]['Name']}',
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.black,
                                           ),
+                                          textAlign: TextAlign.center,
+                                        ),
                                         ),
                                         SizedBox(
-                                          width: 40.0,
+                                          width: 40.0, // height:20 ,
                                         ),
                                         Text(
-                                          '1/1/2019',
+                                          '${Pt[index]['RDate']}',
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.black,
                                           ),
+                                          textAlign: TextAlign.center,
                                         ),
                                         SizedBox(
-                                          width: 80.0,
+                                          width: 60.0, //height: 20,
                                         ),
-                                        Text(
-                                          'سليمة',
+                                          Text(
+                                          '${Pt[index]['result']}',
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.black,
                                           ),
+                                          textAlign: TextAlign.center,
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                                SizedBox(
-                                  height: 5.0,
-                                );
-                                Card(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        right: 20.0, bottom: 10.0, top: 10.0),
-                                    child: new Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          'فحص فحص الكلى',
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 35.0,
-                                        ),
-                                        Text(
-                                          '1/12/2018',
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 70.0,
-                                        ),
-                                        Text(
-                                          'سليمة',
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.black,
-                                          ),
-                                        ),
+                                        // new Padding(
+                                        //     // but didn't make any  cheng!
+                                        //     padding: EdgeInsets.only(
+                                        //         left: 0, bottom: 10.0),
+                                        //     child:
+       
                                       ],
                                     ),
                                   ),

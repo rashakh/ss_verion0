@@ -10,8 +10,10 @@ import '../widgets/styles.dart';
 import 'package:intl/intl.dart' as intl;
 import 'dart:async';
 import 'dart:convert'; // convert json into data
-import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+// import 'package:http/http.dart'
+//     as http; // perform http request on API to get the into
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 import 'mainpage.dart';
 class Pressureinput extends StatelessWidget {
   Pressureinput(this.id, this.BMI, this.A1c,this.carb);
@@ -53,14 +55,16 @@ class _Bodystate extends State<Body> {
 
   // final String url =
   //     'https://jsonplaceholder.typicode.com/posts'; //'http://127.0.0.1:8000/'; // apiURL ghida connection
-  bool _result;
+// bool _result;
   int pressureSys = 120;
   int pressureDia = 85;
   String evaluation = '';
   Color slider = Colors.greenAccent[400];
   DateTime dateTime = DateTime.now();
   String note = '';
-
+  AlertType alerttype = AlertType.success;
+  String decision = '';
+  String titel = ' : نقترح عليك ان';
   // Future<bool> _postData() async {
   //   // map data to converted to json data
   //   final Map<String, dynamic> userData = {
@@ -78,6 +82,39 @@ class _Bodystate extends State<Body> {
   //   _result =
   //       response.statusCode >= 200 || response.statusCode <= 400 ? true : false;
   // }
+
+  void decisionFun() {
+    setState(() {
+      
+      print('this is the pressureDia = $pressureDia');
+      print('this pressureSys = $pressureSys');
+      if (pressureSys <90 && pressureDia<=60) {
+        alerttype = AlertType.warning;
+        titel='لديك انخفاض ضغط';
+        decision =
+            ' اكثر من شرب الماء- \n  تناول طعام حامض -';
+      } else if ((pressureSys>=91 && pressureSys<=129) && (pressureDia>60 && pressureDia<80)) {
+        alerttype = AlertType.success;
+        decision =
+            ' ان تحافظ دائما على مستوى الضغط الحالي ';
+      } else if (pressureSys == 130 && pressureDia == 80) {
+        alerttype = AlertType.success;
+        decision =
+            ' مستوى الضغط لديك جيد، لكن حاول أن يكون هدفك مابين (91-120 )/(60-80) ';
+      } else if ((pressureSys >130 && pressureSys <= 179) || (pressureDia >=80 && pressureDia <=89)) {
+        alerttype = AlertType.warning;
+        titel='لديك ارتفاع ضغط';
+        decision =
+            ' اكثر من شرب الماء -\n تناول اطعمة غنية بالبوتاسيوم كالموز - \n حاول الجلوس  والاسترخاء -\n ابتعد الكافيين والاطعمة المالحة -';
+      }
+        else if (pressureSys >=180 || pressureDia>120) {
+        alerttype = AlertType.warning;
+        titel='لديك نوبة ارتفاع ضغط';
+        decision =
+            ' تناول ادويتك لارتفاع الضغط اذا كان لديك -\nاو اطلب العناية الطبية فوراً -';
+        }
+    });
+  }
 
   void _onChangedSys(e) {
     setState(() {
@@ -182,7 +219,7 @@ class _Bodystate extends State<Body> {
                   initialValue: pressure,
                   minValue: 0,
                   maxValue: max,
-                  itemExtent: 40,
+                  itemExtent: 45,
                   onChanged: (e) => fun(e)),
             ),
           ),
@@ -312,12 +349,35 @@ class _Bodystate extends State<Body> {
                     BP bp=BP(widget.id[0]['email'].toString(), pressureSys, pressureDia, note,dateTime.toIso8601String());
                       var mealw = await helper.insertBP(bp);
                     print("click 2: $mealw");
-                       setState(()  {
-                    Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => MainPage(widget.id,widget.BMI,widget.A1c, widget.carb)),
-                        );
-                  });}
+
+                        decisionFun();
+                        Alert(
+                          style: AlertStyle(
+                            isCloseButton: false,
+                          ),
+                          context: context,
+                          type: alerttype,
+                          title: titel,
+                          desc: decision,
+                          buttons: [
+                            DialogButton(
+                              child: Text(
+                                'حسنا',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20),
+                              ),
+                              onPressed: () => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage(widget.id,
+                                        widget.BMI, widget.A1c, widget.carb,0)),
+                              ),
+                              width: 120,
+                            )
+                          ],
+                        ).show();
+                       }
+
                 ),
                 SizedBox(width: 160.0),
                 new FlatButton(

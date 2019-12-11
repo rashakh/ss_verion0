@@ -7,11 +7,12 @@ import 'exportPDF.dart';
 import 'medalert.dart'; // perform http request on API to get the into
 
 class Instructions extends StatelessWidget {
-  Instructions(this.id, this.BMI, this.A1c, this.carb);
+  Instructions(this.id, this.BMI, this.A1c, this.carb,this.code);
   var id;
   var BMI;
   var A1c;
   var carb;
+  int code=0;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -85,17 +86,18 @@ class Instructions extends StatelessWidget {
         ),
       ),
       body: new SingleChildScrollView(
-          child: new Body(id, BMI, A1c.toString(), carb)),
+          child: new Body(id, BMI, A1c,carb,code)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.carb, this.A1c);
+  Body(this.id, this.BMI, this.A1c, this.carb,this.code);
   var id;
   var BMI;
   var A1c;
   var carb;
+  int code=0;
   @override
   State createState() => new _Bodystate();
 }

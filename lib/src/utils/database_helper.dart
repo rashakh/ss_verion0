@@ -4,13 +4,13 @@ import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/models/BG.dart';
 import 'package:dtfbl/src/models/PA.dart';
 import 'package:dtfbl/src/models/PT.dart';
-import 'package:dtfbl/src/models/a1cexam.dart';
 import 'package:dtfbl/src/models/carb.dart';
 import 'package:dtfbl/src/models/dug.dart';
 import 'package:dtfbl/src/models/exams.dart';
 import 'package:dtfbl/src/models/meal.dart';
 import 'package:dtfbl/src/models/med.dart';
 import 'package:dtfbl/src/models/pressure.dart';
+import 'package:dtfbl/src/models/result.dart';
 import 'package:dtfbl/src/models/variety.dart';
 import 'package:dtfbl/src/models/wieght.dart';
 import 'package:path_provider/path_provider.dart';
@@ -48,6 +48,7 @@ class DatabaseHelper {
 // variety table:
   String varietyTable = 'variety_table';
   String colid = 'id';
+  String colidao = 'idao';
   String coleat = 'eat';
   String colvarcarb = 'varcarb';
   String colamount = 'amount';
@@ -99,8 +100,8 @@ class DatabaseHelper {
   String colresult='result';
   String colRDate='RDate';
 
-//ExamA1C table:
-  String ExamA1CTable= 'ExamA1C_table';
+//Exams result table:
+  String ExamResultTable= 'result_table';
 
 
 //med table:
@@ -132,7 +133,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user11.db';
+    String path = directory.path + 'user13.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
@@ -151,9 +152,11 @@ class DatabaseHelper {
         '$colCarb REAL, $colnote TEXT, $coldate TEXT)');
 
     await db.execute('CREATE TABLE $varietyTable ('
+        '$colidao INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colid INT,$colId INT,$coleat TEXT,'
         '$colEmail TEXT, $colvarcarb REAL,'
-        '$colamount REAL,PRIMARY KEY ($colid,$colId))');
+        '$colamount REAL)'//,PRIMARY KEY ($colid,$colId))'
+        );
 
     await db.execute('CREATE TABLE $bGTable ('
         '$colEmail TEXT,$coldate TEXT,$colBGSlot TEXT,'
@@ -190,11 +193,10 @@ class DatabaseHelper {
         '$colName TEXT, $coldate TEXT, $colresult TEXT, $colRDate TEXT,'
         '$coldur INTEGER)');
 
-    await db.execute('CREATE TABLE $ExamA1CTable('
+    await db.execute('CREATE TABLE $ExamResultTable('
         '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT, $colPTId INTEGER,'
-        '$colName TEXT, $coldate TEXT, $colresult TEXT, $colRDate TEXT,'
-        '$coldur INTEGER)');
+        '$colName TEXT, $colresult TEXT, $colRDate TEXT)');
     
     await db.execute( 'CREATE TABLE $carbTable('
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
@@ -434,6 +436,7 @@ print('updated: $result');
     Database db = await this.database;
  //   int count = await database.rawUpdate(SELECT * FROM tablename ORDER BY column DESC LIMIT 1);
     var result = await db.rawQuery('SELECT * FROM $pATable ORDER BY $colAototId DESC LIMIT 1');
+    print("from PA : $result");
    // var result1 = await db.update(pATable, pa.map(), where: '$colAototId = ?', whereArgs: [variety.id]));
     var result1 = await db.rawUpdate('UPDATE $pATable  SET $coldur = $pa  WHERE $colAototId=${result[0]['id']}');
 print('updated: $result');
@@ -547,7 +550,7 @@ if(result.isEmpty){ //result.add({'a1C':0.0});
 Future getPT(String email) async {
  Database db = await this.database;
 var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$email\" ORDER BY $coldur  DESC  ');
- print("getA1C: ${result.toList()}");
+ print("getPT: ${result.toList()}");
   print("hi list");
  return result;
 }
@@ -560,15 +563,48 @@ var result = await db.rawDelete('DELETE FROM $ExamsTable WHERE $colEmail=\"$emai
  print("delet exam: $result");
  return result;
 }
-//----------------------------------ExamA1C Table------------------------------------------------
+
+// delete:
+Future deleteExam(int id,String email) async {
+ Database db = await this.database;
+var result = await db.rawDelete('DELETE FROM $ExamsTable WHERE $colEmail=\"$email\" AND $colPTId=$id');
+
+ print("delet exam: $result");
+ return result;
+}
+
+//get kidney exam
+Future getPTk(String email) async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$email\" AND $colPTId=2 ORDER BY $coldur  ASC ');
+ print("getPTK: ${result.toList()}");
+  print("hi list");
+ return result;
+}
+
+//get Eye exam
+
+
+//get A1c exam
+//----------------------------------Result Table------------------------------------------------
 //add
-  Future<int> insertExamA1C(ExamA1C pa) async {
+  Future<int> insertResult(Result pa) async {
     Database db = await this.database;
-    var result = await db.insert(ExamA1CTable, pa.toMap());
+    var cler=db.rawDelete('DELETE FROM $ExamResultTable WHERE $colPTId = ${pa.PTId}');
+    var result = await db.insert(ExamResultTable, pa.toMap());
     return result;
   }
 //UPDATE
 //GET
+Future getResult(String email) async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT * FROM $ExamResultTable WHERE $colEmail=\"$email\" ORDER BY $colRDate  DESC  ');
+ print("get Result : ${result.toList()}");
+  //print("");
+ return result;
+}
+
+
 //----------------------------------med table----------------------------------------------------
 //ADD
   Future<int> insertmed(Med pa) async {
@@ -589,7 +625,13 @@ var result = await db.rawDelete('DELETE FROM $ExamsTable WHERE $colEmail=\"$emai
   
 //UPDATE
 //GET
-
+Future getDug(String email) async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT * FROM $DugTable WHERE $colEmail=\"$email\" ');
+ print("get Result : ${result.toList()}");
+  //print("");
+ return result;
+}
 
 
 

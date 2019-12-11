@@ -335,8 +335,6 @@ class _Bodystate extends State<Body> {
 
                         widget.BMI.clear();
                         widget.BMI.add(h);
-                        //widget.BMI[0]['wit'];
-                        //widget.A1c= d;
                         print("hi: ${widget.BMI},${widget.A1c}");
                         decisionFun();
                         Alert(
@@ -358,7 +356,7 @@ class _Bodystate extends State<Body> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MainPage(widget.id,
-                                        widget.BMI, widget.A1c, widget.carb)),
+                                        widget.BMI, widget.A1c, widget.carb,0)),
                               ),
                               width: 120,
                             )

@@ -15,6 +15,7 @@ import 'loginpage.dart';
 // import 'package:sqflite/sqflite.dart';
 import '../models/user.dart';
 import '../utils/database_helper.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 
 class Registration extends StatelessWidget {
   @override
@@ -144,37 +145,77 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 
   Widget _cupdate() {
-    return CupertinoDatePicker(
+    return DatePickerWidget(
       initialDateTime: _birthday,
-      minimumDate: DateTime(2018),
-      maximumDate: DateTime.now(),
-      mode: CupertinoDatePickerMode.date,
-      onDateTimeChanged: (e) {
-        setState(() {
-          if (e.isAfter(DateTime.now())) {
-            e = DateTime.now();
-          }
-          _birthday = e;
-        });
-      },
+      maxDateTime: DateTime.now(),
+      onChange: (e, selectedIndex) => setState(() {
+        if (e.isAfter(DateTime.now())) {
+          e = DateTime.now();
+        }
+        _birthday = e;
+      }),
+      pickerTheme: DateTimePickerTheme(
+        cancel: Icon(Icons.close, size: 30.0, color: Colors.red),
+        confirm: Icon(
+          Icons.check,
+          size: 30.0,
+          color: Colors.blue,
+        ),
+        itemTextStyle: TextStyle(fontSize: 25.0),
+        pickerHeight: 400.0,
+      ),
     );
+    // CupertinoDatePicker(
+    //   initialDateTime: _birthday,
+    //   minimumDate: DateTime(2018),
+    //   maximumDate: DateTime.now(),
+    //   mode: CupertinoDatePickerMode.date,
+    //   onDateTimeChanged: (e) {
+    //     setState(() {
+    //       if (e.isAfter(DateTime.now())) {
+    //         e = DateTime.now();
+    //       }
+    //       _birthday = e;
+    //     });
+    //   },
+    // );
   }
 
   Widget _ddate() {
-    return CupertinoDatePicker(
+    return DatePickerWidget(
       initialDateTime: _dd,
-      minimumDate: DateTime(2018),
-      maximumDate: DateTime.now(),
-      mode: CupertinoDatePickerMode.date,
-      onDateTimeChanged: (e) {
-        setState(() {
-          if (e.isAfter(DateTime.now())) {
-            e = DateTime.now();
-          }
-          _dd = e;
-        });
-      },
+      maxDateTime: DateTime.now(),
+      onChange: (e, selectedIndex) => setState(() {
+        if (e.isAfter(DateTime.now())) {
+          e = DateTime.now();
+        }
+        _dd = e;
+      }),
+      pickerTheme: DateTimePickerTheme(
+        cancel: Icon(Icons.close, size: 30.0, color: Colors.red),
+        confirm: Icon(
+          Icons.check,
+          size: 30.0,
+          color: Colors.blue,
+        ),
+        itemTextStyle: TextStyle(fontSize: 25.0),
+        pickerHeight: 400.0,
+      ),
     );
+    // CupertinoDatePicker(
+    //   initialDateTime: _dd,
+    //   minimumDate: DateTime(2018),
+    //   maximumDate: DateTime.now(),
+    //   mode: CupertinoDatePickerMode.date,
+    //   onDateTimeChanged: (e) {
+    //     setState(() {
+    //       if (e.isAfter(DateTime.now())) {
+    //         e = DateTime.now();
+    //       }
+    //       _dd = e;
+    //     });
+    //   },
+    // );
   }
 
   @override
@@ -183,7 +224,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       textDirection: TextDirection.rtl,
       child: new Stack(fit: StackFit.expand, // make Stack itself fit screen
           children: <Widget>[
-           // new Expanded(
+            // new Expanded(
             new Image(
               image: new AssetImage('assets/img.jpg'),
               fit: BoxFit.none, // make image fit screen
@@ -207,493 +248,429 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     //     new Expanded(
                     //       flex:3,
                     //         flex: 1,
-                          child: Container(
-                            child: new SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  new Card(
-                                      elevation: 5.0,
-                                      color: Colors.white,
-                                      child: new Column(
-                                        children: <Widget>[
-                                          new Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 20.0,
-                                                right: 20.0,
-                                                bottom: 10.0),
-                                            child: new Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  new Expanded(
-                                                    child: new Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                        left: 20.0,
-                                                      ),
-                                                      child: new TextFormField(
-                                                        decoration:
-                                                            InputDecoration(
-                                                          contentPadding:
-                                                              EdgeInsets
-                                                                  .symmetric(
-                                                                      vertical:
-                                                                          3.0),
-                                                          hintText:
-                                                              'الاسم الاول',
-                                                          hintStyle:
-                                                              new TextStyle(
-                                                                  fontSize:
-                                                                      17.0,
-                                                                  color: Colors
-                                                                      .grey),
-                                                          fillColor: Colors
-                                                              .white54
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                        keyboardType:
-                                                            TextInputType.text,
-                                                        validator: (value) =>
-                                                            value.isEmpty
-                                                                ? 'هذا الحقل مطلوب'
-                                                                : null,
-                                                        onSaved: (value) =>
-                                                            _fName = value,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  new Expanded(
-                                                    child: new Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                        right: 10.0,
-                                                      ),
-                                                      child: new TextFormField(
-                                                        decoration:
-                                                            InputDecoration(
-                                                          contentPadding:
-                                                              EdgeInsets
-                                                                  .symmetric(
-                                                                      vertical:
-                                                                          3.0),
-                                                          hintText:
-                                                              'الاسم الاخير',
-                                                          hintStyle:
-                                                              new TextStyle(
-                                                                  fontSize:
-                                                                      17.0,
-                                                                  color: Colors
-                                                                      .grey),
-                                                          fillColor: Colors
-                                                              .white54
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                        keyboardType:
-                                                            TextInputType.text,
-                                                        validator: (value) =>
-                                                            value.isEmpty
-                                                                ? 'هذا الحقل مطلوب'
-                                                                : null,
-                                                        onSaved: (value) =>
-                                                            _lName = value,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ]),
-                                          ),
-                                          new Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 17,
-                                                right: 17.0,
-                                                bottom: 10.0),
-                                            child: new Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  new Expanded(
-                                                    child: new Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                        left: 10.0,
-                                                      ),
-                                                      child: new TextFormField(
-                                                        decoration:
-                                                            InputDecoration(
-                                                          contentPadding:
-                                                              EdgeInsets
-                                                                  .symmetric(
-                                                                      vertical:
-                                                                          3.0),
-                                                          hintText: 'وزنك',
-                                                          hintStyle:
-                                                              new TextStyle(
-                                                                  fontSize:
-                                                                      17.0,
-                                                                  color: Colors
-                                                                      .grey),
-                                                          fillColor: Colors
-                                                              .white54
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        validator: (value) =>
-                                                            value.isEmpty
-                                                                ? 'هذا الحقل مطلوب'
-                                                                : null,
-                                                        onSaved: (value) =>
-                                                            _weight =
-                                                                double.tryParse(
-                                                                    value),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                      left: 35.0,
-                                                    ),
-                                                    child: new Text('كغم'),
-                                                  ),
-                                                  new Expanded(
-                                                    child: new Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                        left: 3.0,
-                                                      ),
-                                                      child: new TextFormField(
-                                                        decoration:
-                                                            InputDecoration(
-                                                          contentPadding:
-                                                              EdgeInsets
-                                                                  .symmetric(
-                                                                      vertical:
-                                                                          3.0),
-                                                          hintText: 'طولك',
-                                                          hintStyle:
-                                                              new TextStyle(
-                                                                  fontSize:
-                                                                      17.0,
-                                                                  color: Colors
-                                                                      .grey),
-                                                          fillColor: Colors
-                                                              .white54
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        validator: (value) =>
-                                                            value.isEmpty
-                                                                ? 'هذا الحقل مطلوب'
-                                                                : null,
-                                                        onSaved: (value) =>
-                                                            _height =
-                                                                double.tryParse(
-                                                                    value),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 10.0),
-                                                    child: new Text('متر'),
-                                                  ),
-                                                ]),
-                                          ),
-                                         new Padding(
-                                           padding: const EdgeInsets.only(
-                                                left: 0,
-                                                right: 0.0,
-                                                bottom: 0.0), 
-                                          child: new Row(
-                                            children: <Widget>[
-                                              new Radio(
-                                                activeColor: Colors.lightBlue,
-                                                value: 0,
-                                                groupValue: _gender,
-                                                onChanged: (value) {
-                                                  _onChange(value);
-                                                },
-                                              ),
-                                              new Text(
-                                                'انثى',
-                                                style: new TextStyle(
-                                                    fontSize: 17.0,
-                                                    color: Colors.grey),
-                                              ),
-                                              new Radio(
-                                                activeColor: Colors.lightBlue,
-                                                value: 1,
-                                                groupValue: _gender,
-                                                onChanged: (value) {
-                                                  _onChange(value);
-                                                },
-                                              ),
-                                              new Text(
-                                                'ذكر',
-                                                style: new TextStyle(
-                                                    fontSize: 17.0,
-                                                    color: Colors.grey),
-                                              ),
-                                            ],
-                                          ),
-                                         ),
-                                          new Row(
-                                            children: <Widget>[
-                                              new Radio(
-                                                activeColor: Colors.lightBlue,
-                                                value: 0,
-                                                groupValue: _type,
-                                                onChanged: (value) {
-                                                  _onChanget(value);
-                                                },
-                                              ),
-                                              new Text(
-                                                'سكري النوع الاول',
-                                                style: new TextStyle(
-                                                    fontSize: 17.0,
-                                                    color: Colors.grey),
-                                              ),
-                                              new Radio(
-                                                activeColor: Colors.lightBlue,
-                                                value: 1,
-                                                groupValue: _type,
-                                                onChanged: (value) {
-                                                  _onChanget(value);
-                                                },
-                                              ),
-                                              new Text(
-                                                'سكري النوع الثاني',
-                                                style: new TextStyle(
-                                                    fontSize: 17.0,
-                                                    color: Colors.grey),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              new Text(
-                                                '    تاريخ الميلاد : ',
-                                                style: new TextStyle(
-                                                    fontSize: 17.0,
-                                                    color: Colors.grey),
-                                              ),
-                                              new IconButton(
-                                                color: Colors.blue,
-                                                icon: new Icon(
-                                                  Icons.calendar_today,
+                    child: Container(
+                      child: new SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Card(
+                                elevation: 5.0,
+                                color: Colors.white,
+                                child: new Column(
+                                  children: <Widget>[
+                                    new Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0,
+                                          right: 20.0,
+                                          bottom: 10.0),
+                                      child: new Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            new Expanded(
+                                              child: new Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 20.0,
                                                 ),
-                                                onPressed: () async {
-                                                  await showModalBottomSheet(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return _cupdate();
-                                                    },
-                                                  );
-                                                },
-                                              ),
-                                              SizedBox(width: 100.0),
-                                              new Text(
-                                                intl.DateFormat.yMMMd()
-                                                    .format(_birthday),
-                                                style:
-                                                    TextStyle(fontSize: 15.0),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              new Text(
-                                                '    تاريخ التشخيص بالسكري : ',
-                                                style: new TextStyle(
-                                                    fontSize: 17.0,
-                                                    color: Colors.grey),
-                                              ),
-                                              new IconButton(
-                                                color: Colors.blue,
-                                                icon: new Icon(
-                                                  Icons.calendar_today,
-                                                ),
-                                                onPressed: () async {
-                                                  await showModalBottomSheet(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return _ddate();
-                                                    },
-                                                  );
-                                                },
-                                              ),
-                                              SizedBox(width: 15.0),
-                                              new Text(
-                                                intl.DateFormat.yMMMd()
-                                                    .format(_dd),
-                                                style:
-                                                    TextStyle(fontSize: 15.0),
-                                              ),
-                                            ],
-                                          ),
-                                         
-                                          new Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10.0,
-                                                bottom: 20.0,
-                                                right: 20.0,
-                                                left: 30.0),
-                                            child: new TextFormField(
-                                              decoration: InputDecoration(
-                                                contentPadding:
-                                                    EdgeInsets.symmetric(
-                                                        vertical: 3.0),
-                                                hintText:
-                                                    'رقم احد افراد العائلة للطوارئ',
-                                                hintStyle: new TextStyle(
-                                                    fontSize: 17.0,
-                                                    color: Colors.grey),
-                                                fillColor: Colors.white54
-                                                    .withOpacity(0.5),
-                                              ),
-                                              keyboardType: TextInputType.phone,
-                                              validator: (value) =>
-                                                  value.isEmpty
-                                                      ? 'هذا الحقل مطلوب'
-                                                      : null,
-                                              onSaved: (value) =>
-                                                  _number = value,
-                                            ),
-                                          ),
-                                         ],
-                                      )),
-                                  new Divider(
-                                    color: Color(0xFFBDD22A),
-                                    height: 10.0,
-                                  ),
-                                  new Card(
-                                      elevation: 5.0,
-                                      color: Colors.white,
-                                      child: new Column(
-                                        children: <Widget>[
-                                          new Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 20.0,
-                                                right: 20.0,
-                                                bottom: 10.0),
-                                            child: new TextFormField(
-                                              decoration: InputDecoration(
-                                                contentPadding:
-                                                    EdgeInsets.symmetric(
-                                                        vertical: 5.0),
-                                                hintText: 'دخل ايميلك',
-                                                hintStyle: new TextStyle(
-                                                    fontSize: 17.0,
-                                                    color: Colors.grey),
-                                                fillColor: Colors.white54
-                                                    .withOpacity(0.5),
-                                              ),
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
-                                              validator: (value) => !value
-                                                          .contains('@') ||
-                                                      !value.contains('.com') ||
+                                                child: new TextFormField(
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 3.0),
+                                                    hintText: 'الاسم الاول',
+                                                    hintStyle: new TextStyle(
+                                                        fontSize: 17.0,
+                                                        color: Colors.grey),
+                                                    fillColor: Colors.white54
+                                                        .withOpacity(0.5),
+                                                  ),
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  validator: (value) =>
                                                       value.isEmpty
-                                                  ? 'الايميل غير صحيح'
-                                                  : null,
-                                              onSaved: (value) =>
-                                                  _email = value,
-                                            ),
-                                          ),
-                                          new Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 20.0,
-                                                right: 20.0,
-                                                bottom: 10.0),
-                                            child: new TextFormField(
-                                              decoration: InputDecoration(
-                                                contentPadding:
-                                                    EdgeInsets.symmetric(
-                                                        vertical: 5.0),
-                                                hintText: 'ادخل كلمة المرور',
-                                                hintStyle: new TextStyle(
-                                                    fontSize: 17.0,
-                                                    color: Colors.grey),
-                                                fillColor: Colors.white54
-                                                    .withOpacity(0.5),
+                                                          ? 'هذا الحقل مطلوب'
+                                                          : null,
+                                                  onSaved: (value) =>
+                                                      _fName = value,
+                                                ),
                                               ),
-                                              keyboardType: TextInputType.text,
-                                              obscureText: true,
-                                              validator: (value) =>
-                                                  value.isEmpty
-                                                      ? 'هذا الحقل مطلوب'
-                                                      : null,
-                                              onSaved: (value) =>
-                                                  _password = value,
                                             ),
-                                          ),
-                                          new Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 20.0,
-                                                right: 20.0,
-                                                bottom: 10.0),
-                                            child: new TextFormField(
-                                              decoration: InputDecoration(
-                                                contentPadding:
-                                                    EdgeInsets.symmetric(
-                                                        vertical: 5.0),
-                                                hintText: 'اكد كلمة المرور',
-                                                hintStyle: new TextStyle(
-                                                    fontSize: 17.0,
-                                                    color: Colors.grey),
-                                                fillColor: Colors.white54
-                                                    .withOpacity(0.5),
+                                            new Expanded(
+                                              child: new Padding(
+                                                padding: const EdgeInsets.only(
+                                                  right: 10.0,
+                                                ),
+                                                child: new TextFormField(
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 3.0),
+                                                    hintText: 'الاسم الاخير',
+                                                    hintStyle: new TextStyle(
+                                                        fontSize: 17.0,
+                                                        color: Colors.grey),
+                                                    fillColor: Colors.white54
+                                                        .withOpacity(0.5),
+                                                  ),
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  validator: (value) =>
+                                                      value.isEmpty
+                                                          ? 'هذا الحقل مطلوب'
+                                                          : null,
+                                                  onSaved: (value) =>
+                                                      _lName = value,
+                                                ),
                                               ),
-                                              keyboardType: TextInputType.text,
-                                              obscureText: true,
-                                              validator: (value) =>
-                                                  value.isEmpty ||
-                                                          value != _password
-                                                      ? 'كلمة السر لا تتطابق'
-                                                      : null,
                                             ),
+                                          ]),
+                                    ),
+                                    new Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 17, right: 17.0, bottom: 10.0),
+                                      child: new Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            new Expanded(
+                                              child: new Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 10.0,
+                                                ),
+                                                child: new TextFormField(
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 3.0),
+                                                    hintText: 'وزنك',
+                                                    hintStyle: new TextStyle(
+                                                        fontSize: 17.0,
+                                                        color: Colors.grey),
+                                                    fillColor: Colors.white54
+                                                        .withOpacity(0.5),
+                                                  ),
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  validator: (value) =>
+                                                      value.isEmpty
+                                                          ? 'هذا الحقل مطلوب'
+                                                          : null,
+                                                  onSaved: (value) => _weight =
+                                                      double.tryParse(value),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 35.0,
+                                              ),
+                                              child: new Text('كغم'),
+                                            ),
+                                            new Expanded(
+                                              child: new Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 3.0,
+                                                ),
+                                                child: new TextFormField(
+                                                  decoration: InputDecoration(
+                                                    contentPadding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 3.0),
+                                                    hintText: 'طولك',
+                                                    hintStyle: new TextStyle(
+                                                        fontSize: 17.0,
+                                                        color: Colors.grey),
+                                                    fillColor: Colors.white54
+                                                        .withOpacity(0.5),
+                                                  ),
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  validator: (value) =>
+                                                      value.isEmpty
+                                                          ? 'هذا الحقل مطلوب'
+                                                          : null,
+                                                  onSaved: (value) => _height =
+                                                      double.tryParse(value),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10.0),
+                                              child: new Text('متر'),
+                                            ),
+                                          ]),
+                                    ),
+                                    new Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 0, right: 0.0, bottom: 0.0),
+                                      child: new Row(
+                                        children: <Widget>[
+                                          new Radio(
+                                            activeColor: Colors.lightBlue,
+                                            value: 0,
+                                            groupValue: _gender,
+                                            onChanged: (value) {
+                                              _onChange(value);
+                                            },
+                                          ),
+                                          new Text(
+                                            'انثى',
+                                            style: new TextStyle(
+                                                fontSize: 17.0,
+                                                color: Colors.grey),
+                                          ),
+                                          new Radio(
+                                            activeColor: Colors.lightBlue,
+                                            value: 1,
+                                            groupValue: _gender,
+                                            onChanged: (value) {
+                                              _onChange(value);
+                                            },
+                                          ),
+                                          new Text(
+                                            'ذكر',
+                                            style: new TextStyle(
+                                                fontSize: 17.0,
+                                                color: Colors.grey),
                                           ),
                                         ],
-                                      )),
-                                  new Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 15.0),
-                                    child: new GestureDetector(
-                                      onTap: validateAndSubmit,
-                                      child: new Container(
-                                          alignment: Alignment.center,
-                                          height: 45.0,
-                                          decoration: new BoxDecoration(
-                                              color: Color(0xFFBDD22A),
-                                              borderRadius:
-                                                  new BorderRadius.circular(
-                                                      7.0)),
-                                          child: new Text("تسجيل",
-                                              style: new TextStyle(
-                                                  fontSize: 20.0,
-                                                  color: Colors.white,
-                                                  fontWeight:
-                                                      FontWeight.bold))),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    new Row(
+                                      children: <Widget>[
+                                        new Radio(
+                                          activeColor: Colors.lightBlue,
+                                          value: 0,
+                                          groupValue: _type,
+                                          onChanged: (value) {
+                                            _onChanget(value);
+                                          },
+                                        ),
+                                        new Text(
+                                          'سكري النوع الاول',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                        ),
+                                        new Radio(
+                                          activeColor: Colors.lightBlue,
+                                          value: 1,
+                                          groupValue: _type,
+                                          onChanged: (value) {
+                                            _onChanget(value);
+                                          },
+                                        ),
+                                        new Text(
+                                          'سكري النوع الثاني',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        new Text(
+                                          '    تاريخ الميلاد : ',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                        ),
+                                        new IconButton(
+                                          color: Colors.blue,
+                                          icon: new Icon(
+                                            Icons.calendar_today,
+                                          ),
+                                          onPressed: () async {
+                                            await showModalBottomSheet(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return _cupdate();
+                                              },
+                                            );
+                                          },
+                                        ),
+                                        SizedBox(width: 100.0),
+                                        new Text(
+                                          intl.DateFormat.yMMMd()
+                                              .format(_birthday),
+                                          style: TextStyle(fontSize: 15.0),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        new Text(
+                                          '    تاريخ التشخيص بالسكري : ',
+                                          style: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                        ),
+                                        new IconButton(
+                                          color: Colors.blue,
+                                          icon: new Icon(
+                                            Icons.calendar_today,
+                                          ),
+                                          onPressed: () async {
+                                            await showModalBottomSheet(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return _ddate();
+                                              },
+                                            );
+                                          },
+                                        ),
+                                        SizedBox(width: 15.0),
+                                        new Text(
+                                          intl.DateFormat.yMMMd().format(_dd),
+                                          style: TextStyle(fontSize: 15.0),
+                                        ),
+                                      ],
+                                    ),
+                                    new Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10.0,
+                                          bottom: 20.0,
+                                          right: 20.0,
+                                          left: 30.0),
+                                      child: new TextFormField(
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 3.0),
+                                          hintText:
+                                              'رقم احد افراد العائلة للطوارئ',
+                                          hintStyle: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                          fillColor:
+                                              Colors.white54.withOpacity(0.5),
+                                        ),
+                                        keyboardType: TextInputType.phone,
+                                        validator: (value) => value.isEmpty
+                                            ? 'هذا الحقل مطلوب'
+                                            : null,
+                                        onSaved: (value) => _number = value,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                            new Divider(
+                              color: Color(0xFFBDD22A),
+                              height: 10.0,
+                            ),
+                            new Card(
+                                elevation: 5.0,
+                                color: Colors.white,
+                                child: new Column(
+                                  children: <Widget>[
+                                    new Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0,
+                                          right: 20.0,
+                                          bottom: 10.0),
+                                      child: new TextFormField(
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 5.0),
+                                          hintText: 'دخل ايميلك',
+                                          hintStyle: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                          fillColor:
+                                              Colors.white54.withOpacity(0.5),
+                                        ),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        validator: (value) =>
+                                            !value.contains('@') ||
+                                                    !value.contains('.com') ||
+                                                    value.isEmpty
+                                                ? 'الايميل غير صحيح'
+                                                : null,
+                                        onSaved: (value) => _email = value,
+                                      ),
+                                    ),
+                                    new Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0,
+                                          right: 20.0,
+                                          bottom: 10.0),
+                                      child: new TextFormField(
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 5.0),
+                                          hintText: 'ادخل كلمة المرور',
+                                          hintStyle: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                          fillColor:
+                                              Colors.white54.withOpacity(0.5),
+                                        ),
+                                        keyboardType: TextInputType.text,
+                                        obscureText: true,
+                                        validator: (value) => value.isEmpty
+                                            ? 'هذا الحقل مطلوب'
+                                            : null,
+                                        onSaved: (value) => _password = value,
+                                      ),
+                                    ),
+                                    new Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0,
+                                          right: 20.0,
+                                          bottom: 10.0),
+                                      child: new TextFormField(
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                              vertical: 5.0),
+                                          hintText: 'اكد كلمة المرور',
+                                          hintStyle: new TextStyle(
+                                              fontSize: 17.0,
+                                              color: Colors.grey),
+                                          fillColor:
+                                              Colors.white54.withOpacity(0.5),
+                                        ),
+                                        keyboardType: TextInputType.text,
+                                        obscureText: true,
+                                        validator: (value) =>
+                                            value.isEmpty || value != _password
+                                                ? 'كلمة السر لا تتطابق'
+                                                : null,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                            new Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 15.0),
+                              child: new GestureDetector(
+                                onTap: validateAndSubmit,
+                                child: new Container(
+                                    alignment: Alignment.center,
+                                    height: 45.0,
+                                    decoration: new BoxDecoration(
+                                        color: Color(0xFFBDD22A),
+                                        borderRadius:
+                                            new BorderRadius.circular(7.0)),
+                                    child: new Text("تسجيل",
+                                        style: new TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold))),
                               ),
                             ),
-                          ),
+                          ],
                         ),
+                      ),
+                    ),
+                  ),
                   //     ],
                   //   ),
                   // ),
                 )),
-      //),
-      ]),
+            //),
+          ]),
     );
   }
 }
