@@ -431,11 +431,11 @@ Future<List<Map<String, dynamic>>> getInstructionMapList() async {
 print('updated: $result');
     return result;
   }
-//UPDATE //not complet
-  Future<int> UpdatetPA(int pa) async {
+//UPDATE
+  Future<int> UpdatetPA(int pa,String email) async {
     Database db = await this.database;
  //   int count = await database.rawUpdate(SELECT * FROM tablename ORDER BY column DESC LIMIT 1);
-    var result = await db.rawQuery('SELECT * FROM $pATable ORDER BY $colAototId DESC LIMIT 1');
+    var result = await db.rawQuery('SELECT * FROM $pATable WHERE $colEmail=\"$email\" ORDER BY $colAototId DESC LIMIT 1');
     print("from PA : $result");
    // var result1 = await db.update(pATable, pa.map(), where: '$colAototId = ?', whereArgs: [variety.id]));
     var result1 = await db.rawUpdate('UPDATE $pATable  SET $coldur = $pa  WHERE $colAototId=${result[0]['id']}');
@@ -444,7 +444,14 @@ print('updated 1: $result1');
     return result1;
   }
 //GET IN RENGE
+  Future getPA(String email) async {
+    Database db = await this.database;
+ //   int count = await database.rawUpdate(SELECT * FROM tablename ORDER BY column DESC LIMIT 1);
+    var result = await db.rawQuery('SELECT * FROM $pATable WHERE  $colEmail=\"$email\" ORDER BY $colAototId DESC LIMIT 1');
+    print("from get PA : $result");
 
+    return result;
+  }
 
 //----------------------------------PT Table--------------------------------------------------- 
 //add
@@ -584,8 +591,21 @@ var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$ema
 
 //get Eye exam
 
-
+Future getPTE(String email) async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$email\" AND $colPTId=3 ORDER BY $coldur  ASC ');
+ print("getPTE: ${result.toList()}");
+  print("hi list");
+ return result;
+}
 //get A1c exam
+Future getPTA(String email) async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$email\" AND $colPTId=1 ORDER BY $coldur  ASC ');
+ print("getPTA: ${result.toList()}");
+  print("hi list");
+ return result;
+}
 //----------------------------------Result Table------------------------------------------------
 //add
   Future<int> insertResult(Result pa) async {
@@ -604,6 +624,14 @@ var result = await db.rawQuery('SELECT * FROM $ExamResultTable WHERE $colEmail=\
  return result;
 }
 
+//get kidney
+Future getResultK(String email) async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT * FROM $ExamResultTable WHERE $colEmail=\"$email\" AND $colPTId=2 ORDER BY $colRDate  DESC  ');
+ print("get Result : ${result.toList()}");
+  //print("");
+ return result;
+}
 
 //----------------------------------med table----------------------------------------------------
 //ADD
@@ -634,7 +662,14 @@ var result = await db.rawQuery('SELECT * FROM $DugTable WHERE $colEmail=\"$email
 }
 
 
+// delete:
+Future deletdug(int id,String email) async {
+ Database db = await this.database;
+var result = await db.rawDelete('DELETE FROM $DugTable WHERE $colEmail=\"$email\" AND $colAototId=$id');
 
+ print("delet exam: $result");
+ return result;
+}
 
 
 

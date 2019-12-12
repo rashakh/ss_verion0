@@ -3,6 +3,7 @@ import 'package:dtfbl/diabetes_icons_icons.dart';
 import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/models/BG.dart';
 import 'package:dtfbl/src/models/PA.dart';
+import 'package:dtfbl/src/screen/meals.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'dart:ui';
@@ -82,10 +83,19 @@ class _Bodystate extends State<Body> {
     minutes: 30,
   );
   List<String> pas = const <String>[
-    'المشي',
-    'تمارين هوائية',
-    'ركوب الدراجة',
+    'الجري',//0
     'السباحة',
+    'المشي',//2
+    ' تنس طاولة',
+    'تمارين ضغط',
+    'تمارين هوائية', //5
+    'جودو',//6
+    'رفع اثقال',
+    'ركوب الدراجة',//8
+    'كارتيه',
+    'كرة سلة',//10
+    'كرة قدم',//11
+    'ملاكمة',
   ];
   List<String> slots = const <String>[
     'قبل النوم',
@@ -1415,11 +1425,17 @@ String helpMessage="من بسيط وحلو مرحبا رشا";
                         });
                       } else if (slot == 9) {
                         int padu = dur.inMinutes;
-                        var palw = await helper.UpdatetPA(padu);
+                        var palw = await helper.UpdatetPA(padu,dbemail);
+                        var paget=await helper.getPA(dbemail);
                         BG bg = BG(widget.id[0]['email'].toString(),
                             slots[slot], gm, note, dateTime.toIso8601String());
                         var mealw = await helper.insertBG(bg);
+                                  print('result update PA: $palw');
+                        print("pa in slot 9: $pa");
+                        String name=paget[0]['Name'];
+                        if(padu>44 &&(name=='الجري'||name=='المشي'||name=='جودو'||name=='تمارين هوائية'||name=='ركوب الدراجة'||name=='كرة سلة'||name=='كرة قدم')){
                           code=1;
+                        }
                         setState(() {
                           _BGRe();
                           _BGTotal();

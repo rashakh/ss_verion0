@@ -157,7 +157,9 @@ class _Bodystate extends State<Body> {
                                           width: 40.0, // height:20 ,
                                         ),
                                         Text(
-                                          '${Pt[index]['date']}',
+                                          '${Pt[index]['date'].substring(0,10)}',
+                                          //  '${DateTime.parse( Pt[index]['date']).toIso8601String()
+                                               // .substring(0, 10)}',
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.black,
@@ -385,9 +387,8 @@ class _Bodystate extends State<Body> {
                                             id,
                                             _pt,
                                             widget.id[0]['email'],
-                                            _ptDate
-                                                .toIso8601String()
-                                                .substring(0, 10),
+                                            _ptDate.toIso8601String()
+                                                ,
                                             difference);
                                         // print("exam: $_pt,${widget.id[0]['email']},${_ptDate.toIso8601String().substring(0,10)},$difference");
                                         var he = await helper.insertExam(pts);
@@ -529,7 +530,8 @@ class _Bodystate extends State<Body> {
                                           width: 40.0, // height:20 ,
                                         ),
                                         Text(
-                                          '${Pt[index]['RDate']}',
+                                         '${Pt[index]['RDate'].substring(0, 10)}',
+                                        //    '${DateTime.parse(Pt[index]['RDate']).substring(0, 10)}',
                                           style: TextStyle(
                                             fontSize: 16.0,
                                             color: Colors.black,

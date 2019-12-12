@@ -160,12 +160,12 @@ class _Bodystate extends State<Body> {
                                                     TextDirection.ltr,
                                                 size: 20),
                                             onPressed: () async {
-                                              // var result =
-                                              //     await helper.deletExam(
-                                              //         Pt[index]['id'],
-                                              //         Pt[index]['email']
-                                              //             .toString());
-                                              // print(result);
+                                              var result =
+                                                  await helper.deletdug(
+                                                      Pt[index]['id'],
+                                                      Pt[index]['email']
+                                                          .toString());
+                                              print(result);
                                               // Navigator.pop(context);
                                               //Navigator.of(context).popAndPushNamed(routeName)
                                               Navigator.pushReplacement(
@@ -175,8 +175,7 @@ class _Bodystate extends State<Body> {
                                                           MedAlert(
                                                               widget.id,
                                                               widget.BMI,
-                                                              widget.A1c
-                                                                  .toString(),
+                                                              widget.A1c,
                                                               widget.carb)));
                                               //
                                             },
@@ -249,9 +248,9 @@ class _Bodystate extends State<Body> {
                                           ),
                                         ),
                                         DropdownMenuItem<String>(
-                                          value: 'كلوفاج',
+                                          value: 'جلوكوفاج',
                                           child: Text(
-                                            'كلوفاج',
+                                            'جلوكوفاج',
                                             style: TextStyle(fontSize: 20),
                                           ),
                                         ),
@@ -263,9 +262,9 @@ class _Bodystate extends State<Body> {
                                           ),
                                         ),
                                         DropdownMenuItem<String>(
-                                          value: 'مومولوج',
+                                          value: 'هيومالوج',
                                           child: Text(
-                                            'مومولوج',
+                                            'هيومالوج',
                                             style: TextStyle(fontSize: 20),
                                           ),
                                         ),
@@ -289,8 +288,15 @@ int dd=durg.toInt();
                                       Dug medc= new Dug(widget.id[0]['email'],_med,dd); 
                                       var dur =await helper.insertDUB(medc);
                                       print("med isert from medalert: $dur");
-                                        Navigator.of(context).pop();
-                                      },
+ Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          MedAlert(
+                                                              widget.id,
+                                                              widget.BMI,
+                                                              widget.A1c,
+                                                              widget.carb)));                                      },
                                       child: new Container(
                                           alignment: Alignment.center,
                                           height: 40.0,

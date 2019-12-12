@@ -1,10 +1,11 @@
 //import 'dart:developer';
 
-import 'package:dtfbl/src/models/exams.dart';
+//import 'package:dtfbl/src/models/exams.dart';
 import 'package:dtfbl/src/models/result.dart';
 import 'package:dtfbl/src/screen/mainpage.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
+//import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import './medalert.dart';
@@ -13,6 +14,7 @@ import './profile.dart';
 import 'exportPDF.dart';
 //import 'package:intl/intl.dart';
 import 'package:after_layout/after_layout.dart';
+//import 'package:date_format/date_format.dart';
 
 class HomePage extends StatelessWidget {
   HomePage(this.id, this.BMI, this.A1c, this.carb, this.code);
@@ -116,6 +118,8 @@ int i = 0;
 class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
+    final _formKey3 = GlobalKey<FormState>();
+
   DatabaseHelper helper = DatabaseHelper();
   double a1c = 0.0;
   double carb = 0.0;
@@ -508,6 +512,9 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
   Future afterFirstLayout(BuildContext context) async {
     print("code in home page is:${widget.code}");
     int code = widget.code;
+   print(widget.code);
+        print(code);
+
     if (code == 1) {
       // Calling the same function "after layout" to resolve the issue.
       print(widget.code);
@@ -519,7 +526,7 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
       showHelloWorld(context, code);
     }
 
-    if (code == 2 || code == 22 || code == 21||code==32) {
+    if (code == 2 || code == 22 || code == 21||code==32||code>=100) {
       setState(() {
         widget.code = 0;
         print(widget.code);
@@ -527,10 +534,71 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
       showHelloWorld(context, code);
     }
 
-    int KidneyDate = (await helper.getPTk(widget.id[0]['email']))[0]['dur'];
-    print("KidneyDate: $KidneyDate");
-    if (KidneyDate < 2) {
+ var KidneyDate =await helper.getPTk(widget.id[0]['email']);
+if(KidneyDate.isEmpty){
+    print("KidneyDate is empty: $KidneyDate");
+      Kidney_checkAppoiment();
+
+}
+else{
+    int Kidney = KidneyDate[0]['dur'];
+
+    print("KidneyDate: $Kidney");
+    if (Kidney < 2) {
+      if(Kidney==1){
+      showHelloWorld(context, 4);
+            }
+      if(Kidney==0){
       showHelloWorld(context, 3);
+      }
+    }
+}
+
+
+
+var EyesDate = await helper.getPTE(widget.id[0]['email']);
+
+if(EyesDate.isEmpty){
+    print("EyesDate is empty: $EyesDate");
+    Eyse_checkAppoiment();
+
+}
+else{
+
+int Eyes = EyesDate[0]['dur'];
+
+   print("EyesDate: $Eyes");
+    if (Eyes < 2) {
+      if(Eyes==1){
+      showHelloWorld(context, 6);
+            }
+      if(Eyes==0){
+      showHelloWorld(context, 5);
+      }
+    }
+}
+    
+  
+var A1cDate = await helper.getPTA(widget.id[0]['email']);
+
+if(EyesDate.isEmpty){
+    print("A1cDate is empty: $A1cDate");
+A1C_checkAppoiment();
+}
+else{
+
+      int A1c = A1cDate[0]['dur'];
+   print("A1cDate: $A1c");
+    if (A1c < 2) {
+      if(A1c==1){
+      showHelloWorld(context, 8);
+            }
+      if(A1c==0){
+
+      showHelloWorld(context, 7);
+      }
+    }
+    
     }
   }
 
@@ -589,6 +657,7 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
         ],
       ).show();
     } 
+
     //نتيجة فحص القدم
     else if (code == 2) {
       showDialog(
@@ -656,7 +725,7 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
                               4,
                               'فحص القدم',
                               widget.id[0]['email'],
-                              pt.toIso8601String().substring(0, 10),
+                              pt.toIso8601String(),
                               _rt);
 
                           var foote = await helper.insertResult(pts);
@@ -768,7 +837,7 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
                               2,
                               'فحص الكلى',
                               widget.id[0]['email'],
-                              pt.toIso8601String().substring(0, 10),
+                              pt.toIso8601String(),
                               _rt);
 
                           var kR = await helper.insertResult(pts);
@@ -813,6 +882,128 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
             });
           });
     }
+
+//تذكير بفحص الكلى
+     else if (code == 4) {
+   String decision = 'لاتنسى غدا موعد فحصك لكلى';
+      AlertType alerttype = AlertType.info;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' : تذكير',
+        desc: decision,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'حسنا ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 0)),
+                );
+              }),
+            },
+            width: 120,
+
+                        ),
+
+                      ],
+      ).show();
+
+
+
+       
+     }
+
+//نتيجة العين
+     else if (code == 5) {
+
+     }
+
+//تذكير العين
+     else if (code == 6) {
+   String decision = 'لاتنسى غدا موعد فحصك لدى عيادة العيون';
+      AlertType alerttype = AlertType.info;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' : تذكير',
+        desc: decision,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'حسنا ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 0)),
+                );
+              }),
+            },
+            width: 120,
+
+                        ),
+
+                      ],
+      ).show();     
+     }
+
+// نتيجة التراكمي
+     else if (code == 7) {}
+
+//تذكير التراكمي
+     else if (code == 8) {
+    String decision = 'لاتنسى غدا موعد فحصك لدى عيادة السكري';
+      AlertType alerttype = AlertType.info;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' : تذكير',
+        desc: decision,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'حسنا ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 0)),
+                );
+              }),
+            },
+            width: 120,
+
+                        ),
+
+                      ],
+      ).show();
+     }
+
+
 //فحص  كان جيد
     else if (code == 21) {
       String decision = ' حافظ على الفحص المنظم';
@@ -881,7 +1072,13 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
     }
     // فحص الكلى كان غير سليم
     else if(code==32){
-      String decision = 'يبدأ هنا التعارض';
+      confilcte();
+
+    }
+//كلا لم يراجع الادوية
+  else if(code==321){
+     String decision = ' تذهب لمعاييرة جرعات الانسولين من قبل الطبيب على الفور  لتتجنب نوبات الارتفاع والانخفاض';
+    String d='قد يتأثر مفعول جرعات الانسولين بسبب الادوية الجديدة التي تم صرفها لك';
       AlertType alerttype = AlertType.warning;
       Alert(
         style: AlertStyle(
@@ -890,11 +1087,11 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
         context: context,
         type: alerttype,
         title: ' : نقترح عليك ان',
-        desc: decision,
+        desc: decision+"\n"+d,
         buttons: [
-          DialogButton(
+         DialogButton(
             child: Text(
-              'حسنا',
+              'حسنا ',
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             onPressed: () async => {
@@ -908,11 +1105,681 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
               }),
             },
             width: 120,
-          )
+
+                        ),
+
+                      ],
+      ).show();
+
+    }
+//لم يغييرها
+  else if(code==322){
+
+    String decision = 'ان اصابتك طفيفة حافظ على نظام العلاج الجديد، \nوضغط دم منخفض لكي لاتتضاعف الاصابة';
+      AlertType alerttype = AlertType.success;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: '  ممتاز',
+        desc: decision,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'حسنا ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb,0 )),
+                );
+              }),
+            },
+            width: 120,
+
+                        ),
+
+                      ],
+      ).show();
+
+
+
+
+    }
+
+    //غيرها
+    else if(code==323){
+ String decision = ' تقوم بتعديل الجرعات  لدينا  لكي تكون القرارات اكثر دقة ';
+      AlertType alerttype = AlertType.success;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: '  نقترح عليك ان',
+        desc: decision,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'حسنا ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb,324 )),
+                );
+              }),
+            },
+            width: 120,
+
+                        ),
+
+                      ],
+      ).show();
+    }  
+//الجرعة الجديدة
+    else if(code==324){
+
+//       showDialog(
+//           context: context,
+//           barrierDismissible: false,
+//           builder: (
+//             BuildContext context,
+//           ) {
+//             return StatefulBuilder(builder: (context, setState) {
+//               return AlertDialog(
+//                 title: new Text('أدخل تعديل الجرعات'),
+//                 content: Form(
+//                   key: _formKey3,
+//                   child: Column(
+//                     mainAxisSize: MainAxisSize.min,
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: <Widget>[
+
+
+// new Row( 
+  
+//                     mainAxisSize: MainAxisSize.min,
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: <Widget>[
+//                                  Card(
+
+//                                     child: Padding(
+//                                       padding: EdgeInsets.only(
+//                                           right: 0.0, bottom: 0.0, top: 0.0),
+//                                       child: 
+
+// new Row( 
+  
+//                     mainAxisSize: MainAxisSize.min,
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: <Widget>[
+  
+
+// DropdownButton(),
+
+// TextFormFiel
+// ),
+// ]))),
+
+
+
+
+
+
+  
+//  DialogButton(
+//             child: Text(
+//               'حفظ ',
+//               style: TextStyle(color: Colors.white, fontSize: 20),
+//             ),
+//             onPressed: () async => {
+//               setState(() {
+//                 Navigator.pushReplacement(
+//                   context,
+//                   MaterialPageRoute(
+//                       builder: (context) => MainPage(
+//                           widget.id, widget.BMI, widget.A1c, widget.carb, 321)),
+//                 );
+//               }),
+//             },
+//             width: 120,
+//             height: 60,
+
+//                         ),]
+//                         ),
+
+                    
+                      
+                      
+//                     ],
+//                   ), 
+//                 ),
+//               );
+//             });
+//           });
+
+
+  }
+  //غيرها
+    else if(code==325){
+
+ String decision = ' تقوم بتعديل الجرعات  لدينا  لكي تكون القرارات اكثر دقة ';
+      AlertType alerttype = AlertType.success;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: '  نقترح عليك ان',
+        desc: decision,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'حسنا ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb,324 )),
+                );
+              }),
+            },
+            width: 120,
+
+                        ),
+
+                      ],
+      ).show();
+
+    }
+    //ماغيرها 
+    else if(code==326){
+ String decision = ' من المحتمل حدوث خطأ، كن حذر الخمس ايام القادمة من حدوث مضاعفات بسبب الادوية الجديدة';
+ String d='راجع ارشادات الادوية للتعرف على الاعراض الجانبية التي من الممكن ان تحدث مع الدواء الذي تستعمله ';
+      AlertType alerttype = AlertType.error;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: '  انتبه: الدواء يتعارض مع علاجات الاصابة لديك',
+        desc: decision+'\n'+d,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'حسنا ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb,0 )),
+                );
+              }),
+            },
+            width: 120,
+
+                        ),
+
+                      ],
+      ).show();
+
+    }
+  // ماشافها ويرجع
+    else if(code==327){
+ String decision = '  كن حذر الخمس ايام القادمة من حدوث مضاعفات بسبب الادوية الجديدة، راجع طبيبك فورا';
+ String d='راجع ارشادات الادوية للتعرف على الاعراض الجانبية التي من الممكن ان تحدث مع الدواء الذي تستعمله ';
+      AlertType alerttype = AlertType.error;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: '  انتبه: الدواء يتعارض مع علاجات الاصابة لديك',
+        desc: decision+'\n'+d,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'حسنا ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb,0 )),
+                );
+              }),
+            },
+            width: 120,
+
+                        ),
+
+                      ],
+      ).show();
+
+
+
+    }
+
+  }
+
+//////////////    Kidney check Appoiment
+
+void Kidney_checkAppoiment() async {
+
+var result=await helper.getResultK(widget.id[0]['email']);
+if(result.isEmpty){
+ print("result kidney is empty: $result");
+}
+
+// else{
+
+// if ()
+//   //prev
+//  String prev=result[0]['date'];
+//  //DateTime date= date.f;
+
+//  //var newDateTimeObj2 = DateTime.parse("1576090679483501");
+ 
+//  convertDateFromString("1576090679483501");
+//  print("prev date: $prev");
+ 
+// }
+
+}
+
+//////////////    Eyse check Appoiment
+void Eyse_checkAppoiment(){
+
+}
+
+//////////////    A1C check Appoiment
+
+void A1C_checkAppoiment(){
+
+}
+
+
+
+
+void convertDateFromString(String strDate){
+   DateTime todayDate = DateTime.parse(strDate);
+   print(todayDate);
+   //print(formatDate(todayDate, [yyyy, '/', mm, '/', dd, ' ', hh, ':', nn, ':', ss, ' ', am]));
+ }
+
+
+
+
+
+Future confilcte() async {
+
+var med=await helper.getDug(widget.id[0]['email']);
+bool isPills=false;
+
+if(!med.isEmpty){
+for(int i=0;i<med.length;i++ ){
+if(med[0]['Name']=='جلوكوفاج'){
+  isPills=true;
+}}
+
+if(isPills){
+print("isPills");
+      String decision = ' تراجع طبيبك نوع حبوب السكري الذي تستعملها ،تتعارض من  علاجاتك للكلى';
+     
+      AlertType alerttype = AlertType.info;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' : نقترح عليك ان',
+        desc: decision,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'نعم،تم\n تغييرها ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 325)),
+                );
+              }),
+            },
+            width: 120,
+            height: 60,
+
+                        ),
+
+                        new  DialogButton(
+            child: Text(
+              'نعم،ولم \nيتم تغييرها',
+              style: TextStyle(color: Colors.white, fontSize: 20),textAlign: TextAlign.center,
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 326)),
+                );
+              }),
+            },
+            width: 120,
+          height: 63,
+
+                      ),
+         new  DialogButton(
+           color: Colors.blueGrey,
+            child: Text(
+              'حسنا',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 327)),
+                );
+              }),
+            },
+            width: 120,
+                    height: 63,
+
+
+                      ),
+          //FlatButton(child: null,),
         ],
       ).show();
-    }
-  }
+
+
+
+
+
+}
+//insulen
+else{
+      String decision = 'يراجع طبيبك  جرعاتك الحالية للإنسولين';
+      AlertType alerttype = AlertType.info;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' : نقترح عليك ان',
+        desc: decision,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'نعم، وتم\n تغييرها ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 323)),
+                );
+              }),
+            },
+            width: 120,
+            height: 60,
+
+                        ),
+
+                        new  DialogButton(
+            child: Text(
+              'نعم،ولم \nيتم تغييرها',
+              style: TextStyle(color: Colors.white, fontSize: 20),textAlign: TextAlign.center,
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 322)),
+                );
+              }),
+            },
+            width: 120,
+          height: 63,
+
+                      ),
+         new  DialogButton(
+           color: Colors.blueGrey,
+            child: Text(
+              'كلا',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 321)),
+                );
+              }),
+            },
+            width: 120,
+                    height: 63,
+
+
+                      ),
+          //FlatButton(child: null,),
+        ],
+      ).show();
+
+
+
+
+
+
+
+
+}}
+}
+
+
+
+
+
+
+
+
+
+
+//       showDialog(
+//           context: context,
+//           barrierDismissible: false,
+//           builder: (
+//             BuildContext context,
+//           ) {
+//             return StatefulBuilder(builder: (context, setState) {
+//               return AlertDialog(
+//                 title: new Text('هل راجع الطبيب جراعات الانسولين؟'),
+//                 content: Form(
+//                   key: _formKey,
+//                   child: Column(
+//                     mainAxisSize: MainAxisSize.min,
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: <Widget>[
+
+
+
+//                       Padding(
+//                         padding: EdgeInsets.only(
+//                           bottom: 10.0,
+//                         ),
+//                         child: Text(data)
+//                         ),
+
+
+//                       Padding(
+//                         padding: EdgeInsets.only(
+//                           bottom: 10.0,
+//                         ),
+//                         child:
+
+// new Row( 
+  
+//                     mainAxisSize: MainAxisSize.min,
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: <Widget>[
+  
+
+
+//  DialogButton(
+//             child: Text(
+//               'نعم، وتم\n تغييرها ',
+//               style: TextStyle(color: Colors.white, fontSize: 20),
+//             ),
+//             onPressed: () async => {
+//               setState(() {
+//                 Navigator.pushReplacement(
+//                   context,
+//                   MaterialPageRoute(
+//                       builder: (context) => MainPage(
+//                           widget.id, widget.BMI, widget.A1c, widget.carb, 321)),
+//                 );
+//               }),
+//             },
+//             width: 120,
+//             height: 60,
+
+//                         ),
+//     Padding(
+//                         padding: EdgeInsets.only(
+//                           left: 10.0,
+//                         ),
+//                         child:// Text("")
+// new  DialogButton(
+//             child: Text(
+//               'نعم،ولم \nيتم تغييرها',
+//               style: TextStyle(color: Colors.white, fontSize: 20),textAlign: TextAlign.center,
+//             ),
+//             onPressed: () async => {
+//               setState(() {
+//                 Navigator.pushReplacement(
+//                   context,
+//                   MaterialPageRoute(
+//                       builder: (context) => MainPage(
+//                           widget.id, widget.BMI, widget.A1c, widget.carb, 322)),
+//                 );
+//               }),
+//             },
+//             width: 120,
+//           height: 60,
+
+//                       ),
+//  ), ], ),
+//                      ),
+//                     //  ),
+                         
+//                         //   Padding(
+//                         // padding: EdgeInsets.only(
+//                         //   bottom: 10.0,
+//                         // ),
+//                         // child:// Text("")
+// new  DialogButton(
+//             child: Text(
+//               'كلا',
+//               style: TextStyle(color: Colors.white, fontSize: 20),
+//             ),
+//             onPressed: () async => {
+//               setState(() {
+//                 Navigator.pushReplacement(
+//                   context,
+//                   MaterialPageRoute(
+//                       builder: (context) => MainPage(
+//                           widget.id, widget.BMI, widget.A1c, widget.carb, 322)),
+//                 );
+//               }),
+//             },
+//             width: 120,
+          
+
+//                       ),
+//                      //   ),
+
+
+              
+//                                            // setState(() {
+//                             //   Navigator.pushReplacement(
+//                             //     context,
+//                             //     MaterialPageRoute(
+//                             //         builder: (context) => MainPage(
+//                             //             widget.id,
+//                             //             widget.BMI,
+//                             //             widget.A1c,
+//                             //             widget.carb,
+//                             //             22)),
+//                             //   );
+//                             // });
+                          
+                        
+                      
+//                     ],
+//                   ),
+//                 ),
+//               );
+//             });
+//           });
+
+}
+//== جلوكوفاج
+// نوع اول و عنده اصابة بالكلى
+// الضغط
+//
+
+// }
+// }
+
+
+
+
+
+
+
+
 
   //   new AlertDialog(
 
@@ -936,7 +1803,7 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
   //   setState(() {
   //   widget.code=0;
   //  });
-}
+
 
 //   void Exams(int code, BuildContext context) {
 //     if (code == 1) {
