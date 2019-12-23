@@ -14,12 +14,16 @@ import '../widgets/fancy_fab.dart';
   DatabaseHelper helper = DatabaseHelper();
 
 class MainPage extends StatefulWidget {
-  MainPage(@required this.id,@required this.BMI, this.A1c,@required this.carb,this.code);
+  MainPage(@required this.id,@required this.BMI, this.A1c,@required this.carb,this.code,this.PAs,this.units);
   var id ;
   List<Map<String,dynamic>> BMI;
   double A1c;
   double carb;
   int code;
+
+  bool booE,booK,booA;
+  int units;
+  double PAs;
   @override
   State createState() => _MainPageState();
 }
@@ -31,11 +35,11 @@ class _MainPageState extends State<MainPage> {
   // }
    Widget pages(_selectedPage) {
     final List<Widget> _pages = [
-      new HomePage(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code),
-      new Meals(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code),
+      new HomePage(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
+      new Meals(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
       //new PhysicalActivity(),
-      new Instructions(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code,),
-      new Medications(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code),
+      new Instructions(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
+      new Medications(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
     ];
     return _pages[_selectedPage];
   }
@@ -52,7 +56,7 @@ class _MainPageState extends State<MainPage> {
   // print("check in mainpage ${widget.A1c.toString()}, ${widget.BMI}, ${widget.carb},");
     return new Scaffold(
       body: pages(_selectedPage),
-      floatingActionButton: new FancyFab(widget.id,widget.BMI, widget.A1c, widget.carb),
+      floatingActionButton: new FancyFab(widget.id,widget.BMI, widget.A1c, widget.carb,widget.PAs,widget.units),
       bottomNavigationBar: new BottomNavigationBar(
         currentIndex: _selectedPage,
         onTap: (int index) {

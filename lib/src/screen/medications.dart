@@ -13,12 +13,14 @@ import 'exportPDF.dart';
 import 'medalert.dart'; // perform http request on API to get the into
 
 class Medications extends StatelessWidget {
-  Medications(this.id, this.BMI, this.A1c,this.carb,this.code);
+  Medications(this.id, this.BMI, this.A1c,this.carb,this.code,this.PAs,this.units);
   var id;
   var BMI;
   var A1c;
   var carb;
   int code=0;
+  double PAs;
+  int units;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -43,7 +45,7 @@ class Medications extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c.toString(),carb)),
+                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c,carb,PAs,units)),
                 );
               },
             ),
@@ -83,18 +85,20 @@ class Medications extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb,code)),
+      body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb,code,PAs,units)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-    Body(this.id,this.BMI,this.A1c,this.carb,this.code);
+    Body(this.id,this.BMI,this.A1c,this.carb,this.code,this.PAs,this.units);
   var id;
   var BMI;
   var A1c;
   var carb;
-  int code;
+  int code=0;
+  double PAs;
+  int units;
   @override
   State createState() => new _Bodystate();
 }

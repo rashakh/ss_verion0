@@ -91,7 +91,7 @@ class _Bodystate extends State<Body> {
                   style: new TextStyle(fontSize: 17.0),
                 ),
                 SizedBox(
-                  width: 80.0,
+                  width: 90.0,
                 ),
                 new Text(
                   'الموعد',
@@ -167,7 +167,7 @@ class _Bodystate extends State<Body> {
                                           textAlign: TextAlign.center,
                                         ),
                                         SizedBox(
-                                          width: 60.0, //height: 20,
+                                          width: 50.0, //height: 20,
                                         ),
                                           Text(
                                           '${Pt[index]['dur']}يوم',

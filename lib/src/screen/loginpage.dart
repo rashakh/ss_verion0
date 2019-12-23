@@ -67,6 +67,8 @@ class _LoginPageState extends State<LoginPage> {
 List<Map<String,dynamic>> BMI;
 double  A1c;
 double carb;
+double PAs;
+int units;
     //  setState(() async{
           BMI=(await helper.getWight(id[0]['email']));
          
@@ -88,14 +90,33 @@ double carb;
           }
           else{ carb=0.0;} 
       // print("A1c list: null");
-
+ if(((await helper.getDug(id[0]['email']))).isNotEmpty)
+          {
+         var unit=(await helper.getDug(id[0]['email']))[0]['dug'];
+         print("unit now : $unit");
+          units=unit as int;
+         print("unit now : $units");
+          }
+          else{ units=0;}  
+          
+          // String date=newd('2019-12-18');
+          // print("Pa date: $date");
+          
+          if(((await helper.getPA(id[0]['email']))).isNotEmpty)
+          {
+         var PAa=(await helper.getPA(id[0]['email']))[0]['dur'];
+         print("PA now : $PAa");
+          PAs=PAa as double;
+         print("PA now : $PAs");
+          }
+          else{ PAs=0.0;} 
         // }
      // });
       print("A1c list: $A1c");
       print("BMI list: $BMI");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c,carb,0)),
+        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c,carb,0,PAs,units)),
       );
       //Navigator.of(context).pushNamed('/MainPage',arguments: _email);
       _formKey.currentState.reset();
@@ -104,6 +125,24 @@ double carb;
           'form invalid, Email: ${emailController.text},  Passwoer: ${passwordController.text}');
   }
 
+// String  newd(String s){
+// String r=s.substring(8,10);
+// int i=int.parse(r);
+// int start =15; 
+// int end=start+7;
+// if(i==end){
+//   start=end;
+// int diff= i-start;
+// i-=diff;
+// print("date: $i");
+// }
+// else{
+//   int diff= i-start;
+// i-=diff;
+// print("date: $i");
+// }
+// return s.substring(0,8)+i.toString();;
+//   }
   @override
   Widget build(BuildContext context) {
     return new Directionality(

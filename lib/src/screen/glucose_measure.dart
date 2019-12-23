@@ -26,11 +26,13 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 class GlucoseMeasure extends StatelessWidget {
-  GlucoseMeasure(this.id, this.BMI, this.A1c, this.carb);
+  GlucoseMeasure(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
   var BMI;
   var A1c;
   var carb;
+    double PAs;
+  int units;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -45,18 +47,20 @@ class GlucoseMeasure extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb)),
+          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb,PAs,units)),
           // Padding(padding: const EdgeInsets.only(top: 100), child: Body()),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb);
+  Body(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
   var BMI;
   var A1c;
   var carb;
+  double PAs;
+  int units;
   @override
   State createState() => new _Bodystate();
 }
@@ -1421,6 +1425,7 @@ String helpMessage="من بسيط وحلو مرحبا رشا";
                           _BGRe();
                           _BGTotal();
                           a11c();
+                          widget.PAs+=pa;
 
                         });
                       } else if (slot == 9) {
@@ -1440,7 +1445,9 @@ String helpMessage="من بسيط وحلو مرحبا رشا";
                           _BGRe();
                           _BGTotal();
                           a11c();
-
+print(" set stat: ${widget.PAs} pa: $pa");
+                          widget.PAs+=padu;
+print(" set stat: ${widget.PAs}");
                         });
 
                       } else {
@@ -1476,7 +1483,7 @@ String helpMessage="من بسيط وحلو مرحبا رشا";
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MainPage(widget.id,
-                                        widget.BMI, widget.A1c, widget.carb,code)),
+                                        widget.BMI, widget.A1c, widget.carb,code,widget.PAs,widget.units)),
                               ),
                               width: 120,
                             )
@@ -1601,7 +1608,12 @@ double durg= (BG-correct)/ISF;
 print("durg: $durg");
 double mod = pow(10.0, 1);
 double nwe = ((durg * mod).round().toDouble() / mod);
-
+// setState(() {
+//   //int t=nwe as int;
+//   print("durg: ${widget.units}");
+//  widget.units+=nwe.toInt();
+//  print("durg: ${widget.units}");
+// });
 return nwe ;
 }
 }

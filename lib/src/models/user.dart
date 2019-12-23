@@ -56,8 +56,6 @@ class User {
     map['type'] = _type;
     map['hight'] = _hight;
     map['number'] = _number;
-    //map['weight'] = _weight;
-    //map['bmi'] = _bmi;
 
     return map;
   }

@@ -7,6 +7,7 @@ import 'package:dtfbl/src/models/variety.dart' as prefix0;
 import 'package:dtfbl/src/screen/profile.dart';
 import 'package:dtfbl/src/screen/pt.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:dtfbl/src/widgets/styles.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -39,13 +40,14 @@ List<Map<int, dynamic>> food = [];
 // varty['id'];
 //int sr;
 class Meals extends StatelessWidget {
-  Meals(this.id, this.BMI, this.A1c, this.carb,this.code);
+  Meals(this.id, this.BMI, this.A1c, this.carb,this.code,this.PAs,this.units);
   var id;
   var BMI;
   var A1c;
   var carb;
   int code;
-  
+    double PAs;
+  int units;
   @override
   
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class Meals extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MedAlert(id, BMI, A1c, carb)),
+                      builder: (context) => MedAlert(id, BMI, A1c, carb,PAs,units)),
                 );
               },
             ),
@@ -118,18 +120,20 @@ class Meals extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb,0)),
+      body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb,0,PAs,units)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb,this.code);
+  Body(this.id, this.BMI, this.A1c, this.carb,this.code,this.PAs,this.units);
   var id;
   var BMI;
   var A1c;
   var carb;
   int code=0;
+    double PAs;
+  int units;
   @override
   State createState() => new _Bodystate();
 }
@@ -1105,7 +1109,7 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['wit']);
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => MainPage(widget.id,
-                                          widget.BMI, widget.A1c, widget.carb,0)),
+                                          widget.BMI, widget.A1c, widget.carb,0,widget.PAs,widget.units)),
                                 );
                               },
                               width: 120,
@@ -1144,9 +1148,9 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['wit']);
     super.initState();
     // this.getData();
   }
-}
   double insulinUnit(double totalcarb,int wit){
   //insulin unit:
+
 double unit= wit *0.5;
 
 double coff= 500/unit;
@@ -1154,8 +1158,13 @@ double coff= 500/unit;
 double durg= totalcarb/coff;
  double mod = pow(1.0, 1);
                       double nwe = ((durg * mod).round().toDouble() / mod);
+setState(() {
+  widget.units+=nwe.toInt();
+});
 return nwe ;
 }
+}
+  
 
 
 class MealCard extends StatefulWidget {

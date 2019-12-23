@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 
 class MedAlert extends StatelessWidget {
-  MedAlert(this.id, this.BMI, this.A1c, this.carb);
+  MedAlert(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
   var BMI;
   var A1c;
   var carb;
+  double PAs;
+  int units;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -22,17 +24,19 @@ class MedAlert extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb)),
+          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb,PAs,units)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb);
+  Body(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
   var BMI;
   var A1c;
   var carb;
+  double PAs;
+  int units;
   @override
   State createState() => new _Bodystate();
 }
@@ -176,7 +180,7 @@ class _Bodystate extends State<Body> {
                                                               widget.id,
                                                               widget.BMI,
                                                               widget.A1c,
-                                                              widget.carb)));
+                                                              widget.carb, widget.PAs,widget.units)));
                                               //
                                             },
                                           ),
@@ -296,7 +300,7 @@ int dd=durg.toInt();
                                                               widget.id,
                                                               widget.BMI,
                                                               widget.A1c,
-                                                              widget.carb)));                                      },
+                                                              widget.carb,widget.PAs,widget.units)));                                      },
                                       child: new Container(
                                           alignment: Alignment.center,
                                           height: 40.0,

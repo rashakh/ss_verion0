@@ -444,6 +444,15 @@ print('updated 1: $result1');
     return result1;
   }
 //GET IN RENGE
+  Future getPAd(String email,String date) async {
+    Database db = await this.database;
+ //   int count = await database.rawUpdate(SELECT * FROM tablename ORDER BY column DESC LIMIT 1);
+//    var result = await db.rawQuery('SELECT * FROM $pATable WHERE  $colEmail=\"$email\" AND $coldate LIKE \"$date%,2019-12-16%,2019-12-17%,2019-12-18%,2019-12-19%\" ');
+    var result = await db.rawQuery('SELECT * FROM $pATable WHERE  $colEmail=\"$email\" AND $coldate LIKE \"$date%\" ');
+    print("from get PA : $result");
+
+    return result;
+  }
   Future getPA(String email) async {
     Database db = await this.database;
  //   int count = await database.rawUpdate(SELECT * FROM tablename ORDER BY column DESC LIMIT 1);
@@ -658,7 +667,17 @@ Future getDug(String email) async {
 var result = await db.rawQuery('SELECT * FROM $DugTable WHERE $colEmail=\"$email\" ');
  print("get Result : ${result.toList()}");
   //print("");
- return result;
+ //return result;
+
+
+if(result.isEmpty){ //result.add({'a1C':0.0});
+  return [];}
+  else{
+  print("carbe list: $result");
+
+  return result;}
+
+
 }
 
 

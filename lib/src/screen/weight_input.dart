@@ -11,11 +11,13 @@ import 'mainpage.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Weightinput extends StatelessWidget {
-  Weightinput(this.id, this.BMI, this.A1c, this.carb);
+  Weightinput(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
   List<Map<String, dynamic>> BMI;
   var A1c;
   var carb;
+    double PAs;
+  int units;
   @override
   Widget build(BuildContext context) {
     return new Directionality(
@@ -30,17 +32,19 @@ class Weightinput extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb)),
+          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb,PAs,units)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb);
+  Body(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
   List<Map<String, dynamic>> BMI;
   var A1c;
   var carb;
+  double PAs;
+  int units;
   @override
   State createState() => new _Bodystate();
 }
@@ -358,7 +362,7 @@ class _Bodystate extends State<Body> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MainPage(widget.id,
-                                        widget.BMI, widget.A1c, widget.carb,0)),
+                                        widget.BMI, widget.A1c, widget.carb,0,widget.PAs,widget.units)),
                               ),
                               width: 120,
                             )

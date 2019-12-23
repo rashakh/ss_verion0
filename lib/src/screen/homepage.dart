@@ -1,6 +1,7 @@
 //import 'dart:developer';
 
 //import 'package:dtfbl/src/models/exams.dart';
+import 'package:date_format/date_format.dart';
 import 'package:dtfbl/src/models/result.dart';
 import 'package:dtfbl/src/screen/mainpage.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
@@ -17,12 +18,14 @@ import 'package:after_layout/after_layout.dart';
 //import 'package:date_format/date_format.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage(this.id, this.BMI, this.A1c, this.carb, this.code);
+  HomePage(this.id, this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
   var id;
   List<Map<String, dynamic>> BMI;
   double A1c;
   double carb;
   int code;
+  double PAs;
+  int units;
   @override
   Widget build(BuildContext context) {
     //print("this is a1c ${this.A1c}");
@@ -49,7 +52,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MedAlert(id, BMI, A1c, carb)),
+                      builder: (context) => MedAlert(id, BMI, A1c, carb,PAs,units)),
                 );
               },
             ),
@@ -60,7 +63,7 @@ class HomePage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          PeriodicTest(id, BMI, A1c.toString(), carb)),
+                          PeriodicTest(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -71,7 +74,7 @@ class HomePage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          ExportPDF(id, BMI, A1c.toString(), carb)),
+                          ExportPDF(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -82,7 +85,7 @@ class HomePage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          Profile(id, BMI, A1c.toString(), carb)),
+                          Profile(id, BMI, A1c, carb)),
                 );
               },
             ),
@@ -96,18 +99,20 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body:
-          new SingleChildScrollView(child: new Body(id, BMI, A1c, carb, code)),
+          new SingleChildScrollView(child: new Body(id, BMI, A1c, carb, code,PAs,units)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb, this.code);
+  Body(this.id, this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
   var id;
   var BMI;
   var A1c;
   var carb;
   var code;
+  double PAs;
+  int units;
   @override
   State createState() => new _Bodystate();
 }
@@ -118,16 +123,16 @@ int i = 0;
 class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
-    final _formKey3 = GlobalKey<FormState>();
+  final _formKey3 = GlobalKey<FormState>();
 
   DatabaseHelper helper = DatabaseHelper();
   double a1c = 0.0;
   double carb = 0.0;
-  double pa = 60.55;
+  double pa = 0;
   double maxPA = 135.0;
   double minPA = 0.0;
   double total = 40;
-  double unit = 20;
+  int unit = 0;
   var _sum = 0;
   var _num = 0;
   var dd = 45 * 0.55;
@@ -144,6 +149,8 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
   Color colorA1c = Colors.green;
   Color colorcarb = Colors.green;
   Color colorPA = Colors.green;
+  Color colorIn = Colors.green;
+
   double _a1c() {
     setState(() {
       a1c = widget.A1c;
@@ -163,11 +170,12 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
     var n = carb / 300;
     //print('carb n: $n');
     _bgratiocarb();
-    return n / 10;
+    return n / 10; 
   }
 
   double _PA() {
-//setState(() {  carb=widget.carb;});
+setState(() {  pa=widget.PAs;});
+
     var n = pa / maxPA;
     //print('PA n: $n');
     _bgratioPA();
@@ -175,7 +183,7 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
   }
 
   double _IS() {
-//setState(() {  carb=widget.carb;});
+setState(() {  unit=widget.units as int;});
     var n = unit / total;
     //print('IS n: $n');
     _bgratioIS();
@@ -233,39 +241,14 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
   }
 
   Future _bgratioPA() {
-    if (pa <= (maxPA / 2)) {
-      icon = Icon(
-        Icons.mood,
-        color: Colors.green,
-        size: 40.0,
-      );
-      colorPA = Colors.green;
-    } else if (pa > (maxPA / 2) && pa <= maxPA) {
-      icon = Icon(
-        Icons.mood,
-        color: Colors.orangeAccent,
-        size: 40.0,
-      );
-      colorPA = Colors.orangeAccent;
-    } else {
-      icon = Icon(
-        Icons.mood_bad,
-        color: Colors.redAccent,
-        size: 40.0,
-      );
-      colorPA = Colors.redAccent;
-    }
-  }
-
-  Future _bgratioIS() {
     if (pa <= (maxPA / 3)) {
       icon = Icon(
         Icons.mood,
-        color: Colors.green,
+        color: Colors.redAccent,
         size: 40.0,
       );
-      colorPA = Colors.green;
-    } else if (pa > (total / 3) && pa <= total / 2) {
+      colorPA = Colors.redAccent;
+    } else if (pa < (maxPA / 2) && pa >= (maxPA/3)) {
       icon = Icon(
         Icons.mood,
         color: Colors.orangeAccent,
@@ -275,10 +258,46 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
     } else {
       icon = Icon(
         Icons.mood_bad,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorPA = Colors.green;
+    }
+//    afterFirstLayout(context);
+  }
+
+
+// void  newd(String s){
+// String r=s.substring(8,10);
+// int i=int.parse(r);
+// int start =15; 
+// int end=start+7;
+// int diff= i-start;
+// i-=diff;
+// print("date: $i");
+//   }
+  Future _bgratioIS() {
+    if (unit <= (total / 3)) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.green,
+        size: 40.0,
+      );
+      colorIn = Colors.green;
+    } else if (unit > (total / 3) && unit <= 2.3*(total / 3)) {
+      icon = Icon(
+        Icons.mood,
+        color: Colors.orangeAccent,
+        size: 40.0,
+      );
+      colorIn = Colors.orangeAccent;
+    } else {
+      icon = Icon(
+        Icons.mood_bad,
         color: Colors.redAccent,
         size: 40.0,
       );
-      colorPA = Colors.redAccent;
+      colorIn = Colors.redAccent;
     }
   }
 
@@ -289,8 +308,10 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
 
   @override
   Widget build(BuildContext context) {
-    String decision = 'تقوم بتأكد من سلامة قدمك';
-    AlertType alerttype = AlertType.warning;
+   
+
+    // String decision = 'تقوم بتأكد من سلامة قدمك';
+    // AlertType alerttype = AlertType.warning;
 
 //    print("crunt widget.A1c in homepage :${ widget.A1c}");
 
@@ -337,11 +358,11 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
                   animation: true,
                   lineHeight: 30.0,
                   animationDuration: 2000,
-                  percent: 0.25, //_a1c(),
-                  center: Text('الانسولين: 10/40 وحدة',
+                  percent: _IS(), //_a1c(),
+                  center: Text('الانسولين: $unit/$total وحدة',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: Colors.green, //colorA1c,
+                  progressColor: colorIn, //colorA1c,
                 ),
               ),
               Padding(
@@ -475,7 +496,10 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
                                                                           .A1c,
                                                                       widget
                                                                           .carb,
-                                                                      0)));
+                                                                      0,
+                                                                      widget.PAs,
+                                                                      widget.units
+                                                                      )));
                                                     },
                                                   ),
                                                 ],
@@ -628,7 +652,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 2)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 2,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -646,7 +670,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -741,7 +765,7 @@ else{
                                         widget.BMI,
                                         widget.A1c,
                                         widget.carb,
-                                        21)),
+                                        21,widget.PAs,widget.units)),
                               );
                             });
                           } else if (id == 2) {
@@ -754,7 +778,7 @@ else{
                                         widget.BMI,
                                         widget.A1c,
                                         widget.carb,
-                                        22)),
+                                        22,widget.PAs,widget.units)),
                               );
                             });
                           }
@@ -856,7 +880,7 @@ else{
                                         widget.BMI,
                                         widget.A1c,
                                         widget.carb,
-                                        21)),
+                                        21,widget.PAs,widget.units)),
                               );
                             });
                           } else if (id == 2) {
@@ -869,7 +893,7 @@ else{
                                         widget.BMI,
                                         widget.A1c,
                                         widget.carb,
-                                        32)),
+                                        32,widget.PAs,widget.units)),
                               );
                             });
                           }
@@ -907,7 +931,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -952,7 +976,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -991,7 +1015,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1028,7 +1052,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1061,7 +1085,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1100,7 +1124,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1137,7 +1161,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb,0 )),
+                          widget.id, widget.BMI, widget.A1c, widget.carb,0 ,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1177,7 +1201,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb,324 )),
+                          widget.id, widget.BMI, widget.A1c, widget.carb,324 ,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1297,7 +1321,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb,324 )),
+                          widget.id, widget.BMI, widget.A1c, widget.carb,324 ,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1334,7 +1358,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb,0 )),
+                          widget.id, widget.BMI, widget.A1c, widget.carb,0 ,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1371,7 +1395,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb,0 )),
+                          widget.id, widget.BMI, widget.A1c, widget.carb,0,widget.PAs,widget.units )),
                 );
               }),
             },
@@ -1473,7 +1497,7 @@ print("isPills");
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 325)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 325,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1493,7 +1517,7 @@ print("isPills");
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 326)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 326,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1513,7 +1537,7 @@ print("isPills");
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 327)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 327,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1555,7 +1579,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 323)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 323,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1575,7 +1599,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 322)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 322,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1595,7 +1619,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 321)),
+                          widget.id, widget.BMI, widget.A1c, widget.carb, 321,widget.PAs,widget.units)),
                 );
               }),
             },
