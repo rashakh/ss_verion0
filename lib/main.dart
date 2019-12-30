@@ -1,5 +1,6 @@
 // main file which contains and manages all other files
 
+import 'package:dtfbl/src/screen/language.dart';
 import 'package:flutter/material.dart'; // flutter main package
 // package support RTL language
 //import 'package:flutter_localizations/flutter_localizations.dart';
@@ -56,11 +57,12 @@ class SS extends StatelessWidget {
         //'/Weightinput': (BuildContext context) => new Weightinput(),
         //'/Pressureinput': (BuildContext context) => new Pressureinput(),
        // '/ExportPDF': (BuildContext context) => new ExportPDF(),
+       '/Language': (BuildContext context) => new Language(),
 
 
       },
       theme: new ThemeData(primarySwatch: Colors.blue),
-      home: LoginPage(),
+      home: Language(),
     );
   }
 }

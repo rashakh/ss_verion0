@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 
 class MedAlert extends StatelessWidget {
-  MedAlert(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
+  MedAlert(this.id,this.Update,this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
+  var Update;
   var BMI;
   var A1c;
   var carb;
@@ -24,14 +25,15 @@ class MedAlert extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb,PAs,units)),
+          body: new SingleChildScrollView(child: new Body(id,Update,  BMI, A1c, carb,PAs,units)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
+  Body(this.id,this.Update,this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
+  var Update;
   var BMI;
   var A1c;
   var carb;
@@ -177,7 +179,7 @@ class _Bodystate extends State<Body> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           MedAlert(
-                                                              widget.id,
+                                                              widget.id,widget.Update,
                                                               widget.BMI,
                                                               widget.A1c,
                                                               widget.carb, widget.PAs,widget.units)));
@@ -297,7 +299,7 @@ int dd=durg.toInt();
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           MedAlert(
-                                                              widget.id,
+                                                              widget.id,widget.Update,
                                                               widget.BMI,
                                                               widget.A1c,
                                                               widget.carb,widget.PAs,widget.units)));                                      },

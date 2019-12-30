@@ -10,13 +10,14 @@ class FancyFab extends StatefulWidget {
   IconData icon;
   List<Map<String, dynamic>> id;
   List<Map<String, dynamic>> BMI;
+  List<Map<String, dynamic>> Update;
   double A1c;
   double carb;
   double PAs;
   int units;
 //var bMI;
   FancyFab(
-    this.id,this.BMI,this.A1c,this.carb, this.PAs,this.units, {
+    this.id,this.Update,this.BMI,this.A1c,this.carb, this.PAs,this.units, {
     this.onPressed,
     this.tooltip,
     this.icon,
@@ -96,7 +97,7 @@ class _FancyFabState extends State<FancyFab>
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => GlucoseMeasure(widget.id,widget.BMI,widget.A1c, widget.carb,widget.PAs,widget.units)),
+                builder: (context) => GlucoseMeasure(widget.id,widget.Update, widget.BMI,widget.A1c, widget.carb,widget.PAs,widget.units)),
           );
           //Navigator.of(context).pushNamed('/GlucoseMeasure');
         },
@@ -120,7 +121,7 @@ class _FancyFabState extends State<FancyFab>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Weightinput(widget.id,widget.BMI,widget.A1c, widget.carb,widget.PAs,widget.units)),
+            MaterialPageRoute(builder: (context) => Weightinput(widget.id,widget.Update,widget.BMI,widget.A1c, widget.carb,widget.PAs,widget.units)),
           );
           //Navigator.of(context).pushNamed('/Weightinput');
         },
@@ -139,7 +140,7 @@ class _FancyFabState extends State<FancyFab>
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Pressureinput(widget.id,widget.BMI,widget.A1c, widget.carb,widget.PAs,widget.units)),
+                builder: (context) => Pressureinput(widget.id,widget.Update,widget.BMI,widget.A1c, widget.carb,widget.PAs,widget.units)),
           );
           //Navigator.of(context).pushNamed('/Pressureinput');
         },

@@ -1,23 +1,23 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 
 import 'package:dtfbl/src/models/carb.dart';
 import 'package:dtfbl/src/models/meal.dart';
 import 'package:dtfbl/src/models/variety.dart';
-import 'package:dtfbl/src/models/variety.dart' as prefix0;
+//import 'package:dtfbl/src/models/variety.dart' as prefix0;
 import 'package:dtfbl/src/screen/profile.dart';
 import 'package:dtfbl/src/screen/pt.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:dtfbl/src/widgets/styles.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart' as intl;
 import 'dart:math';
-import 'dart:async';
-import 'dart:convert'; // convert json into data
-import 'package:http/http.dart'
-    as http; // perform http request on API to get the into
+//import 'dart:async';
+//import 'dart:convert'; // convert json into data
+//import 'package:http/http.dart'
+  //  as http; // perform http request on API to get the into
 import 'exportPDF.dart';
 import 'mainpage.dart';
 import 'medalert.dart';
@@ -40,8 +40,9 @@ List<Map<int, dynamic>> food = [];
 // varty['id'];
 //int sr;
 class Meals extends StatelessWidget {
-  Meals(this.id, this.BMI, this.A1c, this.carb,this.code,this.PAs,this.units);
+  Meals(this.id, this.Update,this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
   var id;
+   List<Map<String, dynamic>> Update;
   var BMI;
   var A1c;
   var carb;
@@ -76,7 +77,7 @@ class Meals extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MedAlert(id, BMI, A1c, carb,PAs,units)),
+                      builder: (context) => MedAlert(id,Update, BMI, A1c, carb,PAs,units)),
                 );
               },
             ),
@@ -120,14 +121,15 @@ class Meals extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb,0,PAs,units)),
+      body: new SingleChildScrollView(child: new Body(id,Update,  BMI, A1c, carb,0,PAs,units)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb,this.code,this.PAs,this.units);
+  Body(this.id,this.Update,this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
   var id;
+  var Update;
   var BMI;
   var A1c;
   var carb;
@@ -1108,7 +1110,7 @@ double insulin = insulinUnit(_sum,  widget.BMI[0]['wit']);
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => MainPage(widget.id,
+                                      builder: (context) => MainPage(widget.id,widget.Update,
                                           widget.BMI, widget.A1c, widget.carb,0,widget.PAs,widget.units)),
                                 );
                               },

@@ -11,6 +11,7 @@ import 'package:dtfbl/src/models/meal.dart';
 import 'package:dtfbl/src/models/med.dart';
 import 'package:dtfbl/src/models/pressure.dart';
 import 'package:dtfbl/src/models/result.dart';
+import 'package:dtfbl/src/models/update.dart';
 import 'package:dtfbl/src/models/variety.dart';
 import 'package:dtfbl/src/models/wieght.dart';
 import 'package:path_provider/path_provider.dart';
@@ -80,7 +81,7 @@ class DatabaseHelper {
   String coldur = 'dur';
 
 //PT table:
-  String PTTable= 'PT_table';
+  String pTTable= 'PT_table';
 
 //A1C table:
   String a1CTable= 'A1C_table';
@@ -95,28 +96,34 @@ class DatabaseHelper {
   String colmax='max';
 
 //Exams table:
-  String ExamsTable= 'Exams_table';
+  String examsTable= 'Exams_table';
   String colPTId='PTId';
   String colresult='result';
   String colRDate='RDate';
 
 //Exams result table:
-  String ExamResultTable= 'result_table';
+  String examResultTable= 'result_table';
 
 
 //med table:
 
-  String MedTable= 'med_table';
+  String medTable= 'med_table';
   String colconf='conf';
   String colwork='work';
   String colsid='sid';
 
-
 //dug table:
-  String DugTable= 'Dug_table';
-
+  String dugTable= 'Dug_table';
   String coldug='dug';
 
+// update table:
+  String updateTable = 'update_table';
+  String colMBA = 'MaxBA'; 
+  String colMC = 'MaxC';
+  String colMI = 'MaxI';
+  String colRE = 'RemE';
+  String colRK = 'RemK';
+  String colRA = 'RemA';
 
   factory DatabaseHelper() {
     if (_databaseHelper == null) {
@@ -133,7 +140,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + 'user13.db';
+    String path = directory.path + 'user14.db';
     var userDatabase =
         await openDatabase(path, version: 1, onCreate: _createDb);
     return userDatabase;
@@ -179,7 +186,7 @@ class DatabaseHelper {
         '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT ,$coldate TEXT ,$colName TEXT , $coldur REAL)');
 
-    await db.execute('CREATE TABLE $PTTable('
+    await db.execute('CREATE TABLE $pTTable('
         '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colName TEXT)');
   
@@ -187,13 +194,13 @@ class DatabaseHelper {
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT,$coldS TEXT ,$coldE TEXT ,$colA1C TEXT)');
 
-    await db.execute('CREATE TABLE $ExamsTable('
+    await db.execute('CREATE TABLE $examsTable('
         '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT, $colPTId INTEGER,'
         '$colName TEXT, $coldate TEXT, $colresult TEXT, $colRDate TEXT,'
         '$coldur INTEGER)');
 
-    await db.execute('CREATE TABLE $ExamResultTable('
+    await db.execute('CREATE TABLE $examResultTable('
         '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT, $colPTId INTEGER,'
         '$colName TEXT, $colresult TEXT, $colRDate TEXT)');
@@ -202,13 +209,20 @@ class DatabaseHelper {
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT,$colcurnt REAL ,$colmin REAL ,$colmax REAL,$coldate TEXT )');
 
-    await db.execute( 'CREATE TABLE $DugTable('
+    await db.execute( 'CREATE TABLE $dugTable('
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colEmail TEXT ,$colName TEXT ,$colType TEXT,$coldug INTEGER )');
 
-    await db.execute( 'CREATE TABLE $MedTable('
+    await db.execute( 'CREATE TABLE $medTable('
     '$colAototId INTEGER PRIMARY KEY AUTOINCREMENT,'
         '$colconf TEXT ,$colName TEXT ,$colwork TEXT,$colsid TEXT )');
+  
+      await db.execute('CREATE TABLE $updateTable('
+          '$colEmail TEXT PRIMARY KEY, $colMBA REAL,'
+        '$colMC REAL, $colMI REAL, $colRE INTEGER, $colRK INTEGER,'
+        '$colRA INTEGER )');
+  
+
   }
 
 
@@ -466,7 +480,7 @@ print('updated 1: $result1');
 //add
   Future<int> insertPT(PT pt) async {
     Database db = await this.database;
-    var result = await db.insert(PTTable, pt.toMap());
+    var result = await db.insert(pTTable, pt.toMap());
     return result;
   }
 //GET
@@ -536,7 +550,7 @@ var result = await db.rawQuery('SELECT COUNT(*) as r FROM $a1CTable WHERE $colEm
 Future<int> updataCarb(String email,double carb,String date) async {
  Database db = await this.database;
 var result = await db.rawUpdate('UPDATE $carbTable SET $colcurnt =$carb+$colcurnt   WHERE $colEmail = \"$email\" AND $coldate=\"$date\"');
- print("update Carb: ${result}");
+ print("update Carb: $result");
 return result;
 }
 
@@ -557,7 +571,7 @@ if(result.isEmpty){ //result.add({'a1C':0.0});
 //add
   Future<int> insertExam(Exam pa) async {
     Database db = await this.database;
-    var result = await db.insert(ExamsTable, pa.toMap());
+    var result = await db.insert(examsTable, pa.toMap());
     return result;
   }
 //UPDATE
@@ -565,7 +579,7 @@ if(result.isEmpty){ //result.add({'a1C':0.0});
 //GET
 Future getPT(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$email\" ORDER BY $coldur  DESC  ');
+var result = await db.rawQuery('SELECT * FROM $examsTable WHERE $colEmail=\"$email\" ORDER BY $coldur  DESC  ');
  print("getPT: ${result.toList()}");
   print("hi list");
  return result;
@@ -574,7 +588,7 @@ var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$ema
 // delete:
 Future deletExam(int id,String email) async {
  Database db = await this.database;
-var result = await db.rawDelete('DELETE FROM $ExamsTable WHERE $colEmail=\"$email\" AND $colAototId=$id');
+var result = await db.rawDelete('DELETE FROM $examsTable WHERE $colEmail=\"$email\" AND $colAototId=$id');
 
  print("delet exam: $result");
  return result;
@@ -583,7 +597,7 @@ var result = await db.rawDelete('DELETE FROM $ExamsTable WHERE $colEmail=\"$emai
 // delete:
 Future deleteExam(int id,String email) async {
  Database db = await this.database;
-var result = await db.rawDelete('DELETE FROM $ExamsTable WHERE $colEmail=\"$email\" AND $colPTId=$id');
+var result = await db.rawDelete('DELETE FROM $examsTable WHERE $colEmail=\"$email\" AND $colPTId=$id');
 
  print("delet exam: $result");
  return result;
@@ -592,7 +606,7 @@ var result = await db.rawDelete('DELETE FROM $ExamsTable WHERE $colEmail=\"$emai
 //get kidney exam
 Future getPTk(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$email\" AND $colPTId=2 ORDER BY $coldur  ASC ');
+var result = await db.rawQuery('SELECT * FROM $examsTable WHERE $colEmail=\"$email\" AND $colPTId=2 ORDER BY $coldur  ASC ');
  print("getPTK: ${result.toList()}");
   print("hi list");
  return result;
@@ -602,7 +616,7 @@ var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$ema
 
 Future getPTE(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$email\" AND $colPTId=3 ORDER BY $coldur  ASC ');
+var result = await db.rawQuery('SELECT * FROM $examsTable WHERE $colEmail=\"$email\" AND $colPTId=3 ORDER BY $coldur  ASC ');
  print("getPTE: ${result.toList()}");
   print("hi list");
  return result;
@@ -610,7 +624,7 @@ var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$ema
 //get A1c exam
 Future getPTA(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$email\" AND $colPTId=1 ORDER BY $coldur  ASC ');
+var result = await db.rawQuery('SELECT * FROM $examsTable WHERE $colEmail=\"$email\" AND $colPTId=1 ORDER BY $coldur  ASC ');
  print("getPTA: ${result.toList()}");
   print("hi list");
  return result;
@@ -619,15 +633,15 @@ var result = await db.rawQuery('SELECT * FROM $ExamsTable WHERE $colEmail=\"$ema
 //add
   Future<int> insertResult(Result pa) async {
     Database db = await this.database;
-    var cler=db.rawDelete('DELETE FROM $ExamResultTable WHERE $colPTId = ${pa.PTId}');
-    var result = await db.insert(ExamResultTable, pa.toMap());
+    var cler=db.rawDelete('DELETE FROM $examResultTable WHERE $colPTId = ${pa.PTId}');
+    var result = await db.insert(examResultTable, pa.toMap());
     return result;
   }
 //UPDATE
 //GET
 Future getResult(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT * FROM $ExamResultTable WHERE $colEmail=\"$email\" ORDER BY $colRDate  DESC  ');
+var result = await db.rawQuery('SELECT * FROM $examResultTable WHERE $colEmail=\"$email\" ORDER BY $colRDate  DESC  ');
  print("get Result : ${result.toList()}");
   //print("");
  return result;
@@ -636,7 +650,7 @@ var result = await db.rawQuery('SELECT * FROM $ExamResultTable WHERE $colEmail=\
 //get kidney
 Future getResultK(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT * FROM $ExamResultTable WHERE $colEmail=\"$email\" AND $colPTId=2 ORDER BY $colRDate  DESC  ');
+var result = await db.rawQuery('SELECT * FROM $examResultTable WHERE $colEmail=\"$email\" AND $colPTId=2 ORDER BY $colRDate  DESC  ');
  print("get Result : ${result.toList()}");
   //print("");
  return result;
@@ -646,7 +660,7 @@ var result = await db.rawQuery('SELECT * FROM $ExamResultTable WHERE $colEmail=\
 //ADD
   Future<int> insertmed(Med pa) async {
     Database db = await this.database;
-    var result = await db.insert(MedTable, pa.toMap());
+    var result = await db.insert(medTable, pa.toMap());
     return result;
   }
 //UPDATE
@@ -656,7 +670,7 @@ var result = await db.rawQuery('SELECT * FROM $ExamResultTable WHERE $colEmail=\
 //ADD
   Future<int> insertDUB(Dug pa) async {
     Database db = await this.database;
-    var result = await db.insert(DugTable, pa.toMap());
+    var result = await db.insert(dugTable, pa.toMap());
     return result;
   }
   
@@ -664,7 +678,7 @@ var result = await db.rawQuery('SELECT * FROM $ExamResultTable WHERE $colEmail=\
 //GET
 Future getDug(String email) async {
  Database db = await this.database;
-var result = await db.rawQuery('SELECT * FROM $DugTable WHERE $colEmail=\"$email\" ');
+var result = await db.rawQuery('SELECT * FROM $dugTable WHERE $colEmail=\"$email\" ');
  print("get Result : ${result.toList()}");
   //print("");
  //return result;
@@ -684,11 +698,73 @@ if(result.isEmpty){ //result.add({'a1C':0.0});
 // delete:
 Future deletdug(int id,String email) async {
  Database db = await this.database;
-var result = await db.rawDelete('DELETE FROM $DugTable WHERE $colEmail=\"$email\" AND $colAototId=$id');
+var result = await db.rawDelete('DELETE FROM $dugTable WHERE $colEmail=\"$email\" AND $colAototId=$id');
 
  print("delet exam: $result");
  return result;
 }
+
+
+//----------------------------------Update table----------------------------------------------------
+ 
+ //insert
+  Future<int> insertUpd(UPD upd) async {
+    Database db = await this.database;
+    var result = await db.insert(updateTable, upd.toMap());
+    return result;
+  }
+
+ //get
+Future getUpd(String email) async {
+ Database db = await this.database;
+var result = await db.rawQuery('SELECT * FROM $updateTable WHERE $colEmail=\"$email\" ');
+ print("update get Result : ${result.toList()}");
+//   //print("");
+//  //return result;
+// if(result.isEmpty){
+//  //result.add({'a1C':0.0});
+//   return [];}
+  // else{
+  print("update list: $result");
+  return result.toList();
+  // }
+}
+
+//update MaxBA
+Future<int> updateMBA(String email,double upd) async {
+ Database db = await this.database;
+var result = await db.rawUpdate('UPDATE $updateTable SET $colMBA=$upd   WHERE $colEmail = \"$email\" ');
+ print("update Carb: $result");
+return result;
+}
+
+//update MaxC
+Future<int> updateMC(String email,double upd) async {
+ Database db = await this.database;
+var result = await db.rawUpdate('UPDATE $updateTable SET $colMC=$upd   WHERE $colEmail = \"$email\" ');
+ print("update Carb: $result");
+return result;
+}
+
+//update MaxBA
+Future<int> updateMI(String email,double upd) async {
+ Database db = await this.database;
+var result = await db.rawUpdate('UPDATE $updateTable SET $colMI=$upd   WHERE $colEmail = \"$email\" ');
+ print("update Carb: $result");
+return result;
+}
+
+
+ //delete 
+
+
+
+
+
+
+
+
+
 
 
 

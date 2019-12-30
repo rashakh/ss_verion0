@@ -1,7 +1,7 @@
 // Home file which contains the Home page, and its properties
 // this file allows enter and navigate into the App features
 
-import 'dart:async';
+//import 'dart:async';
 
 import 'package:dtfbl/diabetes_icons_icons.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
@@ -14,14 +14,13 @@ import '../widgets/fancy_fab.dart';
   DatabaseHelper helper = DatabaseHelper();
 
 class MainPage extends StatefulWidget {
-  MainPage(@required this.id,@required this.BMI, this.A1c,@required this.carb,this.code,this.PAs,this.units);
+  MainPage(@required this.id,@required this.Update,@required this.BMI, this.A1c,@required this.carb,this.code,this.PAs,this.units);
   var id ;
   List<Map<String,dynamic>> BMI;
   double A1c;
   double carb;
   int code;
-
-  bool booE,booK,booA;
+List<Map<String,dynamic>> Update;
   int units;
   double PAs;
   @override
@@ -35,11 +34,11 @@ class _MainPageState extends State<MainPage> {
   // }
    Widget pages(_selectedPage) {
     final List<Widget> _pages = [
-      new HomePage(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
-      new Meals(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
+      new HomePage(widget.id,widget.Update, widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
+      new Meals(widget.id,widget.Update,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
       //new PhysicalActivity(),
-      new Instructions(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
-      new Medications(widget.id,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
+      new Instructions(widget.id,widget.Update,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
+      new Medications(widget.id,widget.Update,widget.BMI,widget.A1c, widget.carb,widget.code,widget.PAs,widget.units),
     ];
     return _pages[_selectedPage];
   }
@@ -56,7 +55,7 @@ class _MainPageState extends State<MainPage> {
   // print("check in mainpage ${widget.A1c.toString()}, ${widget.BMI}, ${widget.carb},");
     return new Scaffold(
       body: pages(_selectedPage),
-      floatingActionButton: new FancyFab(widget.id,widget.BMI, widget.A1c, widget.carb,widget.PAs,widget.units),
+      floatingActionButton: new FancyFab(widget.id,widget.Update,widget.BMI, widget.A1c, widget.carb,widget.PAs,widget.units),
       bottomNavigationBar: new BottomNavigationBar(
         currentIndex: _selectedPage,
         onTap: (int index) {

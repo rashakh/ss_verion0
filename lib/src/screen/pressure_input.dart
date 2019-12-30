@@ -1,5 +1,5 @@
 import 'package:dtfbl/diabetes_icons_icons.dart';
-import 'package:dtfbl/src/models/A1C.dart';
+//import 'package:dtfbl/src/models/A1C.dart';
 import 'package:dtfbl/src/models/pressure.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart';
@@ -8,16 +8,17 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/cupertino.dart';
 import '../widgets/styles.dart';
 import 'package:intl/intl.dart' as intl;
-import 'dart:async';
-import 'dart:convert'; // convert json into data
+//import 'dart:async';
+//import 'dart:convert'; // convert json into data
 // import 'package:http/http.dart'
 //     as http; // perform http request on API to get the into
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'mainpage.dart';
 class Pressureinput extends StatelessWidget {
-  Pressureinput(this.id, this.BMI, this.A1c,this.carb,this.PAs,this.units);
+  Pressureinput(this.id, this.Update,this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
+  var Update;
   var BMI;
   var A1c;
   var carb;
@@ -37,14 +38,15 @@ class Pressureinput extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb,PAs,units)),
+          body: new SingleChildScrollView(child: new Body(id,Update, BMI,A1c,carb,PAs,units)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c,this.carb,this.PAs,this.units);
+  Body(this.id,this.Update,this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
+  var Update;
   List<Map<String,dynamic>> BMI;
   double A1c;
   var carb;
@@ -373,7 +375,7 @@ class _Bodystate extends State<Body> {
                               onPressed: () => Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MainPage(widget.id,
+                                    builder: (context) => MainPage(widget.id,widget.Update,
                                         widget.BMI, widget.A1c, widget.carb,0,widget.PAs,widget.units)),
                               ),
                               width: 120,

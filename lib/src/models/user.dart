@@ -16,16 +16,16 @@ class User {
       this._gender, this._type, this._hight, this._number //this._weight, this._bmi
       );
 
-  String get email => _email;
-  String get pass => _pass;
-  String get fname => _fname;
-  String get lname => _lname;
-  String get dd => _dd;
-  String get bd => _bd;
-  int get gender => _gender;
-  int get type => _type;
-  double get hight => _hight;
-  String get number => _number;
+  String get emailg => _email;
+  String get passg => _pass;
+  String get fnameg => _fname;
+  String get lnameg => _lname;
+  String get ddg => _dd;
+  String get bdg => _bd;
+  int get genderg => _gender;
+  int get typeg => _type;
+  double get hightg => _hight;
+  String get numberg => _number;
   // double get weight => _weight;
   // double get bmi => _bmi;
 
@@ -44,7 +44,7 @@ class User {
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
-    if (email != null) {
+    if (emailg != null) {
       map['email'] = _email;
     }
     map['pass'] = _pass;

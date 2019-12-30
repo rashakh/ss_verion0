@@ -1,20 +1,21 @@
 import 'package:dtfbl/src/screen/profile.dart';
 import 'package:dtfbl/src/screen/pt.dart';
 import 'package:flutter/material.dart'; // flutter main package
-import 'package:dtfbl/src/widgets/styles.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+//import 'package:dtfbl/src/widgets/styles.dart';
+//import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:math';
-import 'dart:async';
-import 'dart:convert'; // convert json into data
-import 'package:http/http.dart'
-    as http;
+//import 'dart:async';
+//import 'dart:convert'; // convert json into data
+//import 'package:http/http.dart'
+  //  as http;
 
 import 'exportPDF.dart';
 import 'medalert.dart'; // perform http request on API to get the into
 
 class Medications extends StatelessWidget {
-  Medications(this.id, this.BMI, this.A1c,this.carb,this.code,this.PAs,this.units);
+  Medications(this.id, this.Update,this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
   var id;
+   List<Map<String, dynamic>> Update;
   var BMI;
   var A1c;
   var carb;
@@ -45,7 +46,7 @@ class Medications extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MedAlert(id,BMI,A1c,carb,PAs,units)),
+                  MaterialPageRoute(builder: (context) => MedAlert(id,Update, BMI,A1c,carb,PAs,units)),
                 );
               },
             ),
@@ -85,14 +86,15 @@ class Medications extends StatelessWidget {
           ],
         ),
       ),
-      body: new SingleChildScrollView(child: new Body(id,BMI,A1c,carb,code,PAs,units)),
+      body: new SingleChildScrollView(child: new Body(id,Update, BMI,A1c,carb,code,PAs,units)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-    Body(this.id,this.BMI,this.A1c,this.carb,this.code,this.PAs,this.units);
+    Body(this.id,this.Update,this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
   var id;
+  var Update;
   var BMI;
   var A1c;
   var carb;

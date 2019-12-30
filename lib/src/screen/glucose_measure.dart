@@ -21,13 +21,14 @@ import 'mainpage.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 //=import 'package:flutter_sms/flutter_sms.dart';
 import 'dart:async';
-import 'dart:io';
+//import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 class GlucoseMeasure extends StatelessWidget {
-  GlucoseMeasure(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
+  GlucoseMeasure(this.id,this.Update,this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
+  var Update;
   var BMI;
   var A1c;
   var carb;
@@ -47,15 +48,16 @@ class GlucoseMeasure extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb,PAs,units)),
+          body: new SingleChildScrollView(child: new Body(id,Update,  BMI, A1c, carb,PAs,units)),
           // Padding(padding: const EdgeInsets.only(top: 100), child: Body()),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
+  Body(this.id, this.Update,this.BMI, this.A1c, this.carb,this.PAs,this.units);
   var id;
+  var Update;
   var BMI;
   var A1c;
   var carb;
@@ -1482,7 +1484,7 @@ print(" set stat: ${widget.PAs}");
                               onPressed: () => Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MainPage(widget.id,
+                                    builder: (context) => MainPage(widget.id,widget.Update,
                                         widget.BMI, widget.A1c, widget.carb,code,widget.PAs,widget.units)),
                               ),
                               width: 120,

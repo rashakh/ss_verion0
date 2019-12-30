@@ -1,12 +1,14 @@
 // Registration file which contains the Registration page, and its properties
 // this file allows user to register into the App, represented by 'r_1' Use-Case
 
-import 'dart:convert';
+//import 'dart:convert';
 
+import 'package:dtfbl/src/models/update.dart';
 import 'package:dtfbl/src/models/wieght.dart';
 import 'package:flutter/material.dart'; // flutter main package
 import 'package:intl/intl.dart' as intl; // flutter main package
 import 'package:flutter/cupertino.dart';
+
 // import 'dart:async';
 // import 'package:http/http.dart'
 //     as http; // perform http request on API to get the into
@@ -123,23 +125,73 @@ class _RegistrationFormState extends State<RegistrationForm> {
           //_weight,
           //(((_weight / _height) / _height) * 10000)
           );
+      double BMI=   (((_weight / _height) / _height) * 10000);
       BW bw = BW(
           _email,
           _weight.floor(),
-          (((_weight / _height) / _height) * 10000),
+          BMI,
           " ",
           new DateTime.now().toIso8601String());
+
+          double durg= _weight *0.5;
+          int dd=durg.toInt();
+          double ddd=dd.toDouble();
+                     
+int carb;
+double carb2;
+ UPD upd;
+if( _gender==0 && BMI<=29){
+setState(() {
+ carb=230;
+double carb2=carb.toDouble(); 
+ upd= new UPD(_email, 135.0, ddd, carb2, 0, 0, 0);   
+
+print("4: $carb,  $carb2 ");   
+});
+}
+else if( _gender==0 && BMI>29){
+ setState(() {
+ carb=180;
+double carb2=carb.toDouble();
+ upd= new UPD(_email, 210.0, ddd, carb2, 0, 0, 0);   
+print("1: $carb,  $carb2 ");   
+ });
+}
+
+else if( _gender==1 && BMI<=29){
+ setState(() {
+ carb=330;
+double carb2=carb.toDouble();
+ upd= new UPD(_email, 135.0, ddd, carb2, 0, 0, 0);   
+print("2: $carb,  $carb2 ");   
+ });
+}
+
+else if( _gender==1 && BMI>29){
+ setState(() {
+ carb=220;
+double carb2=carb.toDouble(); 
+ upd= new UPD(_email, 210.0, ddd, carb2, 0, 0, 0);   
+print("3: $carb,  $carb2 ");      
+ });
+}
+
+ //     UPD upd= new UPD(_email, 200, ddd, carb2, 0, 0, 0);   
+print("${upd.toMap()}");
       var id = await helper.insertUser(user);
-      print('this result id : ${id}');
+      print('this result id : $id');
       var wi = await helper.insertBW(bw);
-      print('this result id : ${wi}');
+      print('this result wi : $wi');
+      var update= await helper.insertUpd(upd);
+      print('this result update : $update');
+
       var route = new MaterialPageRoute(builder: (context) => new LoginPage());
 
       Navigator.of(context).push(route);
       _formKey.currentState.reset();
     } else {
       print(
-          'form invalid, Email: ${_email},  Passwoer: ${_password}, ${_fName}, ${_lName}, ${_gender}, ${_height}, ${_weight}, ${_birthday}');
+          'form invalid, Email: $_email,  Passwoer: $_password, $_fName, $_lName, $_gender, $_height, $_weight, $_birthday');
     }
   }
 

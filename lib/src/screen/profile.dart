@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import '../models/user.dart';
+//import 'package:sqflite/sqflite.dart';
+//import '../models/user.dart';
 import '../utils/database_helper.dart';
 
 class Profile extends StatelessWidget {

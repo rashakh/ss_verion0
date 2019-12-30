@@ -7,8 +7,9 @@ import 'exportPDF.dart';
 import 'medalert.dart'; // perform http request on API to get the into
 
 class Instructions extends StatelessWidget {
-  Instructions(this.id, this.BMI, this.A1c, this.carb,this.code,this.PAs,this.units);
+  Instructions(this.id,this.Update,this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
   var id;
+   List<Map<String, dynamic>> Update;
   var BMI;
   var A1c;
   var carb;
@@ -40,7 +41,7 @@ class Instructions extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MedAlert(id, BMI, A1c, carb,PAs,units)),
+                      builder: (context) => MedAlert(id,Update, BMI, A1c, carb,PAs,units)),
                 );
               },
             ),
@@ -87,14 +88,15 @@ class Instructions extends StatelessWidget {
         ),
       ),
       body: new SingleChildScrollView(
-          child: new Body(id, BMI, A1c,carb,code,PAs,units)),
+          child: new Body(id,Update,  BMI, A1c,carb,code,PAs,units)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb,this.code,this.PAs,this.units);
+  Body(this.id, this.Update,this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
   var id;
+  var Update;
   var BMI;
   var A1c;
   var carb;

@@ -1,8 +1,9 @@
 //import 'dart:developer';
 
 //import 'package:dtfbl/src/models/exams.dart';
-import 'package:date_format/date_format.dart';
+//import 'package:date_format/date_format.dart';
 import 'package:dtfbl/src/models/result.dart';
+//import 'package:dtfbl/src/models/update.dart';
 import 'package:dtfbl/src/screen/mainpage.dart';
 import 'package:dtfbl/src/utils/database_helper.dart';
 import 'package:flutter/material.dart'; // flutter main package
@@ -18,8 +19,9 @@ import 'package:after_layout/after_layout.dart';
 //import 'package:date_format/date_format.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage(this.id, this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
+  HomePage(this.id,this.Update,this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
   var id;
+   List<Map<String, dynamic>> Update;
   List<Map<String, dynamic>> BMI;
   double A1c;
   double carb;
@@ -52,7 +54,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MedAlert(id, BMI, A1c, carb,PAs,units)),
+                      builder: (context) => MedAlert(id,Update, BMI, A1c, carb,PAs,units)),
                 );
               },
             ),
@@ -99,14 +101,15 @@ class HomePage extends StatelessWidget {
         ),
       ),
       body:
-          new SingleChildScrollView(child: new Body(id, BMI, A1c, carb, code,PAs,units)),
+          new SingleChildScrollView(child: new Body(id,Update, BMI, A1c, carb, code,PAs,units)),
     );
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
+  Body(this.id,this.Update,this.BMI, this.A1c, this.carb, this.code,this.PAs,this.units);
   var id;
+   List<Map<String, dynamic>> Update;
   var BMI;
   var A1c;
   var carb;
@@ -124,12 +127,14 @@ class _Bodystate extends State<Body> with AfterLayoutMixin<Body> {
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
+  final _formKey4 = GlobalKey<FormState>();
+  final _formKey5 = GlobalKey<FormState>();
 
   DatabaseHelper helper = DatabaseHelper();
   double a1c = 0.0;
   double carb = 0.0;
   double pa = 0;
-  double maxPA = 135.0;
+  double maxPA = 0;
   double minPA = 0.0;
   double total = 40;
   int unit = 0;
@@ -309,7 +314,7 @@ setState(() {  unit=widget.units as int;});
   @override
   Widget build(BuildContext context) {
    
-
+try{
     // String decision = 'تقوم بتأكد من سلامة قدمك';
     // AlertType alerttype = AlertType.warning;
 
@@ -345,7 +350,7 @@ setState(() {  unit=widget.units as int;});
                   lineHeight: 30.0,
                   animationDuration: 2000,
                   percent: _carb(),
-                  center: Text('$maxCarb / $carb :الكاربوهيدرات',
+                  center: Text('${widget.Update[0]['MaxC']} / $carb :الكاربوهيدرات',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: colorcarb,
@@ -359,7 +364,7 @@ setState(() {  unit=widget.units as int;});
                   lineHeight: 30.0,
                   animationDuration: 2000,
                   percent: _IS(), //_a1c(),
-                  center: Text('الانسولين: $unit/$total وحدة',
+                  center: Text('الانسولين: $unit/${widget.Update[0]['MaxI']} وحدة',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: colorIn, //colorA1c,
@@ -373,7 +378,7 @@ setState(() {  unit=widget.units as int;});
                   lineHeight: 30.0,
                   animationDuration: 2000,
                   percent: _PA(),
-                  center: Text('النشاط البدني: ${maxPA} /$pa دقيقة',
+                  center: Text('النشاط البدني: ${widget.Update[0]['MaxBA']}/$pa دقيقة',
                       style: new TextStyle(fontWeight: FontWeight.bold)),
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: colorPA, //colorA1c,
@@ -489,7 +494,7 @@ setState(() {  unit=widget.units as int;});
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   MainPage(
-                                                                      widget.id,
+                                                                      widget.id,widget.Update,
                                                                       widget
                                                                           .BMI,
                                                                       widget
@@ -531,6 +536,10 @@ setState(() {  unit=widget.units as int;});
       ),
     );
   }
+on Exception catch (e) {
+  print('Exception details:\n $e');  }
+   
+  }
 
   @override
   Future afterFirstLayout(BuildContext context) async {
@@ -558,6 +567,7 @@ setState(() {  unit=widget.units as int;});
       showHelloWorld(context, code);
     }
 
+try{
  var KidneyDate =await helper.getPTk(widget.id[0]['email']);
 if(KidneyDate.isEmpty){
     print("KidneyDate is empty: $KidneyDate");
@@ -577,20 +587,21 @@ else{
       }
     }
 }
-
+}
+on Exception catch (e) {
+  print('Exception details:\n $e');  }
+   
 
 
 var EyesDate = await helper.getPTE(widget.id[0]['email']);
 
+try{
 if(EyesDate.isEmpty){
     print("EyesDate is empty: $EyesDate");
     Eyse_checkAppoiment();
-
 }
 else{
-
 int Eyes = EyesDate[0]['dur'];
-
    print("EyesDate: $Eyes");
     if (Eyes < 2) {
       if(Eyes==1){
@@ -598,32 +609,29 @@ int Eyes = EyesDate[0]['dur'];
             }
       if(Eyes==0){
       showHelloWorld(context, 5);
-      }
-    }
-}
-    
-  
-var A1cDate = await helper.getPTA(widget.id[0]['email']);
+      }}}}
+on Exception catch (e) {
+  print('Exception details:\n $e');  }
+   
+try{
 
+var A1cDate = await helper.getPTA(widget.id[0]['email']);
 if(EyesDate.isEmpty){
     print("A1cDate is empty: $A1cDate");
 A1C_checkAppoiment();
 }
 else{
-
       int A1c = A1cDate[0]['dur'];
    print("A1cDate: $A1c");
     if (A1c < 2) {
       if(A1c==1){
-      showHelloWorld(context, 8);
-            }
+      showHelloWorld(context, 8);          }
       if(A1c==0){
-
       showHelloWorld(context, 7);
-      }
-    }
+      }}}}
+on Exception catch (e) {
+  print('Exception details:\n $e');  }
     
-    }
   }
 
   void showHelloWorld(BuildContext context, int code) {
@@ -652,7 +660,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 2,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 2,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -670,7 +678,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -761,7 +769,7 @@ else{
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MainPage(
-                                        widget.id,
+                                        widget.id,widget.Update,
                                         widget.BMI,
                                         widget.A1c,
                                         widget.carb,
@@ -774,7 +782,7 @@ else{
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MainPage(
-                                        widget.id,
+                                        widget.id,widget.Update,
                                         widget.BMI,
                                         widget.A1c,
                                         widget.carb,
@@ -790,7 +798,6 @@ else{
               );
             });
           });
-
       _rt = null;
     }
     
@@ -876,7 +883,7 @@ else{
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MainPage(
-                                        widget.id,
+                                        widget.id,widget.Update,
                                         widget.BMI,
                                         widget.A1c,
                                         widget.carb,
@@ -889,7 +896,7 @@ else{
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => MainPage(
-                                        widget.id,
+                                        widget.id,widget.Update,
                                         widget.BMI,
                                         widget.A1c,
                                         widget.carb,
@@ -909,6 +916,15 @@ else{
 
 //تذكير بفحص الكلى
      else if (code == 4) {
+        print("hi remK");
+       if(widget.Update[0]['RemK']==0){
+           setState(() {
+      Map<String, dynamic> h = {'email':widget.Update[0]["email"], 'MaxBA':widget.Update[0]["MaxBA"], 'MaxI':widget.Update[0]["MaxI"],
+                                'MaxC':widget.Update[0]["MaxC"],   'RemE':widget.Update[0]["RemE"],   'RemA':widget.Update[0]["RemA"],
+                                'RemK':1};
+      widget.Update.clear();
+      widget.Update.add(h);   
+         }); 
    String decision = 'لاتنسى غدا موعد فحصك لكلى';
       AlertType alerttype = AlertType.info;
       Alert(
@@ -931,7 +947,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -942,18 +958,138 @@ else{
                       ],
       ).show();
 
-
+       }
 
        
      }
 
 //نتيجة العين
      else if (code == 5) {
+  showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (
+            BuildContext context,
+          ) {
+            return StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                title: new Text('ما نتيجة فحص العيون'),
+                content: Form(
+                  key: _formKey5,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: 10.0,
+                        ),
+                        child: new DropdownButton<String>(
+                          isExpanded: true,
+                          //style: TextStyle(),
+                          iconEnabledColor: Color(0xFFBDD22A),
+                          hint: Text('ادخل نتيجة الفحص ',style: TextStyle(fontSize: 20)),
+                          value: _rt,
+                          items: [
+                            DropdownMenuItem<String>(
+                              value: 'سليمة',
+                              child: Text(
+                                'سليمة',style: TextStyle(fontSize: 20)
+                              ),
+                            ),
+                            DropdownMenuItem<String>(
+                              value: 'غير سليمة',
+                              child: Text(
+                                'غير سليمة',style: TextStyle(fontSize: 20)
+                              ),
+                            ),
+                          ],
+                          onChanged: (e) {
+                            setState(() {
+                              _rt = e;
+                            });
+                          },
+                        ),
+                      ),
+                      new DialogButton(
+                        width: 120,
+                        // height: 20,
+                        child: new Text(
+                          'حفظ',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        onPressed: () async {
+                              int id;
+                          if (_rt == "سليمة") {
+                            id = 1;
+                          } else if (_rt == "غير سليمة") {
+                            id = 2;
+                          }
+                          DateTime pt = DateTime.now();
+                          Result pts = new Result(
+                              3,
+                              'فحص العيون',
+                              widget.id[0]['email'],
+                              pt.toIso8601String(),
+                              _rt);
 
+                          var kR = await helper.insertResult(pts);
+                          var kd = await helper.deleteExam(
+                              3, widget.id[0]['email'].toString());
+                          print("KR: $kd");
+                          print("KR: $kR");
+
+                          if (id == 1) {
+                            setState(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage(
+                                        widget.id,widget.Update,
+                                        widget.BMI,
+                                        widget.A1c,
+                                        widget.carb,
+                                        51,widget.PAs,widget.units)),
+                              );
+                            });
+                          } else if (id == 2) {
+                            setState(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage(
+                                        widget.id,widget.Update,
+                                        widget.BMI,
+                                        widget.A1c,
+                                        widget.carb,
+                                        52,widget.PAs,widget.units)),
+                              );
+                            });
+                          }
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              );
+            });
+          });
      }
 
 //تذكير العين
      else if (code == 6) {
+       print("hi remE");
+       if(widget.Update[0]['RemE']==0){
+         setState(() {
+          //  Map<String, dynamic> h = {'email':widget.Update[0]["email"], 'MaxBA':widget.Update[0]["MaxBA"], 'MaxI':widget.Update[0]["MaxI"],
+          //   'MaxC':widget.Update[0]["MaxC"], 'RemE':widget.Update[0]["RemE"], 'RemA':widget.Update[0]["RemA"], 'RemK':widget.Update[0]["RemK"]};
+
+ Map<String, dynamic> h = {'email':widget.Update[0]["email"], 'MaxBA':widget.Update[0]["MaxBA"], 'MaxI':widget.Update[0]["MaxI"],
+            'MaxC':widget.Update[0]["MaxC"], 'RemE':1, 'RemA':widget.Update[0]["RemA"], 'RemK':widget.Update[0]["RemK"]};
+
+      widget.Update..clear();
+      widget.Update.add(h);   
+         });
    String decision = 'لاتنسى غدا موعد فحصك لدى عيادة العيون';
       AlertType alerttype = AlertType.info;
       Alert(
@@ -976,7 +1112,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -986,13 +1122,191 @@ else{
 
                       ],
       ).show();     
-     }
+     
+     }}
 
 // نتيجة التراكمي
-     else if (code == 7) {}
+     else if (code == 7) {
+    
+    try{
+      double valu;
+showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (
+            BuildContext context,
+          ) {
+            return StatefulBuilder(builder: (context, setState) {
+              return AlertDialog(
+                title: new Text('ما نتيجة فحص التراكمي'),
+                content: Form(
+                  key: _formKey4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: 10.0,
+                        ),
+                        child: new TextFormField(
+
+decoration:
+                                                            InputDecoration(
+                                                          contentPadding:
+                                                              EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          3.0),
+                                                          hintText: 'نتيجة التراكمي',
+                                                          hintStyle:
+                                                              new TextStyle(
+                                                                  fontSize:
+                                                                      17.0,
+                                                                  color: Colors
+                                                                      .grey),
+                                                          fillColor: Colors
+                                                              .white54
+                                                              .withOpacity(0.5),
+                                                        ),
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
+                                                        validator: (value) =>
+                                                            value.isEmpty
+                                                                ? 'هذا الحقل مطلوب'
+                                                                : null,
+                                                        onSaved: (value) =>
+                                                            valu =
+                                                                double.tryParse(
+                                                                    value),
+                                                      ),
+                        
+
+                      ),
+                      new DialogButton(
+                        width: 120,
+                        // height: 20,
+                        child: new Text(
+                          'حفظ',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        onPressed: () async {
+                              int id;
+                          if (valu <=7) {
+                            id = 1;
+                          } else if (valu <8) {
+                            id = 2;
+                          }
+                          else if(valu<9){
+                            id=3;
+                          }
+else{
+id=4;
+}
+
+                          DateTime pt = DateTime.now();
+                          Result pts = new Result(
+                              1,
+                              'فحص التراكمي',
+                              widget.id[0]['email'],
+                              pt.toIso8601String(),
+                              _rt);
+
+                          var kR = await helper.insertResult(pts);
+                          var kd = await helper.deleteExam(
+                              1, widget.id[0]['email'].toString());
+                          print("KR: $kd");
+                          print("KR: $kR");
+
+                          if (id == 1) {
+                            setState(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage(
+                                        widget.id,widget.Update,
+                                        widget.BMI,
+                                        widget.A1c,
+                                        widget.carb,
+                                        71,widget.PAs,widget.units)),
+                              );
+                            });
+                          } else if (id == 2) {
+                            setState(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage(
+                                        widget.id,widget.Update,
+                                        widget.BMI,
+                                        widget.A1c,
+                                        widget.carb,
+                                        72,widget.PAs,widget.units)),
+                              );
+                            });
+                          }
+
+else if(id==3){
+                            setState(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage(
+                                        widget.id,widget.Update,
+                                        widget.BMI,
+                                        widget.A1c,
+                                        widget.carb,
+                                        73,widget.PAs,widget.units)),
+                              );
+                            });
+}
+
+else if(id==4){
+                            setState(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainPage(
+                                        widget.id,widget.Update,
+                                        widget.BMI,
+                                        widget.A1c,
+                                        widget.carb,
+                                        74,widget.PAs,widget.units)),
+                              );
+                            });
+}
+
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              );
+            });
+          });
+
+  }
+on Exception catch (e) {
+  print('Exception details:\n $e');  }
+    
+
+     }
 
 //تذكير التراكمي
      else if (code == 8) {
+           print("hi remA");
+       if(widget.Update[0]['RemA']==0){
+         setState(() {
+          //  Map<String, dynamic> h = {'email':widget.Update[0]["email"], 'MaxBA':widget.Update[0]["MaxBA"], 'MaxI':widget.Update[0]["MaxI"],
+          //   'MaxC':widget.Update[0]["MaxC"], 'RemE':widget.Update[0]["RemE"], 'RemA':widget.Update[0]["RemA"], 'RemK':widget.Update[0]["RemK"]};
+
+ Map<String, dynamic> h = {'email':widget.Update[0]["email"], 'MaxBA':widget.Update[0]["MaxBA"], 'MaxI':widget.Update[0]["MaxI"],
+            'MaxC':widget.Update[0]["MaxC"], 'RemE':widget.Update[0]["RemE"], 'RemA':1, 'RemK':widget.Update[0]["RemK"]};
+
+      widget.Update..clear();
+      widget.Update.add(h);   
+         });
     String decision = 'لاتنسى غدا موعد فحصك لدى عيادة السكري';
       AlertType alerttype = AlertType.info;
       Alert(
@@ -1015,7 +1329,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1025,7 +1339,7 @@ else{
 
                       ],
       ).show();
-     }
+     }}
 
 
 //فحص  كان جيد
@@ -1052,7 +1366,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1085,7 +1399,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1099,6 +1413,223 @@ else{
       confilcte();
 
     }
+
+
+//العين سليمة
+else if(code==51){
+     String decision = 'أبقى منتظماً ';
+    String d='';
+      AlertType alerttype = AlertType.warning;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' : ممتاز ',
+        desc: decision+"\n"+d,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'حسنا ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                );
+              }),
+            },
+            width: 120,
+
+                        ),
+
+                      ],
+      ).show();
+}
+//العين غير سليمة غير مكتملة
+else if(code==52){
+     String decision = '';
+    String d='';
+      AlertType alerttype = AlertType.warning;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' : نقترح عليك ان',
+        desc: decision+"\n"+d,
+        buttons: [
+         DialogButton(
+            child: Text(
+              'حسنا ',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                );
+              }),
+            },
+            width: 120,
+
+                        ),
+
+                      ],
+      ).show();
+
+}
+
+// السبعات كلها ما انحطت رسائلها
+
+//ممتاز تراكمي
+else if(code==71){
+  String decision = '';
+      AlertType alerttype = AlertType.success;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' نتيجة ميثالية',
+        desc: decision,
+        buttons: [
+          DialogButton(
+            child: Text(
+              'حسنا',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                );
+              }),
+            },
+            width: 120,
+          )
+        ],
+      ).show();
+
+}
+//تراكمي غير منتظم
+else if(code==72){
+ String decision = '';
+      AlertType alerttype = AlertType.warning;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' انك غير منتظم',
+        desc: decision,
+        buttons: [
+          DialogButton(
+            child: Text(
+              'حسنا',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                );
+              }),
+            },
+            width: 120,
+          )
+        ],
+      ).show();
+
+}
+//تراكمي غير منتظم خطر
+else if(code==73){
+ String decision = '';
+      AlertType alerttype = AlertType.warning;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' انك غير منتظم',
+        desc: decision,
+        buttons: [
+          DialogButton(
+            child: Text(
+              'حسنا',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                );
+              }),
+            },
+            width: 120,
+          )
+        ],
+      ).show();
+
+}
+//التراكمي الخطر 
+else if(code==74){
+ String decision = '';
+      AlertType alerttype = AlertType.error;
+      Alert(
+        style: AlertStyle(
+          isCloseButton: false,
+        ),
+        context: context,
+        type: alerttype,
+        title: ' وصلت الى نتيجة خطرة',
+        desc: decision,
+        buttons: [
+          DialogButton(
+            child: Text(
+              'حسنا',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () async => {
+              setState(() {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MainPage(
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                );
+              }),
+            },
+            width: 120,
+          )
+        ],
+      ).show();
+
+}
+
+
+
 //كلا لم يراجع الادوية
   else if(code==321){
      String decision = ' تذهب لمعاييرة جرعات الانسولين من قبل الطبيب على الفور  لتتجنب نوبات الارتفاع والانخفاض';
@@ -1124,7 +1655,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 0,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1134,7 +1665,6 @@ else{
 
                       ],
       ).show();
-
     }
 //لم يغييرها
   else if(code==322){
@@ -1161,7 +1691,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb,0 ,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb,0 ,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1171,10 +1701,6 @@ else{
 
                       ],
       ).show();
-
-
-
-
     }
 
     //غيرها
@@ -1201,7 +1727,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb,324 ,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb,324 ,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1321,7 +1847,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb,324 ,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb,324 ,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1358,7 +1884,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb,0 ,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb,0 ,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1395,7 +1921,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb,0,widget.PAs,widget.units )),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb,0,widget.PAs,widget.units )),
                 );
               }),
             },
@@ -1405,9 +1931,6 @@ else{
 
                       ],
       ).show();
-
-
-
     }
 
   }
@@ -1457,10 +1980,6 @@ void convertDateFromString(String strDate){
    //print(formatDate(todayDate, [yyyy, '/', mm, '/', dd, ' ', hh, ':', nn, ':', ss, ' ', am]));
  }
 
-
-
-
-
 Future confilcte() async {
 
 var med=await helper.getDug(widget.id[0]['email']);
@@ -1497,7 +2016,7 @@ print("isPills");
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 325,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 325,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1517,7 +2036,7 @@ print("isPills");
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 326,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 326,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1537,7 +2056,7 @@ print("isPills");
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 327,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 327,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1579,7 +2098,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 323,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 323,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1599,7 +2118,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 322,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 322,widget.PAs,widget.units)),
                 );
               }),
             },
@@ -1619,7 +2138,7 @@ else{
                   context,
                   MaterialPageRoute(
                       builder: (context) => MainPage(
-                          widget.id, widget.BMI, widget.A1c, widget.carb, 321,widget.PAs,widget.units)),
+                          widget.id,widget.Update, widget.BMI, widget.A1c, widget.carb, 321,widget.PAs,widget.units)),
                 );
               }),
             },

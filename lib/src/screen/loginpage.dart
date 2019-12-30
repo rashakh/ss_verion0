@@ -1,7 +1,7 @@
 // LogIn file which contains the LogIn page, and its properties
 // this file allows user to log in into the App, represented by 'l_1' Use-Case
 
-import 'package:dtfbl/src/models/A1C.dart';
+//import 'package:dtfbl/src/models/A1C.dart';
 import 'package:flutter/material.dart'; // flutter main package
 // import 'dart:async';
 // import 'dart:convert'; // convert json into data
@@ -63,14 +63,18 @@ class _LoginPageState extends State<LoginPage> {
       print(
           'form invalid, Email: ${emailController.text}, Passwoer: ${passwordController.text}');
     } else if (_validateAndSave(id)) {
-      print('here is login id : ${id}');
-List<Map<String,dynamic>> BMI;
+      print('here is login id : $id');
+List<Map<String,dynamic>> bMI;
+List<Map<String,dynamic>> update;
 double  A1c;
 double carb;
 double PAs;
 int units;
     //  setState(() async{
-          BMI=(await helper.getWight(id[0]['email']));
+//--------------
+
+          bMI=(await helper.getWight(id[0]['email']));
+//--------------
          
          if(((await helper.getA1C(id[0]['email']))).isNotEmpty)
          {
@@ -80,7 +84,7 @@ int units;
          print("A1c now : $A1c");
           }
           else{ A1c=0.0;}
-
+//--------------
           if(((await helper.getCarb(id[0]['email']))).isNotEmpty)
           {
          var carba=(await helper.getCarb(id[0]['email']))[0]['curnt'];
@@ -88,7 +92,9 @@ int units;
           carb=carba as double;
          print("carb now : $carb");
           }
-          else{ carb=0.0;} 
+          else{ carb=0.0;}
+//--------------
+ 
       // print("A1c list: null");
  if(((await helper.getDug(id[0]['email']))).isNotEmpty)
           {
@@ -98,10 +104,10 @@ int units;
          print("unit now : $units");
           }
           else{ units=0;}  
-          
+//--------------
+
           // String date=newd('2019-12-18');
-          // print("Pa date: $date");
-          
+          // print("Pa date: $date");          
           if(((await helper.getPA(id[0]['email']))).isNotEmpty)
           {
          var PAa=(await helper.getPA(id[0]['email']))[0]['dur'];
@@ -109,14 +115,25 @@ int units;
           PAs=PAa as double;
          print("PA now : $PAs");
           }
-          else{ PAs=0.0;} 
+          else{ PAs=0.0;}
+//--------------
+       
+           update=(await helper.getUpd(id[0]['email']));
+          print("Update now : $update");
+        //   if(((await helper.getUpd(id[0]['email']))).isNotEmpty)
+        //   {
+        //    Update=(await helper.getPA(id[0]['email']));
+        //  print("Update now : $Update");
+        //   }
+        //   else{ Update=[];}          
+
         // }
      // });
       print("A1c list: $A1c");
-      print("BMI list: $BMI");
+      print("BMI list: $bMI");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => new MainPage(id,BMI,A1c,carb,0,PAs,units)),
+        MaterialPageRoute(builder: (context) => new MainPage(id,update,bMI,A1c,carb,0,PAs,units)),
       );
       //Navigator.of(context).pushNamed('/MainPage',arguments: _email);
       _formKey.currentState.reset();

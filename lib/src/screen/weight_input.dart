@@ -11,12 +11,14 @@ import 'mainpage.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Weightinput extends StatelessWidget {
-  Weightinput(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
+  Weightinput(this.id, this.Update, this.BMI, this.A1c, this.carb, this.PAs,
+      this.units);
   var id;
+  var Update;
   List<Map<String, dynamic>> BMI;
   var A1c;
   var carb;
-    double PAs;
+  double PAs;
   int units;
   @override
   Widget build(BuildContext context) {
@@ -32,14 +34,17 @@ class Weightinput extends StatelessWidget {
               style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
             ),
           ),
-          body: new SingleChildScrollView(child: new Body(id, BMI, A1c, carb,PAs,units)),
+          body: new SingleChildScrollView(
+              child: new Body(id, Update, BMI, A1c, carb, PAs, units)),
         ));
   }
 }
 
 class Body extends StatefulWidget {
-  Body(this.id, this.BMI, this.A1c, this.carb,this.PAs,this.units);
+  Body(this.id, this.Update, this.BMI, this.A1c, this.carb, this.PAs,
+      this.units);
   var id;
+  var Update;
   List<Map<String, dynamic>> BMI;
   var A1c;
   var carb;
@@ -328,19 +333,75 @@ class _Bodystate extends State<Body> {
                       // }
                       var f = await helper
                           .getWight(widget.id[0]['email'].toString());
-                      //var d= await helper.getA1C(widget.id[0]['email'].toString());
                       var bmii = (((weight / widget.id[0]['hight']) /
                               widget.id[0]['hight']) *
                           10000);
+
+                      double durg = weight * 0.5;
+                      int dd = durg.toInt();
+                      double ddd = dd.toDouble();
+
+                      int carb;
+                      double carb2;
+                      double BA;
+                      if (widget.id[0]['gender'] == 0 && bmii <= 29) {
+                        setState(() {
+                          carb = 230;
+                          carb2 = carb.toDouble();
+                          BA = 135.0;
+                          print("4: $carb,  $carb2 ");
+                        });
+                      } else if (widget.id[0]['gender'] == 0 && bmii > 29) {
+                        setState(() {
+                          carb = 180;
+                          carb2 = carb.toDouble();
+                          BA = 210.0;
+
+                          print("1: $carb,  $carb2 ");
+                        });
+                      } else if (widget.id[0]['gender'] == 1 && bmii <= 29) {
+                        setState(() {
+                          carb = 330;
+                          carb2 = carb.toDouble();
+                          BA = 135.0;
+
+                          print("2: $carb,  $carb2 ");
+                        });
+                      } else if (widget.id[0]['gender'] == 1 && bmii > 29) {
+                        setState(() {
+                          carb = 220;
+                          carb2 = carb.toDouble();
+                          BA = 210.0;
+
+                          print("3: $carb,  $carb2 ");
+                        });
+                      }
+                      var upBA =
+                          await helper.updateMBA(widget.Update[0]['email'], BA);
+                      var upC = await helper.updateMBA(
+                          widget.Update[0]['email'], carb2);
+                      var upI = await helper.updateMBA(
+                          widget.Update[0]['email'], ddd);
+
                       Map<String, dynamic> h = {'wit': weight, 'bmi': bmii};
+                      Map<String, dynamic> h1 = {
+                        'email': widget.Update[0]["email"],
+                        'MaxBA': BA,
+                        'MaxI': ddd,
+                        'MaxC': carb2,
+                        'RemE': widget.Update[0]["RemE"],
+                        'RemA': widget.Update[0]["RemA"],
+                        'RemK': widget.Update[0]["RemK"]
+                      };
                       setState(() {
                         // widget.BMI[0]['wit']=weight;
                         // var widget.BMI[0]['bmi'].add(bmii);
-
                         print("${widget.BMI}");
-
                         widget.BMI.clear();
                         widget.BMI.add(h);
+
+                        widget.Update.clear();
+                        widget.Update.add(h1);
                         print("hi: ${widget.BMI},${widget.A1c}");
                         decisionFun();
                         Alert(
@@ -361,8 +422,15 @@ class _Bodystate extends State<Body> {
                               onPressed: () => Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MainPage(widget.id,
-                                        widget.BMI, widget.A1c, widget.carb,0,widget.PAs,widget.units)),
+                                    builder: (context) => MainPage(
+                                        widget.id,
+                                        widget.Update,
+                                        widget.BMI,
+                                        widget.A1c,
+                                        widget.carb,
+                                        0,
+                                        widget.PAs,
+                                        widget.units)),
                               ),
                               width: 120,
                             )

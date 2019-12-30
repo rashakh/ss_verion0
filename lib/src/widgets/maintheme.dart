@@ -64,21 +64,21 @@ class MainTheme extends StatelessWidget {
     );
   }
 
-  Widget _cupdate() {
-    return CupertinoDatePicker(
-      initialDateTime: date,
-      minimumDate: DateTime(1900),
-      maximumDate: DateTime.now(),
-      mode: CupertinoDatePickerMode.date,
-      onDateTimeChanged: (e) {
-        // _setState(() {
-           date = e;
-           print(date); 
-        // }
-        // );
-      },
-    );
-  }
+  // Widget _cupdate() {
+  //   return CupertinoDatePicker(
+  //     initialDateTime: date,
+  //     minimumDate: DateTime(1900),
+  //     maximumDate: DateTime.now(),
+  //     mode: CupertinoDatePickerMode.date,
+  //     onDateTimeChanged: (e) {
+  //       // _setState(() {
+  //          date = e;
+  //          print(date); 
+  //       // }
+  //       // );
+  //     },
+  //   );
+  // }
 }
 
 // showPicker(BuildContext context) {
